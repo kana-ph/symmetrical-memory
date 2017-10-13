@@ -4,6 +4,7 @@ public class Account {
 	private String domain;
 	private String username;
 	private String encryptedPassword;
+	private long saveTimestamp;
 
 	public String getDomain() {
 		return domain;
@@ -27,6 +28,14 @@ public class Account {
 
 	public void setEncryptedPassword(String encryptedPassword) {
 		this.encryptedPassword = encryptedPassword;
+	}
+
+	public long getSaveTimestamp() {
+		return saveTimestamp;
+	}
+
+	public void setSaveTimestamp(long saveTimestamp) {
+		this.saveTimestamp = saveTimestamp;
 	}
 
 	public boolean isSameAccount(Account other) {

@@ -28,7 +28,7 @@ public class AccountFileDao implements AccountDao {
 	public List<Account> fetchAll() throws StashException {
 		try {
 			return Files.lines(ACCOUNT_STORE.toPath())
-					.map(line -> line.split(":", 3))
+					.map(line -> line.split(":", 4))
 					.map(this::mapToModel)
 					.collect(Collectors.toList());
 		} catch (IOException e) {
@@ -52,11 +52,13 @@ public class AccountFileDao implements AccountDao {
 	private Account mapToModel(String[] line) {
 		String domain = line[0];
 		String username = line[1];
-		String password = line[2];
+		long timestamp = Long.valueOf(line[2]);
+		String password = line[3];
 
 		Account account = new Account();
 		account.setDomain(domain);
 		account.setUsername(username);
+		account.setSaveTimestamp(timestamp);
 		account.setEncryptedPassword(password);
 		return account;
 	}
@@ -70,6 +72,7 @@ public class AccountFileDao implements AccountDao {
 	}
 
 	private String formatAccount(Account account) {
-		return String.format("%s:%s:%s", account.getDomain(), account.getUsername(), account.getEncryptedPassword());
+		String timestamp = Long.toString(account.getSaveTimestamp());
+		return String.format("%s:%s:%s:%s", account.getDomain(), account.getUsername(), timestamp, account.getEncryptedPassword());
 	}
 }
