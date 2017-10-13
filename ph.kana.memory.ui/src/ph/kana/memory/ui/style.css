@@ -1,0 +1,13 @@
+.account-card {
+    -fx-background-color: #d4d4d4;
+}
+
+.account-card .username-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.account-card .domain-label {
+    -fx-font-size: 10px;
+    -fx-font-style: italic;
+}
