@@ -6,6 +6,7 @@ import ph.kana.memory.stash.StashException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +36,19 @@ public class AccountFileDao implements AccountDao {
 		}
 	}
 
+	@Override
+	public Account save(final Account account) throws StashException {
+		List<Account> accountList = fetchAll();
+		try (PrintWriter writer = new PrintWriter(ACCOUNT_STORE)){
+			accountList.stream()
+					.map(existingAccount -> prepareWritable(existingAccount, account))
+					.forEach(writer::write);
+			return account;
+		} catch (IOException e) {
+			throw new StashException(e);
+		}
+	}
+
 	private Account mapToModel(String[] line) {
 		String domain = line[0];
 		String username = line[1];
@@ -45,5 +59,17 @@ public class AccountFileDao implements AccountDao {
 		account.setUsername(username);
 		account.setEncryptedPassword(password);
 		return account;
+	}
+
+	private String prepareWritable(Account current, Account replacement) {
+		if (current.isSameAccount(replacement)) {
+			return formatAccount(replacement);
+		} else {
+			return formatAccount(current);
+		}
+	}
+
+	private String formatAccount(Account account) {
+		return String.format("%s:%s:%s", account.getDomain(), account.getUsername(), account.getEncryptedPassword());
 	}
 }

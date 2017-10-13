@@ -28,4 +28,9 @@ public class Account {
 	public void setEncryptedPassword(String encryptedPassword) {
 		this.encryptedPassword = encryptedPassword;
 	}
+
+	public boolean isSameAccount(Account other) {
+		return other.domain.equalsIgnoreCase(domain) &&
+				other.username.equalsIgnoreCase(username);
+	}
 }
