@@ -60,7 +60,7 @@ public class MainFormController implements Initializable {
 	private void bindPasswordToggle() {
 		unmaskedPasswordTextBox.textProperty()
 				.bindBidirectional(maskedPasswordTextBox.textProperty());
-		unmaskedPasswordTextBox.visibleProperty()
+		maskedPasswordTextBox.visibleProperty()
 				.bind(maskPasswordToggle.selectedProperty().not());
 	}
 
