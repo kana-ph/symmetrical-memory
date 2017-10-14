@@ -1,5 +1,8 @@
 .account-card {
     -fx-background-color: #d4d4d4;
+    -fx-padding: 3px 2px 0px 2px;
+    -fx-border-insets: 3px 2px 0px 2px;
+    -fx-background-insets: 3px 2px 0px 2px;
 }
 
 .account-card .username-label {
