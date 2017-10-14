@@ -11,10 +11,11 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static ph.kana.memory.stash.textfile.FileStoreConstants.ENTRY_SEPARATOR;
+import static ph.kana.memory.stash.textfile.FileStoreConstants.STORE_PATH;
+
 public class AccountFileDao implements AccountDao {
 
-	private static final String STORE_PATH = System.getProperty("user.home") + System.getProperty("file.separator") + ".pstash";
-	private static final String ENTRY_SEPARATOR = "%";
 	private static final File ACCOUNT_STORE = new File(STORE_PATH);
 	static {
 		try {
