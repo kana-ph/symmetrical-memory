@@ -11,3 +11,18 @@
     -fx-font-size: 10px;
     -fx-font-style: italic;
 }
+
+.modal-darkening {
+    -fx-background-color: rgba(0, 0, 0, 0.75);
+}
+
+.modal {
+    -fx-background-color: ghostwhite;
+    -fx-opacity: 100%;
+}
+
+.modal .title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
+}
