@@ -41,8 +41,8 @@
                   <CheckBox fx:id="maskPasswordToggle" layoutX="185.0" layoutY="169.0" mnemonicParsing="false" text="Show?" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="170.0" />
                   <TextField fx:id="unmaskedPasswordTextBox" layoutX="30.0" layoutY="233.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="190.0" />
                   <PasswordField fx:id="maskedPasswordTextBox" layoutX="30.0" layoutY="197.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="190.0" />
-                  <Button cancelButton="true" layoutX="204.0" layoutY="335.0" mnemonicParsing="false" text="Cancel" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="240.0" />
-                  <Button defaultButton="true" layoutX="146.0" layoutY="240.0" mnemonicParsing="false" text="Save" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="240.0" />
+                  <Button cancelButton="true" layoutX="204.0" layoutY="335.0" mnemonicParsing="false" onAction="#closeSaveAccountModal" text="Cancel" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="240.0" />
+                  <Button defaultButton="true" layoutX="146.0" layoutY="240.0" mnemonicParsing="false" onAction="#saveAccount" text="Save" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="240.0" />
                </children></AnchorPane>
          </children>
       </TilePane>

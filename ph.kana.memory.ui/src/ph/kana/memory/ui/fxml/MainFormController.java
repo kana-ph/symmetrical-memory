@@ -51,6 +51,23 @@ public class MainFormController implements Initializable {
 		saveAccountPane.setVisible(true);
 	}
 
+	@FXML
+	public void saveAccount() {
+		String domain = domainTextBox.getText();
+		String username = usernameTextBox.getText();
+		String rawPassword = maskedPasswordTextBox.getText();
+		try {
+			accountService.saveAccount(domain, username, rawPassword);
+		} catch (StashException e) {
+			// TODO: show error saving
+		}
+	}
+
+	@FXML
+	public void closeSaveAccountModal() {
+		saveAccountPane.setVisible(false);
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		Platform.runLater(this::bindPasswordToggle);
