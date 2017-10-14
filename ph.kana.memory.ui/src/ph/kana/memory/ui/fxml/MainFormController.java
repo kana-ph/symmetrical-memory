@@ -2,6 +2,7 @@ package ph.kana.memory.ui.fxml;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -116,8 +117,18 @@ public class MainFormController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		Platform.runLater(this::forcePinNumberInput);
 		Platform.runLater(this::bindPasswordToggle);
 		Platform.runLater(this::loadAccounts);
+	}
+
+	private void forcePinNumberInput() {
+		StringProperty pinTextProperty = pinTextBox.textProperty();
+		pinTextProperty.addListener((observableString, oldValue, newValue) -> {
+			if (newValue.matches("\\D*")) {
+				pinTextBox.setText(newValue.replaceAll("\\D*", ""));
+			}
+		});
 	}
 
 	private void bindPasswordToggle() {
