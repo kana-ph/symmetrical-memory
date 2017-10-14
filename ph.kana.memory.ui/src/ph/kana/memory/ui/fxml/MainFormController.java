@@ -27,17 +27,21 @@ public class MainFormController implements Initializable {
 	private final PasswordCodec passwordCodec = new PasswordCodec();
 
 	@FXML private Pane viewPane;
+
 	@FXML private Pane saveAccountPane;
-	@FXML private Pane centerMessagePane;
-	@FXML private Label centerMessageLabel;
-	@FXML private Pane bottomMessagePane;
-	@FXML private Label bottomMessageLabel;
 	@FXML private Label saveAccountPaneTitle;
 	@FXML private TextField domainTextBox;
 	@FXML private TextField usernameTextBox;
 	@FXML private TextField unmaskedPasswordTextBox;
 	@FXML private PasswordField maskedPasswordTextBox;
 	@FXML private CheckBox maskPasswordToggle;
+
+	@FXML private Pane centerMessagePane;
+	@FXML private Label centerMessageLabel;
+
+	@FXML private Pane bottomMessagePane;
+	@FXML private Label bottomMessageLabel;
+
 	@FXML private Pane passwordRevealPane;
 	@FXML private TextField passwordRevealTextBox;
 	@FXML private Label passwordValue;
