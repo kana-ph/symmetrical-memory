@@ -55,6 +55,9 @@ public class MainFormController implements Initializable {
 	@FXML
 	public void validatePin() {
 		String pin = pinTextBox.getText();
+		if (pin.isEmpty()) {
+			return;
+		}
 		try {
 			if (authService.checkValidPin(pin)) {
 				loginPane.setVisible(false);
