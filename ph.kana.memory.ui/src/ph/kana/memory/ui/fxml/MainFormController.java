@@ -9,6 +9,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import ph.kana.memory.codec.CodecOperationException;
+import ph.kana.memory.codec.PasswordCodec;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountService;
 import ph.kana.memory.stash.StashException;
@@ -22,6 +24,7 @@ public class MainFormController implements Initializable {
 
 	private final Logger logger = Logger.getLogger(MainFormController.class.getName());
 	private final AccountService accountService = new AccountService();
+	private final PasswordCodec passwordCodec = new PasswordCodec();
 
 	@FXML
 	private Pane viewPane;
@@ -60,6 +63,15 @@ public class MainFormController implements Initializable {
 	private CheckBox maskPasswordToggle;
 
 	@FXML
+	private Pane passwordRevealPane;
+
+	@FXML
+	private TextField passwordRevealTextBox;
+
+	@FXML
+	private Label passwordValue;
+
+	@FXML
 	public void showAddAccountDialog() {
 		saveAccountPaneTitle.setText("Add Account");
 		saveAccountPane.setVisible(true);
@@ -89,6 +101,22 @@ public class MainFormController implements Initializable {
 	@FXML
 	public void closeSaveAccountModal() {
 		saveAccountPane.setVisible(false);
+	}
+
+	@FXML
+	public void closePasswordRevealModal() {
+		passwordValue.setText("");
+		passwordRevealPane.setVisible(false);
+	}
+
+	@FXML
+	public void showPassword() {
+		passwordRevealTextBox.setText(passwordValue.getText());
+	}
+
+	@FXML
+	public void hidePassword() {
+		passwordRevealTextBox.setText("");
 	}
 
 	@Override
@@ -143,10 +171,7 @@ public class MainFormController implements Initializable {
 		Button showButton = new Button("Show");
 		children.add(showButton);
 		addCssClass(showButton, "control");
-		showButton.setOnAction(event -> {
-			String encryptedPassword = account.getEncryptedPassword();
-			// TODO: do something with password
-		});
+		showButton.setOnAction(event -> showPasswordRevealForAccount(account));
 		assignAnchors(showButton, 5.0, 10.0, null, null);
 
 		MenuButton accountMenu = new MenuButton("...");
@@ -179,13 +204,28 @@ public class MainFormController implements Initializable {
 		List<String> classes = node.getStyleClass();
 		classes.add(cssClass);
 	}
-	public void showSaveDialogForAccount(Account account) {
+
+	private void showSaveDialogForAccount(Account account) {
 		domainTextBox.setText(account.getDomain());
 		usernameTextBox.setText(account.getUsername());
 		maskedPasswordTextBox.setText("");
 
 		saveAccountPaneTitle.setText("Update account");
 		saveAccountPane.setVisible(true);
+	}
+
+	private void showPasswordRevealForAccount(Account account) {
+		String encryptedPassword = account.getEncryptedPassword();
+		String timestamp = Long.toString(account.getSaveTimestamp());
+		try {
+			String clearPassword = passwordCodec.decrypt(encryptedPassword, timestamp);
+			passwordValue.setText(clearPassword);
+			passwordRevealPane.setVisible(true);
+		} catch (CodecOperationException e) {
+			closePasswordRevealModal();
+			showBottomMessage("Something went wrong.");
+			logger.severe(e::getMessage);
+		}
 	}
 
 	private void showCenterMessage(String message) {
