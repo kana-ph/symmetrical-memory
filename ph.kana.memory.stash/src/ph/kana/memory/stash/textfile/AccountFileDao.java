@@ -8,10 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
-import java.util.Base64;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AccountFileDao implements AccountDao {
@@ -43,7 +40,7 @@ public class AccountFileDao implements AccountDao {
 
 	@Override
 	public Account save(final Account account) throws StashException {
-		Set<Account> accounts = new HashSet<>(fetchAll());
+		Set<Account> accounts = new LinkedHashSet<>(fetchAll());
 		accounts.add(account);
 		try (PrintWriter writer = new PrintWriter(ACCOUNT_STORE)){
 			accounts.stream()
