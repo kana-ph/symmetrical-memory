@@ -28,6 +28,12 @@ public class MainFormController implements Initializable {
 	private Pane saveAccountPane;
 
 	@FXML
+	private Pane centerMessagePane;
+
+	@FXML
+	private Label centerMessageLabel;
+
+	@FXML
 	private Label saveAccountPaneTitle;
 
 	@FXML
@@ -89,9 +95,9 @@ public class MainFormController implements Initializable {
 		try {
 			List<Account> accounts = accountService.fetchAccounts();
 			if (accounts.isEmpty()) {
-				// TODO: show "nothing yet" message
+				showCenterMessage("No saved accounts");
 			} else {
-				// TODO: remove "loading" message
+				centerMessagePane.setVisible(false);
 				accounts.stream()
 						.forEach(this::renderAccountCard);
 			}
@@ -157,5 +163,10 @@ public class MainFormController implements Initializable {
 	private void addCssClass(Node node, String cssClass) {
 		List<String> classes = node.getStyleClass();
 		classes.add(cssClass);
+	}
+
+	private void showCenterMessage(String message) {
+		centerMessageLabel.setText(message);
+		centerMessagePane.setVisible(true);
 	}
 }

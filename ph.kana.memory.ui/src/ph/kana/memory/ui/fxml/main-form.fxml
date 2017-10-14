@@ -28,6 +28,11 @@
             </VBox>
          </content>
       </ScrollPane>
+      <TilePane fx:id="centerMessagePane" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+         <children>
+            <Label fx:id="centerMessageLabel" text="Loading..." />
+         </children>
+      </TilePane>
       <TilePane fx:id="saveAccountPane" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" styleClass="modal-darkening" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane prefHeight="280.0" prefWidth="280.0" styleClass="modal">
@@ -43,8 +48,7 @@
                   <CheckBox fx:id="maskPasswordToggle" layoutX="185.0" layoutY="169.0" mnemonicParsing="false" text="Show?" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="170.0" />
                   <Button cancelButton="true" layoutX="204.0" layoutY="335.0" mnemonicParsing="false" onAction="#closeSaveAccountModal" text="Cancel" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="240.0" />
                   <Button defaultButton="true" layoutX="146.0" layoutY="240.0" mnemonicParsing="false" onAction="#saveAccount" text="Save" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="240.0" />
-               </children>
-            </AnchorPane>
+               </children></AnchorPane>
          </children>
       </TilePane>
    </children>
