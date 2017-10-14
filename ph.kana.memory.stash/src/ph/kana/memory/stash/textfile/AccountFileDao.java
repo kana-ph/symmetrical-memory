@@ -8,12 +8,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class AccountFileDao implements AccountDao {
 
 	private static final String STORE_PATH = System.getProperty("user.home") + System.getProperty("file.separator") + ".pstash";
+	private static final String ENTRY_SEPARATOR = "%";
 	private static final File ACCOUNT_STORE = new File(STORE_PATH);
 	static {
 		try {
@@ -28,7 +30,8 @@ public class AccountFileDao implements AccountDao {
 	public List<Account> fetchAll() throws StashException {
 		try {
 			return Files.lines(ACCOUNT_STORE.toPath())
-					.map(line -> line.split("#", 4))
+					.map(this::decodeEntry)
+					.map(entry -> entry.split(ENTRY_SEPARATOR, 4))
 					.map(this::mapToModel)
 					.collect(Collectors.toList());
 		} catch (IOException e) {
@@ -44,15 +47,15 @@ public class AccountFileDao implements AccountDao {
 			for (Account existing : accountList) {
 				String printLine;
 				if (account.isSameAccount(existing)) {
-					printLine = formatAccount(account);
+					printLine = formatAccountEntry(account);
 					accountExisting = true;
 				} else {
-					printLine = formatAccount(existing);
+					printLine = formatAccountEntry(existing);
 				}
 				writer.write(printLine);
 			}
 			if (!accountExisting) {
-				writer.write(formatAccount(account));
+				writer.write(formatAccountEntry(account));
 			}
 			return account;
 		} catch (IOException e) {
@@ -74,8 +77,21 @@ public class AccountFileDao implements AccountDao {
 		return account;
 	}
 
-	private String formatAccount(Account account) {
-		String timestamp = Long.toString(account.getSaveTimestamp());
-		return String.format("%s#%s#%s#%s", account.getDomain(), account.getUsername(), timestamp, account.getEncryptedPassword());
+	private String decodeEntry(String line) {
+		byte[] content = Base64.getDecoder()
+				.decode(line);
+		return new String(content);
+	}
+
+	private String formatAccountEntry(Account account) {
+		String entry = new StringBuilder()
+				.append(account.getDomain()).append(ENTRY_SEPARATOR)
+				.append(account.getUsername()).append(ENTRY_SEPARATOR)
+				.append(account.getSaveTimestamp()).append(ENTRY_SEPARATOR)
+				.append(account.getEncryptedPassword())
+				.toString();
+		String b64 = Base64.getEncoder()
+				.encodeToString(entry.getBytes());
+		return String.format("%s\n", b64);
 	}
 }
