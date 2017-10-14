@@ -64,16 +64,12 @@ public class AccountFileDao implements AccountDao {
 	}
 
 	private Account mapToModel(String[] line) {
-		String domain = line[0];
-		String username = line[1];
-		long timestamp = Long.valueOf(line[2]);
-		String password = line[3];
-
 		Account account = new Account();
-		account.setDomain(domain);
-		account.setUsername(username);
-		account.setSaveTimestamp(timestamp);
-		account.setEncryptedPassword(password);
+		account.setId(line[0]);
+		account.setDomain(line[1]);
+		account.setUsername(line[2]);
+		account.setSaveTimestamp(Long.valueOf(line[3]));
+		account.setEncryptedPassword(line[4]);
 		return account;
 	}
 
@@ -85,6 +81,7 @@ public class AccountFileDao implements AccountDao {
 
 	private String formatAccountEntry(Account account) {
 		String entry = new StringBuilder()
+				.append(account.getId()).append(ENTRY_SEPARATOR)
 				.append(account.getDomain()).append(ENTRY_SEPARATOR)
 				.append(account.getUsername()).append(ENTRY_SEPARATOR)
 				.append(account.getSaveTimestamp()).append(ENTRY_SEPARATOR)

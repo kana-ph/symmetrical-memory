@@ -1,10 +1,21 @@
 package ph.kana.memory.model;
 
+import java.util.UUID;
+
 public class Account {
+	private String id;
 	private String domain;
 	private String username;
 	private String encryptedPassword;
 	private long saveTimestamp;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getDomain() {
 		return domain;
@@ -38,8 +49,21 @@ public class Account {
 		this.saveTimestamp = saveTimestamp;
 	}
 
-	public boolean isSameAccount(Account other) {
-		return other.domain.equalsIgnoreCase(domain) &&
-				other.username.equalsIgnoreCase(username);
+	@Override
+	public boolean equals(Object that) {
+		if (this == that) {
+			return true;
+		}
+		if (that == null || !(that instanceof Account)) {
+			return false;
+		}
+
+		Account account = (Account) that;
+		return id.equals(account.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
 	}
 }
