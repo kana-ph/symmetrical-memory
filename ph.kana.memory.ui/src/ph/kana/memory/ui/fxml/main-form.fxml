@@ -28,7 +28,7 @@
             </VBox>
          </content>
       </ScrollPane>
-      <TilePane fx:id="saveAccountPane" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" styleClass="modal-darkening" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <TilePane fx:id="saveAccountPane" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" styleClass="modal-darkening" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane prefHeight="280.0" prefWidth="280.0" styleClass="modal">
                <children>
