@@ -60,6 +60,20 @@
             </AnchorPane>
          </children>
       </TilePane>
+      <TilePane fx:id="loginPane" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" styleClass="modal-darkening" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane prefHeight="150.0" prefWidth="260.0" styleClass="modal">
+               <children>
+                  <PasswordField fx:id="pinTextBox" alignment="CENTER" layoutX="55.0" layoutY="62.0" prefHeight="40.0" prefWidth="250.0" promptText="Enter PIN" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="40.0">
+                     <font>
+                        <Font size="21.0" />
+                     </font>
+                  </PasswordField>
+                  <Button defaultButton="true" layoutX="104.0" layoutY="110.0" mnemonicParsing="false" onAction="#validatePin" text="Enter" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="104.0" AnchorPane.rightAnchor="103.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </TilePane>
       <TilePane fx:id="bottomMessagePane" alignment="CENTER" maxHeight="25.0" minHeight="25.0" opacity="0.0" prefHeight="25.0" prefWidth="200.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
          <children>
             <TilePane alignment="CENTER" prefHeight="25.0" prefWidth="0.0" styleClass="bottom-message-darkening">

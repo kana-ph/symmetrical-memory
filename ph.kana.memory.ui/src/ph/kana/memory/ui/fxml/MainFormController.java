@@ -13,6 +13,7 @@ import ph.kana.memory.codec.CodecOperationException;
 import ph.kana.memory.codec.PasswordCodec;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountService;
+import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.StashException;
 
 import java.net.URL;
@@ -24,7 +25,11 @@ public class MainFormController implements Initializable {
 
 	private final Logger logger = Logger.getLogger(MainFormController.class.getName());
 	private final AccountService accountService = new AccountService();
+	private final AuthService authService = new AuthService();
 	private final PasswordCodec passwordCodec = new PasswordCodec();
+
+	@FXML private Pane loginPane;
+	@FXML private TextField pinTextBox;
 
 	@FXML private Pane viewPane;
 
@@ -45,6 +50,21 @@ public class MainFormController implements Initializable {
 	@FXML private Pane passwordRevealPane;
 	@FXML private TextField passwordRevealTextBox;
 	@FXML private Label passwordValue;
+
+	@FXML
+	public void validatePin() {
+		String pin = pinTextBox.getText();
+		try {
+			if (authService.checkValidPin(pin)) {
+				loginPane.setVisible(false);
+			} else {
+				pinTextBox.setText("");
+			}
+		} catch (StashException e) {
+			showBottomMessage("Cannot validate PIN");
+			e.printStackTrace(System.err);
+		}
+	}
 
 	@FXML
 	public void showAddAccountDialog() {
