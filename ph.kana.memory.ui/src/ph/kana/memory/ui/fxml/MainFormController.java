@@ -1,12 +1,10 @@
-package ph.kana.memory.ui;
+package ph.kana.memory.ui.fxml;
 
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import ph.kana.memory.model.Account;
