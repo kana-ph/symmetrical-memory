@@ -145,9 +145,8 @@ public class MainFormController implements Initializable {
 		List<MenuItem> menuItems = accountMenu.getItems();
 		MenuItem updateMenuItem = new MenuItem("Update");
 		menuItems.add(updateMenuItem);
-		updateMenuItem.setOnAction(event -> {
-			// TODO: update account
-		});
+		updateMenuItem.setOnAction(event -> showSaveDialogForAccount(account));
+
 		MenuItem deleteMenuItem = new MenuItem("Delete");
 		menuItems.add(deleteMenuItem);
 		deleteMenuItem.setOnAction(event -> {
@@ -169,6 +168,14 @@ public class MainFormController implements Initializable {
 	private void addCssClass(Node node, String cssClass) {
 		List<String> classes = node.getStyleClass();
 		classes.add(cssClass);
+	}
+	public void showSaveDialogForAccount(Account account) {
+		domainTextBox.setText(account.getDomain());
+		usernameTextBox.setText(account.getUsername());
+		maskedPasswordTextBox.setText("");
+
+		saveAccountPaneTitle.setText("Update account");
+		saveAccountPane.setVisible(true);
 	}
 
 	private void showCenterMessage(String message) {
