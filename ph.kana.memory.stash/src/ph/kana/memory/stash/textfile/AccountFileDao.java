@@ -28,7 +28,7 @@ public class AccountFileDao implements AccountDao {
 	public List<Account> fetchAll() throws StashException {
 		try {
 			return Files.lines(ACCOUNT_STORE.toPath())
-					.map(line -> line.split(":", 4))
+					.map(line -> line.split("#", 4))
 					.map(this::mapToModel)
 					.collect(Collectors.toList());
 		} catch (IOException e) {
@@ -40,9 +40,20 @@ public class AccountFileDao implements AccountDao {
 	public Account save(final Account account) throws StashException {
 		List<Account> accountList = fetchAll();
 		try (PrintWriter writer = new PrintWriter(ACCOUNT_STORE)){
-			accountList.stream()
-					.map(existingAccount -> prepareWritable(existingAccount, account))
-					.forEach(writer::write);
+			boolean accountExisting = false;
+			for (Account existing : accountList) {
+				String printLine;
+				if (account.isSameAccount(existing)) {
+					printLine = formatAccount(account);
+					accountExisting = true;
+				} else {
+					printLine = formatAccount(existing);
+				}
+				writer.write(printLine);
+			}
+			if (!accountExisting) {
+				writer.write(formatAccount(account));
+			}
 			return account;
 		} catch (IOException e) {
 			throw new StashException(e);
@@ -63,16 +74,8 @@ public class AccountFileDao implements AccountDao {
 		return account;
 	}
 
-	private String prepareWritable(Account current, Account replacement) {
-		if (current.isSameAccount(replacement)) {
-			return formatAccount(replacement);
-		} else {
-			return formatAccount(current);
-		}
-	}
-
 	private String formatAccount(Account account) {
 		String timestamp = Long.toString(account.getSaveTimestamp());
-		return String.format("%s:%s:%s:%s", account.getDomain(), account.getUsername(), timestamp, account.getEncryptedPassword());
+		return String.format("%s#%s#%s#%s", account.getDomain(), account.getUsername(), timestamp, account.getEncryptedPassword());
 	}
 }

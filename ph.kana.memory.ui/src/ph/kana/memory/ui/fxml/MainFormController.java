@@ -60,6 +60,10 @@ public class MainFormController implements Initializable {
 			accountService.saveAccount(domain, username, rawPassword);
 		} catch (StashException e) {
 			// TODO: show error saving
+		} finally {
+			domainTextBox.setText("");
+			usernameTextBox.setText("");
+			maskedPasswordTextBox.setText("");
 		}
 	}
 
