@@ -64,6 +64,9 @@ public class MainFormController implements Initializable {
 		String rawPassword = maskedPasswordTextBox.getText();
 		try {
 			accountService.saveAccount(domain, username, rawPassword);
+
+			closeSaveAccountModal();
+			loadAccounts();
 		} catch (StashException e) {
 			// TODO: show error saving
 		} finally {
@@ -93,6 +96,9 @@ public class MainFormController implements Initializable {
 
 	private void loadAccounts() {
 		try {
+			viewPane.getChildren()
+					.clear();
+			showCenterMessage("Loading...");
 			List<Account> accounts = accountService.fetchAccounts();
 			if (accounts.isEmpty()) {
 				showCenterMessage("No saved accounts");
