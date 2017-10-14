@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.Base64;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class AccountFileDao implements AccountDao {
@@ -31,7 +33,7 @@ public class AccountFileDao implements AccountDao {
 		try {
 			return Files.lines(ACCOUNT_STORE.toPath())
 					.map(this::decodeEntry)
-					.map(entry -> entry.split(ENTRY_SEPARATOR, 4))
+					.map(entry -> entry.split(ENTRY_SEPARATOR, 5))
 					.map(this::mapToModel)
 					.collect(Collectors.toList());
 		} catch (IOException e) {
@@ -41,22 +43,12 @@ public class AccountFileDao implements AccountDao {
 
 	@Override
 	public Account save(final Account account) throws StashException {
-		List<Account> accountList = fetchAll();
+		Set<Account> accounts = new HashSet<>(fetchAll());
+		accounts.add(account);
 		try (PrintWriter writer = new PrintWriter(ACCOUNT_STORE)){
-			boolean accountExisting = false;
-			for (Account existing : accountList) {
-				String printLine;
-				if (account.isSameAccount(existing)) {
-					printLine = formatAccountEntry(account);
-					accountExisting = true;
-				} else {
-					printLine = formatAccountEntry(existing);
-				}
-				writer.write(printLine);
-			}
-			if (!accountExisting) {
-				writer.write(formatAccountEntry(account));
-			}
+			accounts.stream()
+					.map(this::formatAccountEntry)
+					.forEach(writer::write);
 			return account;
 		} catch (IOException e) {
 			throw new StashException(e);
