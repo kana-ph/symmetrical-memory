@@ -19,6 +19,15 @@
     -fx-font-style: italic;
 }
 
+.bottom-message-darkening {
+    -fx-background-color: black;
+    -fx-opacity: 60%;
+}
+
+.bottom-message-darkening .text {
+    -fx-text-fill: white;
+}
+
 .modal-darkening {
     -fx-background-color: rgba(0, 0, 0, 0.75);
 }

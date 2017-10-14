@@ -1,5 +1,6 @@
 package ph.kana.memory.ui.fxml;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountService;
 import ph.kana.memory.stash.StashException;
@@ -32,6 +34,12 @@ public class MainFormController implements Initializable {
 
 	@FXML
 	private Label centerMessageLabel;
+
+	@FXML
+	private Pane bottomMessagePane;
+
+	@FXML
+	private Label bottomMessageLabel;
 
 	@FXML
 	private Label saveAccountPaneTitle;
@@ -65,10 +73,12 @@ public class MainFormController implements Initializable {
 		try {
 			accountService.saveAccount(domain, username, rawPassword);
 
+			showBottomMessage("Saving success!");
 			closeSaveAccountModal();
 			loadAccounts();
 		} catch (StashException e) {
-			// TODO: show error saving
+			showBottomMessage("Saving failed!");
+			e.printStackTrace(System.err);
 		} finally {
 			domainTextBox.setText("");
 			usernameTextBox.setText("");
@@ -108,7 +118,7 @@ public class MainFormController implements Initializable {
 						.forEach(this::renderAccountCard);
 			}
 		} catch (StashException e) {
-			// TODO: show error in GUI
+			showBottomMessage("Loading failed!");
 			logger.severe(e::getMessage);
 		}
 	}
@@ -181,5 +191,18 @@ public class MainFormController implements Initializable {
 	private void showCenterMessage(String message) {
 		centerMessageLabel.setText(message);
 		centerMessagePane.setVisible(true);
+	}
+
+	private void showBottomMessage(String message) {
+		bottomMessageLabel.setText(message);
+
+		bottomMessagePane.setOpacity(1.0);
+		FadeTransition fadeTransition = new FadeTransition(Duration.millis(200.0), bottomMessagePane);
+		fadeTransition.setDelay(Duration.millis(3000.0));
+		fadeTransition.setFromValue(1.0);
+		fadeTransition.setToValue(0.0);
+		fadeTransition.setCycleCount(1);
+		fadeTransition.setAutoReverse(false);
+		fadeTransition.play();
 	}
 }
