@@ -7,6 +7,10 @@
     -fx-font-weight: bold;
 }
 
+.account-card .control {
+    -fx-pref-width: 60px;
+}
+
 .account-card .domain-label {
     -fx-font-size: 10px;
     -fx-font-style: italic;

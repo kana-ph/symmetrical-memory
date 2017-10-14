@@ -111,15 +111,16 @@ public class MainFormController implements Initializable {
 		Label usernameLabel = new Label(account.getUsername());
 		children.add(usernameLabel);
 		addCssClass(usernameLabel, "username-label");
-		assignAnchors(usernameLabel, 20.0, 100.0, null, 15.0);
+		assignAnchors(usernameLabel, 15.0, 100.0, null, 15.0);
 
 		Label domainLabel = new Label(account.getDomain());
 		children.add(domainLabel);
 		addCssClass(domainLabel, "domain-label");
-		assignAnchors(domainLabel, null, null, 0.0, 15.0);
+		assignAnchors(domainLabel, null, 100.0, 5.0, 15.0);
 
 		Button showButton = new Button("Show");
 		children.add(showButton);
+		addCssClass(showButton, "control");
 		showButton.setOnAction(event -> {
 			String encryptedPassword = account.getEncryptedPassword();
 			// TODO: do something with password
@@ -128,6 +129,7 @@ public class MainFormController implements Initializable {
 
 		MenuButton accountMenu = new MenuButton("...");
 		children.add(accountMenu);
+		addCssClass(accountMenu, "control");
 		List<MenuItem> menuItems = accountMenu.getItems();
 		MenuItem updateMenuItem = new MenuItem("Update");
 		menuItems.add(updateMenuItem);
@@ -139,7 +141,7 @@ public class MainFormController implements Initializable {
 		deleteMenuItem.setOnAction(event -> {
 			// TODO: delete account
 		});
-		assignAnchors(showButton, null, 10.0, 5.0, null);
+		assignAnchors(accountMenu, null, 10.0, 5.0, null);
 
 		viewPane.getChildren()
 				.add(pane);
