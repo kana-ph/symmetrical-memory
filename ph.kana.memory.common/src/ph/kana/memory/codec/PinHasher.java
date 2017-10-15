@@ -7,7 +7,9 @@ public class PinHasher {
 
 	public String hash(String pin) {
 		Long pinNumber = Long.valueOf(pin);
-		int hash = pinNumber.hashCode(); // TODO: implement something better
+		String hexPin = Long.toHexString(pinNumber);
+		int hash = pin.hashCode() + pin.length()
+				+ hexPin.hashCode() + hexPin.length();
 		return encodeBase64(hash);
 	}
 
