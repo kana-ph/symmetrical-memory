@@ -28,6 +28,12 @@
     -fx-text-fill: white;
 }
 
+.danger-button {
+    -fx-background-color: crimson;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
 .modal-darkening {
     -fx-background-color: rgba(0, 0, 0, 0.75);
 }

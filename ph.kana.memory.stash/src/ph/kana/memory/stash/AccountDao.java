@@ -9,4 +9,6 @@ public interface AccountDao {
 	List<Account> fetchAll() throws StashException;
 
 	Account save(Account account) throws StashException;
+
+	void deleteById(String id) throws StashException;
 }

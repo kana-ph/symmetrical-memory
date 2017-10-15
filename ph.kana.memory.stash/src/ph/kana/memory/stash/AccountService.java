@@ -6,8 +6,6 @@ import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.textfile.AccountFileDao;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import static java.util.UUID.*;
 
@@ -35,6 +33,10 @@ public class AccountService {
 		} catch (CodecOperationException e) {
 			throw new StashException(e);
 		}
+	}
+
+	public void deleteAccount(String id) throws StashException {
+		accountDao.deleteById(id);
 	}
 
 	private String ensureId(String id) {

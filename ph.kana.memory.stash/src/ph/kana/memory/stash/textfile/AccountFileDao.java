@@ -41,13 +41,28 @@ public class AccountFileDao implements AccountDao {
 
 	@Override
 	public Account save(final Account account) throws StashException {
-		List<Account> accounts = new ArrayList<>(fetchAll());
+		List<Account> accounts = fetchAll();
 		addToAccountList(accounts, account);
-		try (PrintWriter writer = new PrintWriter(ACCOUNT_STORE)){
+
+		try (PrintWriter writer = new PrintWriter(ACCOUNT_STORE)) {
 			accounts.stream()
 					.map(this::formatAccountEntry)
 					.forEach(writer::write);
 			return account;
+		} catch (IOException e) {
+			throw new StashException(e);
+		}
+	}
+
+	@Override
+	public void deleteById(String id) throws StashException {
+		List<Account> accounts = fetchAll();
+
+		try (PrintWriter writer = new PrintWriter(ACCOUNT_STORE)) {
+			accounts.stream()
+					.filter(account -> !id.equals(account.getId()))
+					.map(this::formatAccountEntry)
+					.forEach(writer::write);
 		} catch (IOException e) {
 			throw new StashException(e);
 		}

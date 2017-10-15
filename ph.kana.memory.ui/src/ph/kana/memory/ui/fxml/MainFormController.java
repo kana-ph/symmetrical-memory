@@ -8,7 +8,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import ph.kana.memory.codec.CodecOperationException;
 import ph.kana.memory.codec.PasswordCodec;
@@ -53,6 +55,10 @@ public class MainFormController implements Initializable {
 	@FXML private TextField passwordRevealTextBox;
 	@FXML private Label passwordValue;
 
+	@FXML private Pane deleteAccountPane;
+	@FXML private Text usernameText;
+	@FXML private Text domainText;
+
 	@FXML
 	public void validatePin() {
 		String pin = pinTextBox.getText();
@@ -88,7 +94,6 @@ public class MainFormController implements Initializable {
 			accountService.saveAccount(accountId, domain, username, rawPassword);
 
 			showBottomMessage("Saving success!");
-			closeSaveAccountModal();
 			loadAccounts();
 		} catch (StashException e) {
 			showBottomMessage("Saving failed!");
@@ -97,6 +102,23 @@ public class MainFormController implements Initializable {
 			domainTextBox.setText("");
 			usernameTextBox.setText("");
 			maskedPasswordTextBox.setText("");
+			closeSaveAccountModal();
+		}
+	}
+
+	@FXML
+	public void deleteAccount() {
+		String accountId = accountIdValue.getText();
+		try {
+			accountService.deleteAccount(accountId);
+
+			showBottomMessage("Deletion success!");
+			loadAccounts();
+		} catch (StashException e) {
+			showBottomMessage("Delete failed!");
+			e.printStackTrace(System.err);
+		} finally {
+			closeDeleteAccountModal();
 		}
 	}
 
@@ -109,6 +131,12 @@ public class MainFormController implements Initializable {
 	public void closePasswordRevealModal() {
 		passwordValue.setText("");
 		passwordRevealPane.setVisible(false);
+	}
+
+	@FXML
+	public void closeDeleteAccountModal() {
+		accountIdValue.setText("");
+		deleteAccountPane.setVisible(false);
 	}
 
 	@FXML
@@ -168,6 +196,7 @@ public class MainFormController implements Initializable {
 		addCssClass(pane, "account-card");
 		pane.setPrefHeight(70.0);
 		pane.setMinHeight(70.0);
+		pane.setMaxHeight(70.0);
 		List<Node> children = pane.getChildren();
 
 		Label usernameLabel = new Label(account.getUsername());
@@ -189,6 +218,8 @@ public class MainFormController implements Initializable {
 		MenuButton accountMenu = new MenuButton("...");
 		children.add(accountMenu);
 		addCssClass(accountMenu, "control");
+		assignAnchors(accountMenu, null, 10.0, 5.0, null);
+
 		List<MenuItem> menuItems = accountMenu.getItems();
 		MenuItem updateMenuItem = new MenuItem("Update");
 		menuItems.add(updateMenuItem);
@@ -196,10 +227,7 @@ public class MainFormController implements Initializable {
 
 		MenuItem deleteMenuItem = new MenuItem("Delete");
 		menuItems.add(deleteMenuItem);
-		deleteMenuItem.setOnAction(event -> {
-			// TODO: delete account
-		});
-		assignAnchors(accountMenu, null, 10.0, 5.0, null);
+		deleteMenuItem.setOnAction(event -> showDeleteDialogForAccount(account));
 
 		viewPane.getChildren()
 				.add(pane);
@@ -239,6 +267,13 @@ public class MainFormController implements Initializable {
 			showBottomMessage("Something went wrong.");
 			logger.severe(e::getMessage);
 		}
+	}
+
+	private void showDeleteDialogForAccount(Account account) {
+		accountIdValue.setText(account.getId());
+		usernameText.setText(account.getUsername());
+		domainText.setText(account.getDomain());
+		deleteAccountPane.setVisible(true);
 	}
 
 	private void showCenterMessage(String message) {
