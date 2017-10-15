@@ -136,7 +136,28 @@ public class MainFormController implements Initializable {
 
 	@FXML
 	public void savePin() {
+		String oldPin = currentPinTextBox.getText();
+		String newPin = maskedPinTextBox.getText();
 
+		try {
+			if (oldPin.isEmpty() || !authService.checkValidPin(oldPin)) {
+				showBottomMessage("Current PIN is invalid!");
+				return;
+			}
+			if (newPin.isEmpty()) {
+				showBottomMessage("New PIN is required!");
+				return;
+			}
+
+			authService.saveClearPin(newPin);
+
+			closeSetPinModal();
+			showBottomMessage("PIN updated!");
+		} catch (StashException e) {
+			showBottomMessage("Setting new PIN failed!");
+			e.printStackTrace(System.err);
+			closeSetPinModal();
+		}
 	}
 
 	@FXML

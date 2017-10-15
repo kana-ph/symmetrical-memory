@@ -18,14 +18,18 @@ public class AuthService {
 			String currentPin = authDao.readStoredPin();
 			boolean hasPin = !"".equals(currentPin);
 			if (!hasPin) {
-				String hashPin = pinHasher.hash(DEFAULT_PIN);
-				authDao.savePin(hashPin);
+				saveClearPin(DEFAULT_PIN);
 				hasPin = true;
 			}
 		} catch (StashException e) {
 			e.printStackTrace(System.err);
 			System.exit(1);
 		}
+	}
+
+	public void saveClearPin(String pin) throws StashException {
+		String hashPin = pinHasher.hash(pin);
+		authDao.savePin(hashPin);
 	}
 
 	public boolean checkValidPin(String pin) throws StashException {
