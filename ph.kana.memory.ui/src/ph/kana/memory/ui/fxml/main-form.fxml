@@ -24,6 +24,7 @@
             <MenuButton focusTraversable="false" mnemonicParsing="false" text="⚙" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#showSetPinModal" text="Set PIN Code" />
+                  <MenuItem mnemonicParsing="false" onAction="#openSourceCodeUrl" text="Source Code" />
               </items>
             </MenuButton>
          </children>

@@ -1,10 +1,12 @@
 package ph.kana.memory.ui;
 
 import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import ph.kana.memory.ui.fxml.MainFormController;
 
 public class MainForm extends Application {
 
@@ -17,8 +19,8 @@ public class MainForm extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("/ph/kana/memory/ui/fxml/main-form.fxml"));
-		Scene scene = new Scene(root);
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/ph/kana/memory/ui/fxml/main-form.fxml"));
+		Scene scene = new Scene(loader.load());
 
 		setUserAgentStylesheet(STYLESHEET_MODENA);
 
@@ -30,6 +32,9 @@ public class MainForm extends Application {
 
 		stage.setTitle("kana0011/password-locker");
 		stage.setScene(scene);
+
+		MainFormController controller = loader.<MainFormController>getController();
+		controller.setHostServices(getHostServices());
 
 		stage.show();
 	}

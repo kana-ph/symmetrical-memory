@@ -1,12 +1,17 @@
 package ph.kana.memory.ui.fxml;
 
 import javafx.animation.FadeTransition;
+import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -15,7 +20,11 @@ import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountService;
 import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.StashException;
+import ph.kana.memory.ui.MainForm;
 
+import java.awt.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -26,6 +35,7 @@ public class MainFormController implements Initializable {
 	private final Logger logger = Logger.getLogger(MainFormController.class.getName());
 	private final AccountService accountService = new AccountService();
 	private final AuthService authService = new AuthService();
+	private HostServices hostServices;
 
 	@FXML private Pane loginPane;
 	@FXML private TextField pinTextBox;
@@ -161,6 +171,13 @@ public class MainFormController implements Initializable {
 	}
 
 	@FXML
+	public void openSourceCodeUrl() {
+		String url = "https://github.com/kana0011/symmetrical-memory";
+		showBottomMessage("Opening web browser...");
+		hostServices.showDocument(url);
+	}
+
+	@FXML
 	public void closeSaveAccountModal() {
 		saveAccountPane.setVisible(false);
 	}
@@ -193,6 +210,10 @@ public class MainFormController implements Initializable {
 		Platform.runLater(this::bindPasswordToggle);
 		Platform.runLater(this::bindPinToggle);
 		Platform.runLater(this::loadAccounts);
+	}
+
+	public void setHostServices(HostServices hostServices) {
+		this.hostServices = hostServices;
 	}
 
 	private void forcePinNumberInput() {
