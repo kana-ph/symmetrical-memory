@@ -31,4 +31,14 @@ public class AuthFileDao implements AuthDao {
 			throw new StashException(e);
 		}
 	}
+
+	@Override
+	public void savePin(String hashedPin) throws StashException {
+		String printFormat = String.format("%s\n", hashedPin);
+		try {
+			Files.write(PIN_STORE.toPath(), printFormat.getBytes());
+		} catch (IOException e) {
+			throw new StashException(e);
+		}
+	}
 }

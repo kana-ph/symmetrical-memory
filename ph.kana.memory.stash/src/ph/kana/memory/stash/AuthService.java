@@ -11,6 +11,23 @@ public class AuthService {
 	private final PasswordCodec passwordCodec = new PasswordCodec();
 	private final PinHasher pinHasher = new PinHasher();
 
+	private final static String DEFAULT_PIN = "12345678";
+
+	public AuthService() {
+		try {
+			String currentPin = authDao.readStoredPin();
+			boolean hasPin = !"".equals(currentPin);
+			if (!hasPin) {
+				String hashPin = pinHasher.hash(DEFAULT_PIN);
+				authDao.savePin(hashPin);
+				hasPin = true;
+			}
+		} catch (StashException e) {
+			e.printStackTrace(System.err);
+			System.exit(1);
+		}
+	}
+
 	public boolean checkValidPin(String pin) throws StashException {
 		String storedPin = authDao.readStoredPin();
 		return pinHasher.validate(pin, storedPin);
