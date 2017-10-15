@@ -211,7 +211,7 @@ public class MainFormController implements Initializable {
 		showButton.setOnAction(event -> showPasswordRevealForAccount(account));
 		assignAnchors(showButton, 5.0, 10.0, null, null);
 
-		MenuButton accountMenu = new MenuButton("...");
+		MenuButton accountMenu = new MenuButton("\u2699");
 		children.add(accountMenu);
 		addCssClass(accountMenu, "control");
 		assignAnchors(accountMenu, null, 10.0, 5.0, null);
