@@ -22,7 +22,6 @@ import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.StashException;
 import ph.kana.memory.ui.MainForm;
 
-import java.awt.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -102,19 +101,24 @@ public class MainFormController implements Initializable {
 		String domain = domainTextBox.getText();
 		String username = usernameTextBox.getText();
 		String rawPassword = maskedPasswordTextBox.getText();
+		if (domain.isEmpty() || username.isEmpty() || rawPassword.isEmpty()) {
+			showBottomMessage("All fields required!");
+			return;
+		}
 		try {
 			accountService.saveAccount(accountId, domain, username, rawPassword);
 
 			showBottomMessage("Saving success!");
 			loadAccounts();
+			closeSaveAccountModal();
 		} catch (StashException e) {
 			showBottomMessage("Saving failed!");
 			e.printStackTrace(System.err);
+			closeSaveAccountModal();
 		} finally {
 			domainTextBox.setText("");
 			usernameTextBox.setText("");
 			maskedPasswordTextBox.setText("");
-			closeSaveAccountModal();
 		}
 	}
 
