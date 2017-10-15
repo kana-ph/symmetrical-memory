@@ -128,8 +128,8 @@ public class MainFormController implements Initializable {
 	private void forcePinNumberInput() {
 		StringProperty pinTextProperty = pinTextBox.textProperty();
 		pinTextProperty.addListener((observableString, oldValue, newValue) -> {
-			if (newValue.matches("\\D*")) {
-				pinTextBox.setText(newValue.replaceAll("\\D*", ""));
+			if (!newValue.matches("\\d*")) {
+				pinTextBox.setText(newValue.replaceAll("[^\\d]", ""));
 			}
 		});
 	}
