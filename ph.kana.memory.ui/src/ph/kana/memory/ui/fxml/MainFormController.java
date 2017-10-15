@@ -55,6 +55,12 @@ public class MainFormController implements Initializable {
 	@FXML private Text usernameText;
 	@FXML private Text domainText;
 
+	@FXML private Pane setPinPane;
+	@FXML private PasswordField currentPinTextBox;
+	@FXML private TextField unmaskedPinTextBox;
+	@FXML private PasswordField maskedPinTextBox;
+	@FXML private CheckBox maskPinToggle;
+
 	@FXML
 	public void validatePin() {
 		String pin = pinTextBox.getText();
@@ -119,6 +125,21 @@ public class MainFormController implements Initializable {
 	}
 
 	@FXML
+	public void showSetPinModal() {
+		setPinPane.setVisible(true);
+	}
+
+	@FXML
+	public void closeSetPinModal() {
+		setPinPane.setVisible(false);
+	}
+
+	@FXML
+	public void savePin() {
+
+	}
+
+	@FXML
 	public void closeSaveAccountModal() {
 		saveAccountPane.setVisible(false);
 	}
@@ -149,14 +170,24 @@ public class MainFormController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		Platform.runLater(this::forcePinNumberInput);
 		Platform.runLater(this::bindPasswordToggle);
+		Platform.runLater(this::bindPinToggle);
 		Platform.runLater(this::loadAccounts);
 	}
 
 	private void forcePinNumberInput() {
-		StringProperty pinTextProperty = pinTextBox.textProperty();
+		List<TextField> numericalTextField = List.of(
+				pinTextBox,
+				currentPinTextBox,
+				unmaskedPinTextBox,
+				maskedPinTextBox);
+		numericalTextField.forEach(this::forceNumericalInput);
+	}
+
+	private void forceNumericalInput(TextField numericalTextField) {
+		StringProperty pinTextProperty = numericalTextField.textProperty();
 		pinTextProperty.addListener((observableString, oldValue, newValue) -> {
 			if (!newValue.matches("\\d*")) {
-				pinTextBox.setText(newValue.replaceAll("[^\\d]", ""));
+				numericalTextField.setText(newValue.replaceAll("[^\\d]", ""));
 			}
 		});
 	}
@@ -166,6 +197,13 @@ public class MainFormController implements Initializable {
 				.bindBidirectional(maskedPasswordTextBox.textProperty());
 		maskedPasswordTextBox.visibleProperty()
 				.bind(maskPasswordToggle.selectedProperty().not());
+	}
+
+	private void bindPinToggle() {
+		unmaskedPinTextBox.textProperty()
+				.bindBidirectional(maskedPinTextBox.textProperty());
+		maskedPinTextBox.visibleProperty()
+				.bind(maskPinToggle.selectedProperty().not());
 	}
 
 	private void loadAccounts() {
