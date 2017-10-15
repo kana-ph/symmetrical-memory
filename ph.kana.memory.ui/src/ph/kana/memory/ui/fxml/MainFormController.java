@@ -8,12 +8,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import ph.kana.memory.codec.CodecOperationException;
-import ph.kana.memory.codec.PasswordCodec;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountService;
 import ph.kana.memory.stash.AuthService;
@@ -29,7 +26,6 @@ public class MainFormController implements Initializable {
 	private final Logger logger = Logger.getLogger(MainFormController.class.getName());
 	private final AccountService accountService = new AccountService();
 	private final AuthService authService = new AuthService();
-	private final PasswordCodec passwordCodec = new PasswordCodec();
 
 	@FXML private Pane loginPane;
 	@FXML private TextField pinTextBox;
@@ -259,10 +255,10 @@ public class MainFormController implements Initializable {
 		String encryptedPassword = account.getEncryptedPassword();
 		String timestamp = Long.toString(account.getSaveTimestamp());
 		try {
-			String clearPassword = passwordCodec.decrypt(encryptedPassword, timestamp);
+			String clearPassword = authService.decryptPassword(encryptedPassword, timestamp);
 			passwordValue.setText(clearPassword);
 			passwordRevealPane.setVisible(true);
-		} catch (CodecOperationException e) {
+		} catch (StashException e) {
 			closePasswordRevealModal();
 			showBottomMessage("Something went wrong.");
 			logger.severe(e::getMessage);
