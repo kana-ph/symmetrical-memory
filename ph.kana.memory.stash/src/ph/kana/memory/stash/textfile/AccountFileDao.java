@@ -41,8 +41,8 @@ public class AccountFileDao implements AccountDao {
 
 	@Override
 	public Account save(final Account account) throws StashException {
-		Set<Account> accounts = new LinkedHashSet<>(fetchAll());
-		accounts.add(account);
+		List<Account> accounts = new ArrayList<>(fetchAll());
+		addToAccountList(accounts, account);
 		try (PrintWriter writer = new PrintWriter(ACCOUNT_STORE)){
 			accounts.stream()
 					.map(this::formatAccountEntry)
@@ -50,6 +50,16 @@ public class AccountFileDao implements AccountDao {
 			return account;
 		} catch (IOException e) {
 			throw new StashException(e);
+		}
+	}
+
+	private void addToAccountList(List<Account> accountList, Account account) {
+		int i = accountList.indexOf(account);
+		if (i < 0) {
+			accountList.add(account);
+		} else {
+			accountList.remove(i);
+			accountList.add(i, account);
 		}
 	}
 

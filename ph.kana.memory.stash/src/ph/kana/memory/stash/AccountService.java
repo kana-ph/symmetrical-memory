@@ -6,7 +6,10 @@ import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.textfile.AccountFileDao;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+
+import static java.util.UUID.*;
 
 public class AccountService {
 
@@ -17,13 +20,13 @@ public class AccountService {
 		return accountDao.fetchAll();
 	}
 
-	public Account saveAccount(String domain, String username, String rawPassword) throws StashException {
+	public Account saveAccount(String id, String domain, String username, String rawPassword) throws StashException {
 		try {
 			long now = System.currentTimeMillis();
 			String encryptedPassword = passwordCodec.encrypt(rawPassword, Long.toString(now));
 
 			Account account = new Account();
-			account.setId(generateId());
+			account.setId(ensureId(id));
 			account.setDomain(domain);
 			account.setUsername(username);
 			account.setSaveTimestamp(now);
@@ -34,7 +37,11 @@ public class AccountService {
 		}
 	}
 
-	private String generateId() {
-		return UUID.randomUUID().toString();
+	private String ensureId(String id) {
+		if (id == null || id.isEmpty()) {
+			return randomUUID().toString();
+		} else {
+			return id;
+		}
 	}
 }

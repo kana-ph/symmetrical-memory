@@ -36,6 +36,7 @@ public class MainFormController implements Initializable {
 
 	@FXML private Pane saveAccountPane;
 	@FXML private Label saveAccountPaneTitle;
+	@FXML private Label accountIdValue;
 	@FXML private TextField domainTextBox;
 	@FXML private TextField usernameTextBox;
 	@FXML private TextField unmaskedPasswordTextBox;
@@ -73,16 +74,18 @@ public class MainFormController implements Initializable {
 	@FXML
 	public void showAddAccountDialog() {
 		saveAccountPaneTitle.setText("Add Account");
+		accountIdValue.setText("");
 		saveAccountPane.setVisible(true);
 	}
 
 	@FXML
 	public void saveAccount() {
+		String accountId = accountIdValue.getText();
 		String domain = domainTextBox.getText();
 		String username = usernameTextBox.getText();
 		String rawPassword = maskedPasswordTextBox.getText();
 		try {
-			accountService.saveAccount(domain, username, rawPassword);
+			accountService.saveAccount(accountId, domain, username, rawPassword);
 
 			showBottomMessage("Saving success!");
 			closeSaveAccountModal();
@@ -215,6 +218,7 @@ public class MainFormController implements Initializable {
 	}
 
 	private void showSaveDialogForAccount(Account account) {
+		accountIdValue.setText(account.getId());
 		domainTextBox.setText(account.getDomain());
 		usernameTextBox.setText(account.getUsername());
 		maskedPasswordTextBox.setText("");
