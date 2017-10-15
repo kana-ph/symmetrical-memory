@@ -20,8 +20,8 @@
    <children>
       <AnchorPane prefHeight="45.0" prefWidth="350.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onAction="#showAddAccountDialog" text="Add" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
-            <MenuButton mnemonicParsing="false" text="⚙" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+            <Button focusTraversable="false" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onAction="#showAddAccountDialog" text="Add" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+            <MenuButton focusTraversable="false" mnemonicParsing="false" text="⚙" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#showSetPinModal" text="Set PIN Code" />
               </items>
@@ -70,7 +70,6 @@
                   <CheckBox fx:id="maskPinToggle" layoutX="185.0" layoutY="169.0" mnemonicParsing="false" text="Show?" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="115.0" />
                   <Button cancelButton="true" layoutX="204.0" layoutY="335.0" mnemonicParsing="false" onAction="#closeSetPinModal" text="Cancel" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="175.0" />
                   <Button defaultButton="true" layoutX="146.0" layoutY="240.0" mnemonicParsing="false" onAction="#savePin" text="Save" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="175.0" />
-                  <Label fx:id="accountIdValue1" maxHeight="0.0" maxWidth="0.0" minHeight="0.0" minWidth="0.0" opacity="0.0" prefHeight="0.0" prefWidth="0.0" visible="false" />
                </children>
             </AnchorPane>
          </children>
@@ -117,9 +116,10 @@
       </TilePane>
       <TilePane fx:id="loginPane" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" styleClass="modal-darkening" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane prefHeight="150.0" prefWidth="260.0" styleClass="modal">
+            <AnchorPane prefHeight="145.0" prefWidth="260.0" styleClass="modal">
                <children>
-                  <PasswordField fx:id="pinTextBox" alignment="CENTER" layoutX="55.0" layoutY="62.0" prefHeight="40.0" prefWidth="250.0" promptText="Enter PIN" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="40.0">
+                  <Label layoutX="40.0" layoutY="21.0" styleClass="title" text="PIN Code Required!" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                  <PasswordField fx:id="pinTextBox" alignment="CENTER" layoutX="55.0" layoutY="62.0" prefHeight="40.0" prefWidth="250.0" promptText="Enter PIN" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="50.0">
                      <font>
                         <Font size="21.0" />
                      </font>

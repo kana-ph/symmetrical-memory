@@ -246,12 +246,14 @@ public class MainFormController implements Initializable {
 		Button showButton = new Button("Show");
 		children.add(showButton);
 		addCssClass(showButton, "control");
+		showButton.setFocusTraversable(false);
 		showButton.setOnAction(event -> showPasswordRevealForAccount(account));
 		assignAnchors(showButton, 5.0, 10.0, null, null);
 
 		MenuButton accountMenu = new MenuButton("\u2699");
 		children.add(accountMenu);
 		addCssClass(accountMenu, "control");
+		accountMenu.setFocusTraversable(false);
 		assignAnchors(accountMenu, null, 10.0, 5.0, null);
 
 		List<MenuItem> menuItems = accountMenu.getItems();

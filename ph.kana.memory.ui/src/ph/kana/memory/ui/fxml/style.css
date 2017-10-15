@@ -35,7 +35,7 @@
 }
 
 .modal-darkening {
-    -fx-background-color: rgba(0, 0, 0, 0.75);
+    -fx-background-color: rgba(0, 0, 0, 0.9);
 }
 
 .modal {
