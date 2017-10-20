@@ -30,13 +30,4 @@ abstract class AbstractTilePaneModal<TData> extends TilePane {
 	public void setOnClose(Runnable onClose) {
 		this.onClose = Optional.ofNullable(onClose);
 	}
-
-	protected void forceNumericalInput(TextField numericalTextField) {
-		StringProperty pinTextProperty = numericalTextField.textProperty();
-		pinTextProperty.addListener((observableString, oldValue, newValue) -> {
-			if (!newValue.matches("\\d*")) {
-				numericalTextField.setText(newValue.replaceAll("[^\\d]", ""));
-			}
-		});
-	}
 }

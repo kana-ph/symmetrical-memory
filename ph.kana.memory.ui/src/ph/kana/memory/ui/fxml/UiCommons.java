@@ -1,7 +1,9 @@
 package ph.kana.memory.ui.fxml;
 
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -16,6 +18,15 @@ public final class UiCommons {
 		AnchorPane.setRightAnchor(node, right);
 		AnchorPane.setBottomAnchor(node, bottom);
 		AnchorPane.setLeftAnchor(node, left);
+	}
+
+	public static void forceNumericalInput(TextField numericalTextField) {
+		StringProperty pinTextProperty = numericalTextField.textProperty();
+		pinTextProperty.addListener((observableString, oldValue, newValue) -> {
+			if (!newValue.matches("\\d*")) {
+				numericalTextField.setText(newValue.replaceAll("[^\\d]", ""));
+			}
+		});
 	}
 
 	public static <TController> void loadFxmlFile(TController rootController, String fxmlPath) {

@@ -6,6 +6,9 @@ import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.StashException;
 import ph.kana.memory.ui.fxml.UiCommons;
 
+import static ph.kana.memory.ui.fxml.UiCommons.forceNumericalInput;
+import static ph.kana.memory.ui.fxml.UiCommons.showBottomFadingText;
+
 public class LoginModal extends AbstractTilePaneModal<Void> {
 
 	@FXML private TextField pinTextBox;
@@ -33,7 +36,7 @@ public class LoginModal extends AbstractTilePaneModal<Void> {
 				pinTextBox.setText("");
 			}
 		} catch (StashException e) {
-			UiCommons.showBottomFadingText("Cannot validate PIN", getChildren());
+			showBottomFadingText("Cannot validate PIN", getChildren());
 			e.printStackTrace(System.err);
 		}
 	}
