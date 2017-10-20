@@ -12,7 +12,7 @@ public class DeleteAccountModal extends AbstractTilePaneModal<Account> {
 	@FXML private Text usernameText;
 	@FXML private Text domainText;
 
-	private final AccountService accountService = new AccountService();
+	private final AccountService accountService = AccountService.getInstance();
 	private Account account;
 
 	public DeleteAccountModal() {

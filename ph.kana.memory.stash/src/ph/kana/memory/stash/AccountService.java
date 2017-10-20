@@ -14,6 +14,14 @@ public class AccountService {
 	private AccountDao accountDao = new AccountFileDao();
 	private PasswordCodec passwordCodec = new PasswordCodec();
 
+	private static final AccountService INSTANCE = new AccountService();
+
+	public static AccountService getInstance() {
+		return INSTANCE;
+	}
+
+	private AccountService() {}
+
 	public List<Account> fetchAccounts() throws StashException {
 		return accountDao.fetchAll();
 	}
