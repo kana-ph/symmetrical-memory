@@ -20,6 +20,7 @@ import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountService;
 import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.StashException;
+import ph.kana.memory.ui.fxml.modal.DeleteAccountModal;
 import ph.kana.memory.ui.fxml.modal.LoginModal;
 import ph.kana.memory.ui.fxml.modal.PasswordRevealModal;
 
@@ -52,10 +53,7 @@ public class MainFormController implements Initializable {
 
 	@FXML private LoginModal loginModal;
 	@FXML private PasswordRevealModal passwordRevealModal;
-
-	@FXML private Pane deleteAccountPane;
-	@FXML private Text usernameText;
-	@FXML private Text domainText;
+	@FXML private DeleteAccountModal deleteAccountModal;
 
 	@FXML private Pane setPinPane;
 	@FXML private PasswordField currentPinTextBox;
@@ -94,22 +92,6 @@ public class MainFormController implements Initializable {
 			domainTextBox.setText("");
 			usernameTextBox.setText("");
 			maskedPasswordTextBox.setText("");
-		}
-	}
-
-	@FXML
-	public void deleteAccount() {
-		String accountId = accountIdValue.getText();
-		try {
-			accountService.deleteAccount(accountId);
-
-			showBottomMessage("Deletion success!");
-			loadAccounts();
-		} catch (StashException e) {
-			showBottomMessage("Delete failed!");
-			e.printStackTrace(System.err);
-		} finally {
-			closeDeleteAccountModal();
 		}
 	}
 
@@ -159,12 +141,6 @@ public class MainFormController implements Initializable {
 	@FXML
 	public void closeSaveAccountModal() {
 		saveAccountPane.setVisible(false);
-	}
-
-	@FXML
-	public void closeDeleteAccountModal() {
-		accountIdValue.setText("");
-		deleteAccountPane.setVisible(false);
 	}
 
 	@Override
@@ -268,7 +244,7 @@ public class MainFormController implements Initializable {
 
 		MenuItem deleteMenuItem = new MenuItem("Delete");
 		menuItems.add(deleteMenuItem);
-		deleteMenuItem.setOnAction(event -> showDeleteDialogForAccount(account));
+		deleteMenuItem.setOnAction(event -> deleteAccountModal.showModal(account));
 
 		viewPane.getChildren()
 				.add(pane);
@@ -300,13 +276,6 @@ public class MainFormController implements Initializable {
 			showBottomMessage("Something went wrong.");
 			logger.severe(e::getMessage);
 		}
-	}
-
-	private void showDeleteDialogForAccount(Account account) {
-		accountIdValue.setText(account.getId());
-		usernameText.setText(account.getUsername());
-		domainText.setText(account.getDomain());
-		deleteAccountPane.setVisible(true);
 	}
 
 	private void showCenterMessage(String message) {
