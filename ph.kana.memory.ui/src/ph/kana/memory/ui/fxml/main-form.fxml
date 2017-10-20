@@ -18,7 +18,7 @@
 
 <?import ph.kana.memory.ui.fxml.modal.PasswordRevealModal?>
 <?import ph.kana.memory.ui.fxml.modal.LoginModal?>
-<AnchorPane prefHeight="495.0" prefWidth="350.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ph.kana.memory.ui.fxml.MainFormController">
+<AnchorPane fx:id="rootPane" prefHeight="495.0" prefWidth="350.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ph.kana.memory.ui.fxml.MainFormController">
    <children>
       <AnchorPane prefHeight="45.0" prefWidth="350.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -107,21 +107,5 @@
       </TilePane>
       <PasswordRevealModal fx:id="passwordRevealModal" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"  />
       <LoginModal fx:id="loginModal" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <TilePane fx:id="bottomMessagePane" alignment="CENTER" maxHeight="25.0" minHeight="25.0" opacity="0.0" prefHeight="25.0" prefWidth="200.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
-         <children>
-            <TilePane alignment="CENTER" prefHeight="25.0" prefWidth="0.0" styleClass="bottom-message-darkening">
-               <children>
-                  <Label fx:id="bottomMessageLabel" styleClass="text" textFill="WHITE">
-                     <font>
-                        <Font size="12.0" />
-                     </font>
-                     <TilePane.margin>
-                        <Insets left="3.0" right="3.0" />
-                     </TilePane.margin>
-                  </Label>
-               </children>
-            </TilePane>
-         </children>
-      </TilePane>
    </children>
 </AnchorPane>

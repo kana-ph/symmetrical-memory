@@ -35,6 +35,7 @@ public class MainFormController implements Initializable {
 	private final AuthService authService = new AuthService();
 	private HostServices hostServices;
 
+	@FXML private Pane rootPane;
 	@FXML private Pane viewPane;
 
 	@FXML private Pane saveAccountPane;
@@ -48,9 +49,6 @@ public class MainFormController implements Initializable {
 
 	@FXML private Pane centerMessagePane;
 	@FXML private Label centerMessageLabel;
-
-	@FXML private Pane bottomMessagePane;
-	@FXML private Label bottomMessageLabel;
 
 	@FXML private LoginModal loginModal;
 	@FXML private PasswordRevealModal passwordRevealModal;
@@ -324,15 +322,11 @@ public class MainFormController implements Initializable {
 	}
 
 	private void showBottomMessage(String message) {
-		bottomMessageLabel.setText(message);
+		FadingNotificationText fadingText = new FadingNotificationText();
+		List<Node> children = rootPane.getChildren();
 
-		bottomMessagePane.setOpacity(1.0);
-		FadeTransition fadeTransition = new FadeTransition(Duration.millis(200.0), bottomMessagePane);
-		fadeTransition.setDelay(Duration.millis(3000.0));
-		fadeTransition.setFromValue(1.0);
-		fadeTransition.setToValue(0.0);
-		fadeTransition.setCycleCount(1);
-		fadeTransition.setAutoReverse(false);
-		fadeTransition.play();
+		children.add(fadingText);
+		assignAnchors(fadingText, null, 20.0, 20.0, 20.0);
+		fadingText.showText(message, children::remove);
 	}
 }
