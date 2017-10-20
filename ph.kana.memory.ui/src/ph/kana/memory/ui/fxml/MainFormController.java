@@ -23,6 +23,7 @@ import ph.kana.memory.stash.StashException;
 import ph.kana.memory.ui.fxml.modal.DeleteAccountModal;
 import ph.kana.memory.ui.fxml.modal.LoginModal;
 import ph.kana.memory.ui.fxml.modal.PasswordRevealModal;
+import ph.kana.memory.ui.fxml.modal.SavePinModal;
 
 import java.net.URL;
 import java.util.List;
@@ -33,7 +34,7 @@ public class MainFormController implements Initializable {
 
 	private final Logger logger = Logger.getLogger(MainFormController.class.getName());
 	private final AccountService accountService = new AccountService();
-	private final AuthService authService = new AuthService();
+	private final AuthService authService = AuthService.getInstance();
 	private HostServices hostServices;
 
 	@FXML private Pane rootPane;
@@ -54,12 +55,7 @@ public class MainFormController implements Initializable {
 	@FXML private LoginModal loginModal;
 	@FXML private PasswordRevealModal passwordRevealModal;
 	@FXML private DeleteAccountModal deleteAccountModal;
-
-	@FXML private Pane setPinPane;
-	@FXML private PasswordField currentPinTextBox;
-	@FXML private TextField unmaskedPinTextBox;
-	@FXML private PasswordField maskedPinTextBox;
-	@FXML private CheckBox maskPinToggle;
+	@FXML private SavePinModal savePinModal;
 
 	@FXML
 	public void showAddAccountDialog() {
@@ -97,38 +93,7 @@ public class MainFormController implements Initializable {
 
 	@FXML
 	public void showSetPinModal() {
-		setPinPane.setVisible(true);
-	}
-
-	@FXML
-	public void closeSetPinModal() {
-		setPinPane.setVisible(false);
-	}
-
-	@FXML
-	public void savePin() {
-		String oldPin = currentPinTextBox.getText();
-		String newPin = maskedPinTextBox.getText();
-
-		try {
-			if (oldPin.isEmpty() || !authService.checkValidPin(oldPin)) {
-				showBottomMessage("Current PIN is invalid!");
-				return;
-			}
-			if (newPin.isEmpty()) {
-				showBottomMessage("New PIN is required!");
-				return;
-			}
-
-			authService.saveClearPin(newPin);
-
-			closeSetPinModal();
-			showBottomMessage("PIN updated!");
-		} catch (StashException e) {
-			showBottomMessage("Setting new PIN failed!");
-			e.printStackTrace(System.err);
-			closeSetPinModal();
-		}
+		savePinModal.showModal(null);
 	}
 
 	@FXML
@@ -145,22 +110,12 @@ public class MainFormController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		Platform.runLater(this::forcePinNumberInput);
 		Platform.runLater(this::bindPasswordToggle);
-		Platform.runLater(this::bindPinToggle);
 		Platform.runLater(this::loadAccounts);
 	}
 
 	public void setHostServices(HostServices hostServices) {
 		this.hostServices = hostServices;
-	}
-
-	private void forcePinNumberInput() {
-		List<TextField> numericalTextField = List.of(
-				currentPinTextBox,
-				unmaskedPinTextBox,
-				maskedPinTextBox);
-		numericalTextField.forEach(this::forceNumericalInput);
 	}
 
 	@Deprecated(forRemoval = true)
@@ -178,13 +133,6 @@ public class MainFormController implements Initializable {
 				.bindBidirectional(maskedPasswordTextBox.textProperty());
 		maskedPasswordTextBox.visibleProperty()
 				.bind(maskPasswordToggle.selectedProperty().not());
-	}
-
-	private void bindPinToggle() {
-		unmaskedPinTextBox.textProperty()
-				.bindBidirectional(maskedPinTextBox.textProperty());
-		maskedPinTextBox.visibleProperty()
-				.bind(maskPinToggle.selectedProperty().not());
 	}
 
 	private void loadAccounts() {
