@@ -20,10 +20,8 @@ import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountService;
 import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.StashException;
-import ph.kana.memory.ui.MainForm;
+import ph.kana.memory.ui.fxml.modal.PasswordRevealModal;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -56,9 +54,7 @@ public class MainFormController implements Initializable {
 	@FXML private Pane bottomMessagePane;
 	@FXML private Label bottomMessageLabel;
 
-	@FXML private Pane passwordRevealPane;
-	@FXML private TextField passwordRevealTextBox;
-	@FXML private Label passwordValue;
+	@FXML private PasswordRevealModal passwordRevealModal;
 
 	@FXML private Pane deleteAccountPane;
 	@FXML private Text usernameText;
@@ -187,25 +183,9 @@ public class MainFormController implements Initializable {
 	}
 
 	@FXML
-	public void closePasswordRevealModal() {
-		passwordValue.setText("");
-		passwordRevealPane.setVisible(false);
-	}
-
-	@FXML
 	public void closeDeleteAccountModal() {
 		accountIdValue.setText("");
 		deleteAccountPane.setVisible(false);
-	}
-
-	@FXML
-	public void showPassword() {
-		passwordRevealTextBox.setText(passwordValue.getText());
-	}
-
-	@FXML
-	public void hidePassword() {
-		passwordRevealTextBox.setText("");
 	}
 
 	@Override
@@ -342,10 +322,9 @@ public class MainFormController implements Initializable {
 		String timestamp = Long.toString(account.getSaveTimestamp());
 		try {
 			String clearPassword = authService.decryptPassword(encryptedPassword, timestamp);
-			passwordValue.setText(clearPassword);
-			passwordRevealPane.setVisible(true);
+			passwordRevealModal.showModal(clearPassword);
 		} catch (StashException e) {
-			closePasswordRevealModal();
+			passwordRevealModal.close();
 			showBottomMessage("Something went wrong.");
 			logger.severe(e::getMessage);
 		}

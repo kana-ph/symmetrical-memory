@@ -8,4 +8,5 @@ module ph.kana.memory.ui {
 
 	opens ph.kana.memory.ui to javafx.graphics;
 	opens ph.kana.memory.ui.fxml to javafx.fxml, javafx.controls;
+	opens ph.kana.memory.ui.fxml.modal to javafx.fxml, javafx.controls;
 }
