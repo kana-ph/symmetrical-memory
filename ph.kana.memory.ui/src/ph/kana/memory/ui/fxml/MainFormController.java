@@ -20,6 +20,7 @@ import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountService;
 import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.StashException;
+import ph.kana.memory.ui.fxml.modal.LoginModal;
 import ph.kana.memory.ui.fxml.modal.PasswordRevealModal;
 
 import java.net.URL;
@@ -33,9 +34,6 @@ public class MainFormController implements Initializable {
 	private final AccountService accountService = new AccountService();
 	private final AuthService authService = new AuthService();
 	private HostServices hostServices;
-
-	@FXML private Pane loginPane;
-	@FXML private TextField pinTextBox;
 
 	@FXML private Pane viewPane;
 
@@ -54,6 +52,7 @@ public class MainFormController implements Initializable {
 	@FXML private Pane bottomMessagePane;
 	@FXML private Label bottomMessageLabel;
 
+	@FXML private LoginModal loginModal;
 	@FXML private PasswordRevealModal passwordRevealModal;
 
 	@FXML private Pane deleteAccountPane;
@@ -65,24 +64,6 @@ public class MainFormController implements Initializable {
 	@FXML private TextField unmaskedPinTextBox;
 	@FXML private PasswordField maskedPinTextBox;
 	@FXML private CheckBox maskPinToggle;
-
-	@FXML
-	public void validatePin() {
-		String pin = pinTextBox.getText();
-		if (pin.isEmpty()) {
-			return;
-		}
-		try {
-			if (authService.checkValidPin(pin)) {
-				loginPane.setVisible(false);
-			} else {
-				pinTextBox.setText("");
-			}
-		} catch (StashException e) {
-			showBottomMessage("Cannot validate PIN");
-			e.printStackTrace(System.err);
-		}
-	}
 
 	@FXML
 	public void showAddAccountDialog() {
@@ -202,13 +183,13 @@ public class MainFormController implements Initializable {
 
 	private void forcePinNumberInput() {
 		List<TextField> numericalTextField = List.of(
-				pinTextBox,
 				currentPinTextBox,
 				unmaskedPinTextBox,
 				maskedPinTextBox);
 		numericalTextField.forEach(this::forceNumericalInput);
 	}
 
+	@Deprecated(forRemoval = true)
 	private void forceNumericalInput(TextField numericalTextField) {
 		StringProperty pinTextProperty = numericalTextField.textProperty();
 		pinTextProperty.addListener((observableString, oldValue, newValue) -> {

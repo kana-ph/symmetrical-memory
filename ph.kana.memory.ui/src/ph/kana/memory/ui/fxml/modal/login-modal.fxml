@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Font?>
+
+<fx:root type="TilePane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" styleClass="modal-darkening" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<children>
+    <AnchorPane prefHeight="145.0" prefWidth="260.0" styleClass="modal">
+        <children>
+            <Label layoutX="40.0" layoutY="21.0" styleClass="title" text="PIN Code Required!" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
+            <PasswordField fx:id="pinTextBox" alignment="CENTER" layoutX="55.0" layoutY="62.0" prefHeight="40.0" prefWidth="250.0" promptText="Enter PIN" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="50.0">
+                <font>
+                    <Font size="21.0" />
+                </font>
+            </PasswordField>
+            <Button defaultButton="true" layoutX="104.0" layoutY="110.0" mnemonicParsing="false" onAction="#validatePin" text="Enter" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="104.0" AnchorPane.rightAnchor="103.0" />
+        </children>
+    </AnchorPane>
+</children>
+</fx:root>
