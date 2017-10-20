@@ -244,7 +244,7 @@ public class MainFormController implements Initializable {
 
 		MenuItem deleteMenuItem = new MenuItem("Delete");
 		menuItems.add(deleteMenuItem);
-		deleteMenuItem.setOnAction(event -> deleteAccountModal.showModal(account));
+		deleteMenuItem.setOnAction(event -> showDeleteModal(account));
 
 		viewPane.getChildren()
 				.add(pane);
@@ -281,6 +281,11 @@ public class MainFormController implements Initializable {
 	private void showCenterMessage(String message) {
 		centerMessageLabel.setText(message);
 		centerMessagePane.setVisible(true);
+	}
+
+	private void showDeleteModal(Account account) {
+		deleteAccountModal.setOnClose(this::loadAccounts);
+		deleteAccountModal.showModal(account);
 	}
 
 	private void showBottomMessage(String message) {

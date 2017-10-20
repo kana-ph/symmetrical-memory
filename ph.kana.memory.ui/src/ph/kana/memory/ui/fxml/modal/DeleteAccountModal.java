@@ -21,6 +21,7 @@ public class DeleteAccountModal extends AbstractTilePaneModal<Account> {
 
 	@Override
 	public void showModal(Account account) {
+		this.account = account;
 		usernameText.setText(account.getUsername());
 		domainText.setText(account.getDomain());
 		setVisible(true);
@@ -33,17 +34,11 @@ public class DeleteAccountModal extends AbstractTilePaneModal<Account> {
 			accountService.deleteAccount(accountId);
 
 			UiCommons.showBottomFadingText("Deletion success!", getChildren());
-//			loadAccounts(); // TODO reload
 		} catch (StashException e) {
 			UiCommons.showBottomFadingText("Delete failed!", getChildren());
 			e.printStackTrace(System.err);
 		} finally {
 			close();
 		}
-	}
-
-	@FXML
-	public void close() {
-		setVisible(false);
 	}
 }
