@@ -105,8 +105,8 @@
             </AnchorPane>
          </children>
       </TilePane>
-      <PasswordRevealModal fx:id="passwordRevealModal" />
-      <LoginModal fx:id="loginModal" />
+      <PasswordRevealModal fx:id="passwordRevealModal" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"  />
+      <LoginModal fx:id="loginModal" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <TilePane fx:id="bottomMessagePane" alignment="CENTER" maxHeight="25.0" minHeight="25.0" opacity="0.0" prefHeight="25.0" prefWidth="200.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
          <children>
             <TilePane alignment="CENTER" prefHeight="25.0" prefWidth="0.0" styleClass="bottom-message-darkening">
