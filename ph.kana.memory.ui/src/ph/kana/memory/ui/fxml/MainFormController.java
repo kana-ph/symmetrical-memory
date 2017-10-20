@@ -20,34 +20,23 @@ import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountService;
 import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.StashException;
-import ph.kana.memory.ui.fxml.modal.DeleteAccountModal;
-import ph.kana.memory.ui.fxml.modal.LoginModal;
-import ph.kana.memory.ui.fxml.modal.PasswordRevealModal;
-import ph.kana.memory.ui.fxml.modal.SavePinModal;
+import ph.kana.memory.ui.fxml.modal.*;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
 public class MainFormController implements Initializable {
 
 	private final Logger logger = Logger.getLogger(MainFormController.class.getName());
-	private final AccountService accountService = new AccountService();
+	private final AccountService accountService = AccountService.getInstance();
 	private final AuthService authService = AuthService.getInstance();
 	private HostServices hostServices;
 
 	@FXML private Pane rootPane;
 	@FXML private Pane viewPane;
-
-	@FXML private Pane saveAccountPane;
-	@FXML private Label saveAccountPaneTitle;
-	@FXML private Label accountIdValue;
-	@FXML private TextField domainTextBox;
-	@FXML private TextField usernameTextBox;
-	@FXML private TextField unmaskedPasswordTextBox;
-	@FXML private PasswordField maskedPasswordTextBox;
-	@FXML private CheckBox maskPasswordToggle;
 
 	@FXML private Pane centerMessagePane;
 	@FXML private Label centerMessageLabel;
@@ -55,40 +44,13 @@ public class MainFormController implements Initializable {
 	@FXML private LoginModal loginModal;
 	@FXML private PasswordRevealModal passwordRevealModal;
 	@FXML private DeleteAccountModal deleteAccountModal;
+	@FXML private SaveAccountModal saveAccountModal;
 	@FXML private SavePinModal savePinModal;
 
 	@FXML
 	public void showAddAccountDialog() {
-		saveAccountPaneTitle.setText("Add Account");
-		accountIdValue.setText("");
-		saveAccountPane.setVisible(true);
-	}
-
-	@FXML
-	public void saveAccount() {
-		String accountId = accountIdValue.getText();
-		String domain = domainTextBox.getText();
-		String username = usernameTextBox.getText();
-		String rawPassword = maskedPasswordTextBox.getText();
-		if (domain.isEmpty() || username.isEmpty() || rawPassword.isEmpty()) {
-			showBottomMessage("All fields required!");
-			return;
-		}
-		try {
-			accountService.saveAccount(accountId, domain, username, rawPassword);
-
-			showBottomMessage("Saving success!");
-			loadAccounts();
-			closeSaveAccountModal();
-		} catch (StashException e) {
-			showBottomMessage("Saving failed!");
-			e.printStackTrace(System.err);
-			closeSaveAccountModal();
-		} finally {
-			domainTextBox.setText("");
-			usernameTextBox.setText("");
-			maskedPasswordTextBox.setText("");
-		}
+		saveAccountModal.setOnClose(this::loadAccounts);
+		saveAccountModal.showModal(Optional.empty());
 	}
 
 	@FXML
@@ -103,14 +65,8 @@ public class MainFormController implements Initializable {
 		hostServices.showDocument(url);
 	}
 
-	@FXML
-	public void closeSaveAccountModal() {
-		saveAccountPane.setVisible(false);
-	}
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		Platform.runLater(this::bindPasswordToggle);
 		Platform.runLater(this::loadAccounts);
 	}
 
@@ -126,13 +82,6 @@ public class MainFormController implements Initializable {
 				numericalTextField.setText(newValue.replaceAll("[^\\d]", ""));
 			}
 		});
-	}
-
-	private void bindPasswordToggle() {
-		unmaskedPasswordTextBox.textProperty()
-				.bindBidirectional(maskedPasswordTextBox.textProperty());
-		maskedPasswordTextBox.visibleProperty()
-				.bind(maskPasswordToggle.selectedProperty().not());
 	}
 
 	private void loadAccounts() {
@@ -204,16 +153,11 @@ public class MainFormController implements Initializable {
 	}
 
 	private void showSaveDialogForAccount(Account account) {
-		accountIdValue.setText(account.getId());
-		domainTextBox.setText(account.getDomain());
-		usernameTextBox.setText(account.getUsername());
-		maskedPasswordTextBox.setText("");
-
-		saveAccountPaneTitle.setText("Update account");
-		saveAccountPane.setVisible(true);
+		saveAccountModal.setOnClose(this::loadAccounts);
+		saveAccountModal.showModal(Optional.of(account));
 	}
 
-	private void showPasswordRevealForAccount(Account account) {
+	private void showPasswordRevealForAccount(Account account) { // TODO move to password reveal
 		String encryptedPassword = account.getEncryptedPassword();
 		String timestamp = Long.toString(account.getSaveTimestamp());
 		try {

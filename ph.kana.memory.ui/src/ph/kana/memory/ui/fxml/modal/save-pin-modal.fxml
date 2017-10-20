@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root type="TilePane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:id="setPinPane" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" styleClass="modal-darkening" visible="false">
+<fx:root type="TilePane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" styleClass="modal-darkening" visible="false">
 <children>
     <AnchorPane prefHeight="215.0" prefWidth="280.0" styleClass="modal">
         <children>
