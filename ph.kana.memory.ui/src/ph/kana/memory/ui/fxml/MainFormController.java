@@ -241,25 +241,25 @@ public class MainFormController implements Initializable {
 		Label usernameLabel = new Label(account.getUsername());
 		children.add(usernameLabel);
 		addCssClass(usernameLabel, "username-label");
-		assignAnchors(usernameLabel, 15.0, 100.0, null, 15.0);
+		UiCommons.assignAnchors(usernameLabel, 15.0, 100.0, null, 15.0);
 
 		Label domainLabel = new Label(account.getDomain());
 		children.add(domainLabel);
 		addCssClass(domainLabel, "domain-label");
-		assignAnchors(domainLabel, null, 100.0, 5.0, 15.0);
+		UiCommons.assignAnchors(domainLabel, null, 100.0, 5.0, 15.0);
 
 		Button showButton = new Button("Show");
 		children.add(showButton);
 		addCssClass(showButton, "control");
 		showButton.setFocusTraversable(false);
 		showButton.setOnAction(event -> showPasswordRevealForAccount(account));
-		assignAnchors(showButton, 5.0, 10.0, null, null);
+		UiCommons.assignAnchors(showButton, 5.0, 10.0, null, null);
 
 		MenuButton accountMenu = new MenuButton("\u2699");
 		children.add(accountMenu);
 		addCssClass(accountMenu, "control");
 		accountMenu.setFocusTraversable(false);
-		assignAnchors(accountMenu, null, 10.0, 5.0, null);
+		UiCommons.assignAnchors(accountMenu, null, 10.0, 5.0, null);
 
 		List<MenuItem> menuItems = accountMenu.getItems();
 		MenuItem updateMenuItem = new MenuItem("Update");
@@ -272,13 +272,6 @@ public class MainFormController implements Initializable {
 
 		viewPane.getChildren()
 				.add(pane);
-	}
-
-	private void assignAnchors(Node node, Double top, Double right, Double bottom, Double left) {
-		AnchorPane.setTopAnchor(node, top);
-		AnchorPane.setRightAnchor(node, right);
-		AnchorPane.setBottomAnchor(node, bottom);
-		AnchorPane.setLeftAnchor(node, left);
 	}
 
 	private void addCssClass(Node node, String cssClass) {
@@ -322,11 +315,6 @@ public class MainFormController implements Initializable {
 	}
 
 	private void showBottomMessage(String message) {
-		FadingNotificationText fadingText = new FadingNotificationText();
-		List<Node> children = rootPane.getChildren();
-
-		children.add(fadingText);
-		assignAnchors(fadingText, null, 20.0, 20.0, 20.0);
-		fadingText.showText(message, children::remove);
+		UiCommons.showBottomFadingText(message, rootPane.getChildren());
 	}
 }
