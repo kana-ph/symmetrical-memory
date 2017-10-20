@@ -7,7 +7,7 @@ import javafx.scene.layout.TilePane;
 
 import java.io.IOException;
 
-public class PasswordRevealModal extends AbstractTilePaneModal {
+public class PasswordRevealModal extends AbstractTilePaneModal<String> {
 
 	@FXML private TextField passwordRevealTextBox;
 
@@ -15,6 +15,12 @@ public class PasswordRevealModal extends AbstractTilePaneModal {
 
 	public PasswordRevealModal() {
 		super("password-reveal-modal.fxml");
+	}
+
+	@Override
+	public void showModal(String password) {
+		this.password = password;
+		setVisible(true);
 	}
 
 	@FXML
@@ -31,10 +37,5 @@ public class PasswordRevealModal extends AbstractTilePaneModal {
 	@FXML
 	public void hidePassword() {
 		passwordRevealTextBox.setText("");
-	}
-
-	public void showModal(String password) {
-		this.password = password;
-		setVisible(true);
 	}
 }

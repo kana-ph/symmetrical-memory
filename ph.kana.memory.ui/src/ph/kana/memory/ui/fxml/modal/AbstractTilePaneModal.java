@@ -7,7 +7,7 @@ import javafx.scene.layout.TilePane;
 
 import java.io.IOException;
 
-abstract class AbstractTilePaneModal extends TilePane {
+abstract class AbstractTilePaneModal<TData> extends TilePane {
 
 	AbstractTilePaneModal(String fxmlPath) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -21,6 +21,8 @@ abstract class AbstractTilePaneModal extends TilePane {
 			System.exit(1);
 		}
 	}
+
+	public abstract void showModal(TData data);
 
 	protected void forceNumericalInput(TextField numericalTextField) {
 		StringProperty pinTextProperty = numericalTextField.textProperty();

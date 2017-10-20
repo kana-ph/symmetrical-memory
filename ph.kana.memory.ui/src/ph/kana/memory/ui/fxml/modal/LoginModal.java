@@ -6,7 +6,7 @@ import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.StashException;
 import ph.kana.memory.ui.fxml.UiCommons;
 
-public class LoginModal extends AbstractTilePaneModal {
+public class LoginModal extends AbstractTilePaneModal<Void> {
 
 	@FXML private TextField pinTextBox;
 
@@ -16,6 +16,9 @@ public class LoginModal extends AbstractTilePaneModal {
 		super("login-modal.fxml");
 		forceNumericalInput(pinTextBox);
 	}
+
+	@Override
+	public void showModal(Void data) {}
 
 	@FXML
 	public void validatePin() {
