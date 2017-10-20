@@ -7,19 +7,12 @@ import javafx.scene.layout.TilePane;
 
 import java.io.IOException;
 
+import static ph.kana.memory.ui.fxml.UiCommons.loadFxmlFile;
+
 abstract class AbstractTilePaneModal<TData> extends TilePane {
 
 	AbstractTilePaneModal(String fxmlPath) {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-		loader.setController(this);
-		loader.setRoot(this);
-
-		try {
-			loader.load();
-		} catch (IOException e) {
-			e.printStackTrace(System.err);
-			System.exit(1);
-		}
+		loadFxmlFile(this, fxmlPath);
 	}
 
 	public abstract void showModal(TData data);

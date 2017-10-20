@@ -1,8 +1,10 @@
 package ph.kana.memory.ui.fxml;
 
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 
+import java.io.IOException;
 import java.util.List;
 
 public final class UiCommons {
@@ -14,6 +16,19 @@ public final class UiCommons {
 		AnchorPane.setRightAnchor(node, right);
 		AnchorPane.setBottomAnchor(node, bottom);
 		AnchorPane.setLeftAnchor(node, left);
+	}
+
+	public static <TController> void loadFxmlFile(TController rootController, String fxmlPath) {
+		FXMLLoader loader = new FXMLLoader(rootController.getClass().getResource(fxmlPath));
+		loader.setController(rootController);
+		loader.setRoot(rootController);
+
+		try {
+			loader.load();
+		} catch (IOException e) {
+			e.printStackTrace(System.err);
+			System.exit(1);
+		}
 	}
 
 	public static void showBottomFadingText(String text, List<Node> nodeList) {

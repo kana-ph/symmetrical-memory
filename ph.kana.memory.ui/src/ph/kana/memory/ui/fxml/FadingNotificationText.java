@@ -15,16 +15,7 @@ public class FadingNotificationText extends TilePane {
 	@FXML private Label messageLabel;
 
 	public FadingNotificationText() {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("fading-notification-text.fxml"));
-		loader.setController(this);
-		loader.setRoot(this);
-
-		try {
-			loader.load();
-		} catch (IOException e) {
-			e.printStackTrace(System.err);
-			System.exit(1);
-		}
+		UiCommons.loadFxmlFile(this, "fading-notification-text.fxml");
 	}
 
 	public void showText(String text, Consumer<FadingNotificationText> cleanup) {
