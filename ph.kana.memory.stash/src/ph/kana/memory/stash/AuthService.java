@@ -12,8 +12,13 @@ public class AuthService {
 	private final PinHasher pinHasher = new PinHasher();
 
 	private final static String DEFAULT_PIN = "12345678";
+	private final static AuthService INSTANCE = new AuthService();
 
-	public AuthService() {
+	public static AuthService getInstance() {
+		return INSTANCE;
+	}
+
+	private AuthService() {
 		try {
 			String currentPin = authDao.readStoredPin();
 			boolean hasPin = !"".equals(currentPin);

@@ -13,7 +13,7 @@ public class LoginModal extends AbstractTilePaneModal<Void> {
 
 	@FXML private TextField pinTextBox;
 
-	private final AuthService authService = new AuthService();
+	private final AuthService authService = AuthService.getInstance();
 
 	public LoginModal() {
 		super("login-modal.fxml");
@@ -36,7 +36,7 @@ public class LoginModal extends AbstractTilePaneModal<Void> {
 				pinTextBox.setText("");
 			}
 		} catch (StashException e) {
-			showBottomFadingText("Cannot validate PIN", getChildren());
+			showBottomFadingText("Cannot validate PIN");
 			e.printStackTrace(System.err);
 		}
 	}
