@@ -7,23 +7,14 @@ import javafx.scene.layout.TilePane;
 
 import java.io.IOException;
 
-public class PasswordRevealModal extends TilePane {
+public class PasswordRevealModal extends AbstractTilePaneModal {
 
 	@FXML private TextField passwordRevealTextBox;
 
 	private String password; // TODO change to char array
 
 	public PasswordRevealModal() {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("password-reveal-modal.fxml"));
-		loader.setController(this);
-		loader.setRoot(this);
-
-		try {
-			loader.load();
-		} catch (IOException e) {
-			e.printStackTrace(System.err);
-			System.exit(1);
-		}
+		super("password-reveal-modal.fxml");
 	}
 
 	@FXML
