@@ -9,18 +9,18 @@
 
 <fx:root type="TilePane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" styleClass="modal-darkening" visible="false">
 <children>
-    <AnchorPane prefHeight="181.0" prefWidth="235.0" styleClass="modal">
+    <AnchorPane prefHeight="180.0" prefWidth="320.0" styleClass="modal">
         <children>
             <Label layoutX="14.0" layoutY="14.0" styleClass="title" text="Confirm Delete" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
             <TextFlow layoutX="14.0" prefHeight="200.0" prefWidth="200.0" textAlignment="CENTER" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="60.0">
                 <children>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="This action will permanently delete your account " />
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="This action will permanently delete the stored password for " />
                     <Text fx:id="usernameText" strokeType="OUTSIDE" strokeWidth="0.0" text="USERNAME">
                         <font>
                             <Font name="System Bold Italic" size="13.0" />
                         </font>
                     </Text>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" on " />
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" account on " />
                     <Text fx:id="domainText" strokeType="OUTSIDE" strokeWidth="0.0" text="DOMAIN">
                         <font>
                             <Font name="System Bold Italic" size="13.0" />
