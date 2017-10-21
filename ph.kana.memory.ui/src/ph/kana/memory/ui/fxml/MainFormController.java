@@ -114,7 +114,7 @@ public class MainFormController implements Initializable {
 		List<MenuItem> menuItems = accountMenu.getItems();
 		MenuItem updateMenuItem = new MenuItem("Update");
 		menuItems.add(updateMenuItem);
-		updateMenuItem.setOnAction(event -> showModalWithReload(new SaveAccountModal(), account));
+		updateMenuItem.setOnAction(event -> showModalWithReload(new SaveAccountModal(), Optional.of(account)));
 
 		MenuItem deleteMenuItem = new MenuItem("Delete");
 		menuItems.add(deleteMenuItem);
