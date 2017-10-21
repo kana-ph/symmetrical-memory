@@ -19,6 +19,7 @@ public abstract class AbstractTilePaneModal<TData> extends TilePane {
 
 	AbstractTilePaneModal(String fxmlPath) {
 		UiCommons.loadFxmlFile(this, fxmlPath);
+		setVisible(false);
 	}
 
 	public abstract void showModal(TData data);
@@ -27,6 +28,10 @@ public abstract class AbstractTilePaneModal<TData> extends TilePane {
 	public void close() {
 		setVisible(false);
 		onClose.ifPresent(Runnable::run);
+
+		Pane parent = (Pane) getParent();
+		parent.getChildren()
+				.remove(this);
 	}
 
 	public void setOnClose(Runnable onClose) {

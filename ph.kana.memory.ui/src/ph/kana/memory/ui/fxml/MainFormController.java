@@ -65,7 +65,7 @@ public class MainFormController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		showModal(new LoginModal());
+		showModal(new LoginModal(), null);
 		Platform.runLater(this::loadAccounts);
 	}
 
@@ -141,10 +141,11 @@ public class MainFormController implements Initializable {
 		classes.add(cssClass);
 	}
 
-	private void showModal(AbstractTilePaneModal modal) {
+	private  void showModal(AbstractTilePaneModal modal, Object data) {
 		List<Node> rootChildren = rootPane.getChildren();
 		rootChildren.add(modal);
 		UiCommons.assignAnchors(modal, 0.0, 0.0, 0.0, 0.0);
+		modal.showModal(data);
 	}
 
 	private void showSaveDialogForAccount(Account account) {
