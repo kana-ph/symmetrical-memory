@@ -3,6 +3,8 @@ package ph.kana.memory.ui.fxml.modal;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextField;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.TilePane;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AuthService;
@@ -35,10 +37,10 @@ public class PasswordRevealModal extends AbstractTilePaneModal<Account> {
 		}
 	}
 
-	@FXML
+	@FXML @Override
 	public void close() {
 		Arrays.fill(password, (byte) 0);
-		setVisible(false);
+		super.close();
 	}
 
 	@FXML
@@ -49,5 +51,14 @@ public class PasswordRevealModal extends AbstractTilePaneModal<Account> {
 	@FXML
 	public void hidePassword() {
 		passwordRevealTextBox.setText("");
+	}
+
+	@FXML
+	public void copyPassword() {
+		ClipboardContent clipboardContent = new ClipboardContent();
+		clipboardContent.putString(new String(password));
+
+		Clipboard.getSystemClipboard()
+				.setContent(clipboardContent);
 	}
 }
