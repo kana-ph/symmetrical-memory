@@ -1,24 +1,18 @@
 package ph.kana.memory.ui.fxml;
 
-import javafx.animation.FadeTransition;
 import javafx.application.HostServices;
 import javafx.application.Platform;
-import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
-import javafx.util.Duration;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountService;
-import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.StashException;
 import ph.kana.memory.ui.fxml.modal.*;
 
@@ -40,20 +34,14 @@ public class MainFormController implements Initializable {
 	@FXML private Pane centerMessagePane;
 	@FXML private Label centerMessageLabel;
 
-	@FXML private PasswordRevealModal passwordRevealModal;
-	@FXML private DeleteAccountModal deleteAccountModal;
-	@FXML private SaveAccountModal saveAccountModal;
-	@FXML private SavePinModal savePinModal;
-
 	@FXML
 	public void showAddAccountDialog() {
-		saveAccountModal.setOnClose(this::loadAccounts);
-		saveAccountModal.showModal(Optional.empty());
+		showModalWithReload(new SaveAccountModal(), Optional.empty());
 	}
 
 	@FXML
 	public void showSetPinModal() {
-		savePinModal.showModal(null);
+		showModal(new SavePinModal(), null);
 	}
 
 	@FXML
@@ -114,7 +102,7 @@ public class MainFormController implements Initializable {
 		children.add(showButton);
 		addCssClass(showButton, "control");
 		showButton.setFocusTraversable(false);
-		showButton.setOnAction(event -> passwordRevealModal.showModal(account));
+		showButton.setOnAction(event -> showModal(new PasswordRevealModal(), account));
 		UiCommons.assignAnchors(showButton, 5.0, 10.0, null, null);
 
 		MenuButton accountMenu = new MenuButton("\u2699");
@@ -126,11 +114,11 @@ public class MainFormController implements Initializable {
 		List<MenuItem> menuItems = accountMenu.getItems();
 		MenuItem updateMenuItem = new MenuItem("Update");
 		menuItems.add(updateMenuItem);
-		updateMenuItem.setOnAction(event -> showSaveDialogForAccount(account));
+		updateMenuItem.setOnAction(event -> showModalWithReload(new SaveAccountModal(), account));
 
 		MenuItem deleteMenuItem = new MenuItem("Delete");
 		menuItems.add(deleteMenuItem);
-		deleteMenuItem.setOnAction(event -> showDeleteModal(account));
+		deleteMenuItem.setOnAction(event -> showModalWithReload(new DeleteAccountModal(), account));
 
 		viewPane.getChildren()
 				.add(pane);
@@ -141,26 +129,21 @@ public class MainFormController implements Initializable {
 		classes.add(cssClass);
 	}
 
-	private  void showModal(AbstractTilePaneModal modal, Object data) {
+	private void showModal(AbstractTilePaneModal modal, Object data) {
 		List<Node> rootChildren = rootPane.getChildren();
 		rootChildren.add(modal);
 		UiCommons.assignAnchors(modal, 0.0, 0.0, 0.0, 0.0);
 		modal.showModal(data);
 	}
 
-	private void showSaveDialogForAccount(Account account) {
-		saveAccountModal.setOnClose(this::loadAccounts);
-		saveAccountModal.showModal(Optional.of(account));
+	private void showModalWithReload(AbstractTilePaneModal modal, Object data) {
+		modal.setOnClose(this::loadAccounts);
+		showModal(modal, data);
 	}
 
 	private void showCenterMessage(String message) {
 		centerMessageLabel.setText(message);
 		centerMessagePane.setVisible(true);
-	}
-
-	private void showDeleteModal(Account account) {
-		deleteAccountModal.setOnClose(this::loadAccounts);
-		deleteAccountModal.showModal(account);
 	}
 
 	private void showBottomMessage(String message) {

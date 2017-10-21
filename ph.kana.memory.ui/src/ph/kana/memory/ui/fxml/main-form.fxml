@@ -9,11 +9,6 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 
-<?import ph.kana.memory.ui.fxml.modal.PasswordRevealModal?>
-<?import ph.kana.memory.ui.fxml.modal.LoginModal?>
-<?import ph.kana.memory.ui.fxml.modal.DeleteAccountModal?>
-<?import ph.kana.memory.ui.fxml.modal.SavePinModal?>
-<?import ph.kana.memory.ui.fxml.modal.SaveAccountModal?>
 <AnchorPane fx:id="rootPane" prefHeight="495.0" prefWidth="350.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ph.kana.memory.ui.fxml.MainFormController">
    <children>
       <AnchorPane prefHeight="45.0" prefWidth="350.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -37,9 +32,5 @@
             <Label fx:id="centerMessageLabel" text="Loading..." />
          </children>
       </TilePane>
-      <SaveAccountModal fx:id="saveAccountModal" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <SavePinModal fx:id="savePinModal" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <DeleteAccountModal fx:id="deleteAccountModal" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <PasswordRevealModal fx:id="passwordRevealModal" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>
