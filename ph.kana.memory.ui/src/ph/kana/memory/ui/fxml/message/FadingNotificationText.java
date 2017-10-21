@@ -1,13 +1,12 @@
-package ph.kana.memory.ui.fxml;
+package ph.kana.memory.ui.fxml.message;
 
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.TilePane;
 import javafx.util.Duration;
+import ph.kana.memory.ui.fxml.UiCommons;
 
-import java.io.IOException;
 import java.util.function.Consumer;
 
 public class FadingNotificationText extends TilePane {

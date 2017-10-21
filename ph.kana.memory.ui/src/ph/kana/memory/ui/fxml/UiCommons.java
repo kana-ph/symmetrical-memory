@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import ph.kana.memory.ui.fxml.message.FadingNotificationText;
 
 import java.io.IOException;
 import java.util.List;
