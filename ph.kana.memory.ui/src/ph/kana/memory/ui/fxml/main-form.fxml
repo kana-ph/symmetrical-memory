@@ -14,8 +14,8 @@
             <Button focusTraversable="false" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onAction="#showAddAccountDialog" text="Add" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
             <MenuButton focusTraversable="false" mnemonicParsing="false" text="⚙" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#showSetPinModal" text="Update PIN Code" />
-                  <MenuItem mnemonicParsing="false" onAction="#openSourceCodeUrl" text="Source Code" />
+                  <MenuItem mnemonicParsing="false" onAction="#showSetPinModal" text="Update PIN Code" />
+                  <MenuItem mnemonicParsing="false" onAction="#openSourceCodeUrl" text="Source Code (v1.1)" />
               </items>
             </MenuButton>
          </children>
