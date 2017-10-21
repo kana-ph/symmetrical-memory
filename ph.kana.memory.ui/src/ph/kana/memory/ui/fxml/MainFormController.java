@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountService;
 import ph.kana.memory.stash.StashException;
+import ph.kana.memory.ui.fxml.message.LargeCenterText;
 import ph.kana.memory.ui.fxml.modal.*;
 
 import java.net.URL;
@@ -30,9 +31,6 @@ public class MainFormController implements Initializable {
 
 	@FXML private Pane rootPane;
 	@FXML private Pane viewPane;
-
-	@FXML private Pane centerMessagePane;
-	@FXML private Label centerMessageLabel;
 
 	@FXML
 	public void showAddAccountDialog() {
@@ -68,9 +66,9 @@ public class MainFormController implements Initializable {
 			showCenterMessage("Loading...");
 			List<Account> accounts = accountService.fetchAccounts();
 			if (accounts.isEmpty()) {
-				showCenterMessage("No saved accounts");
+				showCenterMessage("No saved accounts!\nClick 'Add' to get started!");
 			} else {
-				centerMessagePane.setVisible(false);
+				clearCenterMessage();
 				accounts.stream()
 						.forEach(this::renderAccountCard);
 			}
@@ -142,8 +140,18 @@ public class MainFormController implements Initializable {
 	}
 
 	private void showCenterMessage(String message) {
-		centerMessageLabel.setText(message);
-		centerMessagePane.setVisible(true);
+		LargeCenterText centerText = new LargeCenterText();
+		centerText.setMessage(message);
+
+		clearCenterMessage();
+		List<Node> rootChildren = rootPane.getChildren();
+		rootChildren.add(2, centerText);
+		UiCommons.assignAnchors(centerText, 50.0, 0.0, 0.0, 0.0);
+	}
+
+	private void clearCenterMessage() {
+		rootPane.getChildren()
+				.removeIf(node -> node instanceof LargeCenterText);
 	}
 
 	private void showBottomMessage(String message) {

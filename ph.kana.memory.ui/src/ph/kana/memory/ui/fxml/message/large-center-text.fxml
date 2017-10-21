@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.TilePane?>
+
+<fx:root type="TilePane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" prefHeight="200.0" prefWidth="200.0">
+<children>
+    <Label fx:id="messageLabel" styleClass="center-text" text="Loading..." underline="true" wrapText="true" />
+</children>
+</fx:root>

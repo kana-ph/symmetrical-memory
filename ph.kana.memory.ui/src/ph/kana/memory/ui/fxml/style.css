@@ -28,6 +28,15 @@
     -fx-text-fill: white;
 }
 
+.center-text {
+    -fx-font-size: 20;
+    -fx-text-fill: lightslategrey;
+    -fx-text-alignment: center;
+    -fx-border-color: lightslategrey;
+    -fx-border-insets: -15;
+    -fx-border-radius: 10;
+}
+
 .danger-button {
     -fx-background-color: crimson;
     -fx-text-fill: white;
