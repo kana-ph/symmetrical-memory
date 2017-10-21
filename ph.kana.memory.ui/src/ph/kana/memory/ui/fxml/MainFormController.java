@@ -40,7 +40,6 @@ public class MainFormController implements Initializable {
 	@FXML private Pane centerMessagePane;
 	@FXML private Label centerMessageLabel;
 
-	@FXML private LoginModal loginModal;
 	@FXML private PasswordRevealModal passwordRevealModal;
 	@FXML private DeleteAccountModal deleteAccountModal;
 	@FXML private SaveAccountModal saveAccountModal;
@@ -66,6 +65,7 @@ public class MainFormController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		showModal(new LoginModal());
 		Platform.runLater(this::loadAccounts);
 	}
 
@@ -139,6 +139,12 @@ public class MainFormController implements Initializable {
 	private void addCssClass(Node node, String cssClass) {
 		List<String> classes = node.getStyleClass();
 		classes.add(cssClass);
+	}
+
+	private void showModal(AbstractTilePaneModal modal) {
+		List<Node> rootChildren = rootPane.getChildren();
+		rootChildren.add(modal);
+		UiCommons.assignAnchors(modal, 0.0, 0.0, 0.0, 0.0);
 	}
 
 	private void showSaveDialogForAccount(Account account) {

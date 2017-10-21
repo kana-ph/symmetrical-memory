@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-abstract class AbstractTilePaneModal<TData> extends TilePane {
+public abstract class AbstractTilePaneModal<TData> extends TilePane {
 
 	private Optional<Runnable> onClose = Optional.empty();
 
