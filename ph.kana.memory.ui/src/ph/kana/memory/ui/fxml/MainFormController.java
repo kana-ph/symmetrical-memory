@@ -32,7 +32,6 @@ public class MainFormController implements Initializable {
 
 	private final Logger logger = Logger.getLogger(MainFormController.class.getName());
 	private final AccountService accountService = AccountService.getInstance();
-	private final AuthService authService = AuthService.getInstance();
 	private HostServices hostServices;
 
 	@FXML private Pane rootPane;
@@ -72,16 +71,6 @@ public class MainFormController implements Initializable {
 
 	public void setHostServices(HostServices hostServices) {
 		this.hostServices = hostServices;
-	}
-
-	@Deprecated(forRemoval = true)
-	private void forceNumericalInput(TextField numericalTextField) {
-		StringProperty pinTextProperty = numericalTextField.textProperty();
-		pinTextProperty.addListener((observableString, oldValue, newValue) -> {
-			if (!newValue.matches("\\d*")) {
-				numericalTextField.setText(newValue.replaceAll("[^\\d]", ""));
-			}
-		});
 	}
 
 	private void loadAccounts() {
@@ -125,7 +114,7 @@ public class MainFormController implements Initializable {
 		children.add(showButton);
 		addCssClass(showButton, "control");
 		showButton.setFocusTraversable(false);
-		showButton.setOnAction(event -> showPasswordRevealForAccount(account));
+		showButton.setOnAction(event -> passwordRevealModal.showModal(account));
 		UiCommons.assignAnchors(showButton, 5.0, 10.0, null, null);
 
 		MenuButton accountMenu = new MenuButton("\u2699");
@@ -155,19 +144,6 @@ public class MainFormController implements Initializable {
 	private void showSaveDialogForAccount(Account account) {
 		saveAccountModal.setOnClose(this::loadAccounts);
 		saveAccountModal.showModal(Optional.of(account));
-	}
-
-	private void showPasswordRevealForAccount(Account account) { // TODO move to password reveal
-		String encryptedPassword = account.getEncryptedPassword();
-		String timestamp = Long.toString(account.getSaveTimestamp());
-		try {
-			String clearPassword = authService.decryptPassword(encryptedPassword, timestamp);
-			passwordRevealModal.showModal(clearPassword);
-		} catch (StashException e) {
-			passwordRevealModal.close();
-			showBottomMessage("Something went wrong.");
-			logger.severe(e::getMessage);
-		}
 	}
 
 	private void showCenterMessage(String message) {
