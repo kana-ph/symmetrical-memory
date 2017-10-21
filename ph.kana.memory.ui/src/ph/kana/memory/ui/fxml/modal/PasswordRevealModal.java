@@ -9,13 +9,14 @@ import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.StashException;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class PasswordRevealModal extends AbstractTilePaneModal<Account> {
 
 	@FXML private TextField passwordRevealTextBox;
 
-	private AuthService authService = AuthService.getInstance();
-	private String password; // TODO change to char array
+	private final AuthService authService = AuthService.getInstance();
+	private byte[] password;
 
 	public PasswordRevealModal() {
 		super("password-reveal-modal.fxml");
@@ -36,13 +37,13 @@ public class PasswordRevealModal extends AbstractTilePaneModal<Account> {
 
 	@FXML
 	public void close() {
-		password = "";
+		Arrays.fill(password, (byte) 0);
 		setVisible(false);
 	}
 
 	@FXML
 	public void showPassword() {
-		passwordRevealTextBox.setText(password);
+		passwordRevealTextBox.setText(new String(password));
 	}
 
 	@FXML

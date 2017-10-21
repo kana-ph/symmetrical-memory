@@ -42,7 +42,7 @@ public class AuthService {
 		return pinHasher.validate(pin, storedPin);
 	}
 
-	public String decryptPassword(String encryptedPassword, String salt) throws StashException {
+	public byte[] decryptPassword(String encryptedPassword, String salt) throws StashException {
 		try {
 			return passwordCodec.decrypt(encryptedPassword, salt);
 		} catch (CodecOperationException e) {

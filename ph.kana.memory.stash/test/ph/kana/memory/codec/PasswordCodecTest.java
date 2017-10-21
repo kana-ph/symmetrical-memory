@@ -13,7 +13,7 @@ class PasswordCodecTest {
 		PasswordCodec codec = new PasswordCodec();
 
 		String encrypted = codec.encrypt(rawPassword, salt);
-		String decrypted = codec.decrypt(encrypted, salt);
+		String decrypted = new String(codec.decrypt(encrypted, salt));
 
 		assertEquals(rawPassword, decrypted);
 	}

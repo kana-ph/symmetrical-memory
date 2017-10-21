@@ -15,12 +15,12 @@ import java.util.Base64;
 
 public class PasswordCodec {
 
-	private final static String WAGSTAFF_PRIME = "1298074214633706835075030044377087";
+	private final static char[] WAGSTAFF_PRIME = "1298074214633706835075030044377087".toCharArray();
 	private final static String SEPARATOR = ":";
 
 	public String encrypt(String rawPassword, String salt) throws CodecOperationException {
 		try {
-			SecretKeySpec keySpec = createSecretKey(WAGSTAFF_PRIME.toCharArray(), salt.getBytes());
+			SecretKeySpec keySpec = createSecretKey(WAGSTAFF_PRIME, salt.getBytes());
 			Cipher cipher = fetchCipher();
 			cipher.init(Cipher.ENCRYPT_MODE, keySpec);
 			AlgorithmParameters parameters = cipher.getParameters();
@@ -33,17 +33,17 @@ public class PasswordCodec {
 		}
 	}
 
-	public String decrypt(String encryptedPassword, String salt) throws CodecOperationException {
+	public byte[] decrypt(String encryptedPassword, String salt) throws CodecOperationException {
 		try {
 			String[] split = encryptedPassword.split(SEPARATOR);
 			String iv = split[0];
 			String cryptoText = split[1];
 
-			SecretKeySpec keySpec = createSecretKey(WAGSTAFF_PRIME.toCharArray(), salt.getBytes());
+			SecretKeySpec keySpec = createSecretKey(WAGSTAFF_PRIME, salt.getBytes());
 			Cipher cipher = fetchCipher();
 			cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(base64Decode(iv)));
-			return new String(cipher.doFinal(base64Decode(cryptoText)), "UTF-8");
-		} catch (GeneralSecurityException | UnsupportedEncodingException e) {
+			return cipher.doFinal(base64Decode(cryptoText));
+		} catch (GeneralSecurityException e) {
 			throw new CodecOperationException(e);
 		}
 	}
