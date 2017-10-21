@@ -86,15 +86,15 @@ public class MainFormController implements Initializable {
 		pane.setMaxHeight(70.0);
 		List<Node> children = pane.getChildren();
 
-		Label usernameLabel = new Label(account.getUsername());
-		children.add(usernameLabel);
-		addCssClass(usernameLabel, "username-label");
-		UiCommons.assignAnchors(usernameLabel, 15.0, 100.0, null, 15.0);
-
 		Label domainLabel = new Label(account.getDomain());
 		children.add(domainLabel);
 		addCssClass(domainLabel, "domain-label");
-		UiCommons.assignAnchors(domainLabel, null, 100.0, 5.0, 15.0);
+		UiCommons.assignAnchors(domainLabel, 5.0, 100.0, null, 5.0);
+
+		Label usernameLabel = new Label(account.getUsername());
+		children.add(usernameLabel);
+		addCssClass(usernameLabel, "username-label");
+		UiCommons.assignAnchors(usernameLabel, 10.0, 100.0, 15.0, 10.0);
 
 		Button showButton = new Button("Show");
 		children.add(showButton);
