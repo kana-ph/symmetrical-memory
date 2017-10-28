@@ -10,5 +10,5 @@ public interface AccountDao {
 
 	Account save(Account account) throws StashException;
 
-	void deleteById(String id) throws StashException;
+	void delete(Account account) throws StashException;
 }

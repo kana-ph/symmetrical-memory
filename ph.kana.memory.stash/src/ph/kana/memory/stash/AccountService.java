@@ -43,8 +43,8 @@ public class AccountService {
 		}
 	}
 
-	public void deleteAccount(String id) throws StashException {
-		accountDao.deleteById(id);
+	public void deleteAccount(Account account) throws StashException {
+		accountDao.delete(account);
 	}
 
 	private String ensureId(String id) {

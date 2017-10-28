@@ -55,14 +55,15 @@ public class AccountFileDao implements AccountDao {
 	}
 
 	@Override
-	public void deleteById(String id) throws StashException {
+	public void delete(Account account) throws StashException {
 		List<Account> accounts = fetchAll();
+		accounts.remove(account);
 
 		try (PrintWriter writer = new PrintWriter(ACCOUNT_STORE)) {
 			accounts.stream()
-					.filter(account -> !id.equals(account.getId()))
 					.map(this::formatAccountEntry)
 					.forEach(writer::write);
+			account.setId(null);
 		} catch (IOException e) {
 			throw new StashException(e);
 		}

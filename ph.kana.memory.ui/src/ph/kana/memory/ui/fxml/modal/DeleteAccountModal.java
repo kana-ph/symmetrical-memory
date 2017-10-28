@@ -29,9 +29,8 @@ public class DeleteAccountModal extends AbstractTilePaneModal<Account> {
 
 	@FXML
 	public void deleteAccount() {
-		String accountId = account.getId();
 		try {
-			accountService.deleteAccount(accountId);
+			accountService.deleteAccount(account);
 
 			UiCommons.showBottomFadingText("Deletion success!", getChildren());
 		} catch (StashException e) {
