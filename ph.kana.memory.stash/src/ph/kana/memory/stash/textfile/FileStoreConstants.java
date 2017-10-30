@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.attribute.DosFileAttributes;
 
-public final class FileStoreConstants {
+final class FileStoreConstants {
 	private FileStoreConstants() {}
 
 	private static final String LOCKER_ROOT = System.getProperty("user.home") + System.getProperty("file.separator") + ".pstash";
