@@ -23,8 +23,8 @@ final class SqlJetStoreConstants {
 	public static SqlJetDb connection;
 
 	public static final String DB_PATH = String.format("%s/db", LOCKER_ROOT);
-	public static final String CREATE_IF_EXIST_TABLE_ACCOUNTS =
-		"CREATE TABLE IF NOT EXISTS accounts (id TEXT NOT NULL PRIMARY KEY, domain TEXT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL, timestamp INTEGER NOT NULL)";
+
+	@Deprecated(forRemoval = true)
 	public static final String CREATE_IF_EXIST_TABLE_PINCODE =
 		"CREATE TABLE IF NOT EXISTS pin_code (value TEXT)";
 	private static final int SQL_USER_VERSION = 1;
@@ -34,7 +34,9 @@ final class SqlJetStoreConstants {
 			connection = SqlJetDb.open(new File(DB_PATH), true);
 
 			ISqlJetOptions sqlJetOptions = connection.getOptions();
-			sqlJetOptions.setAutovacuum(true);
+			if (!sqlJetOptions.isAutovacuum()) {
+				sqlJetOptions.setAutovacuum(true);
+			}
 
 			connection.runTransaction(db -> {
 				sqlJetOptions.setUserVersion(SQL_USER_VERSION);
