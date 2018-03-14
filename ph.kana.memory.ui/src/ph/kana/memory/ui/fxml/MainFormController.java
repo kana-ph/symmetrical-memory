@@ -151,7 +151,7 @@ public class MainFormController implements Initializable {
 
 	private void clearCenterMessage() {
 		rootPane.getChildren()
-				.removeIf(node -> node instanceof LargeCenterText);
+				.removeIf(LargeCenterText.class::isInstance);
 	}
 
 	private void showBottomMessage(String message) {

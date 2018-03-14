@@ -19,5 +19,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="sqljet-1.1.10" level="project" />
+    <orderEntry type="library" name="antlr-runtime-3.4" level="project" />
   </component>
 </module>
