@@ -3,6 +3,7 @@ package ph.kana.memory.stash;
 import ph.kana.memory.codec.CodecOperationException;
 import ph.kana.memory.codec.PasswordCodec;
 import ph.kana.memory.model.Account;
+import ph.kana.memory.stash.sqljet.AccountSqlJetDao;
 import ph.kana.memory.stash.textfile.AccountFileDao;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import static java.util.UUID.*;
 
 public class AccountService {
 
-	private AccountDao accountDao = new AccountFileDao();
+	private AccountDao accountDao = new AccountSqlJetDao();
 	private PasswordCodec passwordCodec = new PasswordCodec();
 
 	private static final AccountService INSTANCE = new AccountService();
