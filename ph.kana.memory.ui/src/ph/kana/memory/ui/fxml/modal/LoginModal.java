@@ -1,8 +1,10 @@
 package ph.kana.memory.ui.fxml.modal;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import ph.kana.memory.model.PinStatus;
 import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.StashException;
 import ph.kana.memory.ui.fxml.UiCommons;
@@ -10,8 +12,9 @@ import ph.kana.memory.ui.fxml.UiCommons;
 import static ph.kana.memory.ui.fxml.UiCommons.forceNumericalInput;
 import static ph.kana.memory.ui.fxml.UiCommons.showBottomFadingText;
 
-public class LoginModal extends AbstractTilePaneModal<Void> {
+public class LoginModal extends AbstractTilePaneModal<PinStatus> {
 
+	@FXML private Label firstTimeLabel;
 	@FXML private TextField pinTextBox;
 
 	private final AuthService authService = AuthService.getInstance();
@@ -22,7 +25,11 @@ public class LoginModal extends AbstractTilePaneModal<Void> {
 	}
 
 	@Override
-	public void showModal(Void data) {
+	public void showModal(PinStatus pinStatus) {
+		if (PinStatus.NEW == pinStatus) {
+			String message = String.format("Initial PIN Code: %s", AuthService.DEFAULT_PIN);
+			firstTimeLabel.setText(message);
+		}
 		setVisible(true);
 	}
 

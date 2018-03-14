@@ -12,7 +12,9 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import ph.kana.memory.model.Account;
+import ph.kana.memory.model.PinStatus;
 import ph.kana.memory.stash.AccountService;
+import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.StashException;
 import ph.kana.memory.ui.fxml.message.LargeCenterText;
 import ph.kana.memory.ui.fxml.modal.*;
@@ -26,8 +28,10 @@ import java.util.logging.Logger;
 public class MainFormController implements Initializable {
 
 	private final Logger logger = Logger.getLogger(MainFormController.class.getName());
-	private final AccountService accountService = AccountService.getInstance();
 	private HostServices hostServices;
+
+	private final AccountService accountService = AccountService.getInstance();
+	private final AuthService authService = AuthService.getInstance();
 
 	@FXML private Pane rootPane;
 	@FXML private Pane viewPane;
@@ -51,8 +55,13 @@ public class MainFormController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		showModal(new LoginModal(), null);
-		Platform.runLater(this::loadAccounts);
+		PinStatus pinStatus = authService.initializePin();
+		if (PinStatus.MISSING == pinStatus) {
+			showModal(new ResetModal(), null);
+		} else {
+			showModal(new LoginModal(), pinStatus);
+			Platform.runLater(this::loadAccounts);
+		}
 	}
 
 	public void setHostServices(HostServices hostServices) {

@@ -15,7 +15,7 @@ public class AuthService {
 	private final PasswordCodec passwordCodec = new PasswordCodec();
 	private final PinHasher pinHasher = new PinHasher();
 
-	private final static String DEFAULT_PIN = "12345678";
+	public final static String DEFAULT_PIN = "12345678";
 	private final static AuthService INSTANCE = new AuthService();
 
 	public static AuthService getInstance() {
