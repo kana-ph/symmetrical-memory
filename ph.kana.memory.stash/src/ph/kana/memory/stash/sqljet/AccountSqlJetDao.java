@@ -109,4 +109,17 @@ public class AccountSqlJetDao implements AccountDao {
 			throw new StashException(e);
 		}
 	}
+
+	@Override
+	public boolean anyExists() throws StashException {
+		try {
+			return (boolean) sqlJetDb.runReadTransaction(db -> {
+				ISqlJetTable table = db.getTable(TABLE_NAME);
+				ISqlJetCursor cursor = table.order(ID_INDEX_NAME);
+				return cursor.getRowCount() > 0L;
+			});
+		} catch (SqlJetException e) {
+			throw new StashException(e);
+		}
+	}
 }

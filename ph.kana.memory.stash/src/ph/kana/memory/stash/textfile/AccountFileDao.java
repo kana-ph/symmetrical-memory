@@ -69,6 +69,11 @@ public class AccountFileDao implements AccountDao {
 		}
 	}
 
+
+	public boolean anyExists() throws StashException {
+		return ACCOUNT_STORE.length() > 0L;
+	}
+
 	private void addToAccountList(List<Account> accountList, Account account) {
 		int i = accountList.indexOf(account);
 		if (i < 0) {
