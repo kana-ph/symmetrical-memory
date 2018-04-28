@@ -21,7 +21,7 @@ public class AccountSqlJetDao implements AccountDao {
 	private final static String CREATE_TABLE_SQL =
 		"CREATE TABLE IF NOT EXISTS accounts (id TEXT NOT NULL PRIMARY KEY, domain TEXT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL, timestamp INTEGER NOT NULL)";
 	private final static String ID_INDEX_NAME = "accounts_pkey";
-	private final static String CREATE_ID_INDEX_SQL = "CREATE INDEX IF NOT EXISTS ccounts_pkey ON accounts(id)";
+	private final static String CREATE_ID_INDEX_SQL = "CREATE INDEX IF NOT EXISTS accounts_pkey ON accounts(id)";
 
 	public AccountSqlJetDao() {
 		try {
