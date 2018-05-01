@@ -24,9 +24,6 @@ final class SqlJetStoreConstants {
 
 	public static final String DB_PATH = String.format("%s/db", LOCKER_ROOT);
 
-	@Deprecated(forRemoval = true)
-	public static final String CREATE_IF_EXIST_TABLE_PINCODE =
-		"CREATE TABLE IF NOT EXISTS pin_code (value TEXT)";
 	private static final int SQL_USER_VERSION = 1;
 
 	public static SqlJetDb getConnection() throws SqlJetException {
