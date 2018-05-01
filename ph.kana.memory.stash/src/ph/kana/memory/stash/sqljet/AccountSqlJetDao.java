@@ -1,7 +1,6 @@
 package ph.kana.memory.stash.sqljet;
 
 import org.tmatesoft.sqljet.core.SqlJetException;
-import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
 import org.tmatesoft.sqljet.core.table.ISqlJetCursor;
 import org.tmatesoft.sqljet.core.table.ISqlJetTable;
 import org.tmatesoft.sqljet.core.table.SqlJetDb;
@@ -40,7 +39,8 @@ public class AccountSqlJetDao implements AccountDao {
 	@Override
 	public List<Account> fetchAll() throws StashException {
 		try {
-			return (List) sqlJetDb.runReadTransaction(db -> {
+			@SuppressWarnings("unchecked")
+			List<Account> allAccounts = (List) sqlJetDb.runReadTransaction(db -> {
 				ISqlJetTable table = db.getTable(TABLE_NAME);
 				ISqlJetCursor cursor = table.order(ID_INDEX_NAME);
 
@@ -58,6 +58,7 @@ public class AccountSqlJetDao implements AccountDao {
 				}
 				return accounts;
 			});
+			return allAccounts;
 		} catch (SqlJetException e) {
 			throw new StashException(e);
 		}
@@ -71,7 +72,7 @@ public class AccountSqlJetDao implements AccountDao {
 				ISqlJetCursor cursor = table.lookup(ID_INDEX_NAME, account.getId());
 				cursor.setLimit(1L);
 
-				Map data = Map.of(
+				Map<String, Object> data = Map.of(
 					"id", account.getId(),
 					"domain", account.getDomain(),
 					"username", account.getUsername(),
