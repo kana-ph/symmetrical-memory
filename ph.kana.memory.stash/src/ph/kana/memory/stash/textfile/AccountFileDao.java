@@ -8,12 +8,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Base64;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static ph.kana.memory.stash.textfile.FileStoreConstants.ENTRY_SEPARATOR;
 import static ph.kana.memory.stash.textfile.FileStoreConstants.STORE_PATH;
 
+@Deprecated(forRemoval = true)
 public class AccountFileDao implements AccountDao {
 
 	private static final File ACCOUNT_STORE = new File(STORE_PATH);

@@ -4,11 +4,10 @@ import ph.kana.memory.codec.CodecOperationException;
 import ph.kana.memory.codec.PasswordCodec;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.sqljet.AccountSqlJetDao;
-import ph.kana.memory.stash.textfile.AccountFileDao;
 
 import java.util.List;
 
-import static java.util.UUID.*;
+import static java.util.UUID.randomUUID;
 
 public class AccountService {
 
