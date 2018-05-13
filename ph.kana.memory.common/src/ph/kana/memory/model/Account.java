@@ -1,12 +1,10 @@
 package ph.kana.memory.model;
 
-import java.util.UUID;
-
 public class Account {
 	private String id;
 	private String domain;
 	private String username;
-	private String encryptedPassword;
+	private String passwordFile;
 	private long saveTimestamp;
 
 	public String getId() {
@@ -33,12 +31,12 @@ public class Account {
 		this.username = username;
 	}
 
-	public String getEncryptedPassword() {
-		return encryptedPassword;
+	public String getPasswordFile() {
+		return passwordFile;
 	}
 
-	public void setEncryptedPassword(String encryptedPassword) {
-		this.encryptedPassword = encryptedPassword;
+	public void setPasswordFile(String passwordFile) {
+		this.passwordFile = passwordFile;
 	}
 
 	public long getSaveTimestamp() {
@@ -54,7 +52,7 @@ public class Account {
 		if (this == that) {
 			return true;
 		}
-		if (that == null || !(that instanceof Account)) {
+		if (!(that instanceof Account)) {
 			return false;
 		}
 

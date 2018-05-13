@@ -4,6 +4,7 @@ import ph.kana.memory.codec.CodecOperationException;
 import ph.kana.memory.codec.PasswordCodec;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.sqljet.AccountSqlJetDao;
+import ph.kana.memory.stash.textfile.PasswordFileDao;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import static java.util.UUID.randomUUID;
 public class AccountService {
 
 	private AccountDao accountDao = new AccountSqlJetDao();
+	private PasswordDao passwordDao = new PasswordFileDao();
 	private PasswordCodec passwordCodec = new PasswordCodec();
 
 	private static final AccountService INSTANCE = new AccountService();
@@ -30,13 +32,14 @@ public class AccountService {
 		try {
 			long now = System.currentTimeMillis();
 			String encryptedPassword = passwordCodec.encrypt(rawPassword, Long.toString(now));
+			String passwordFile = passwordDao.storePassword(encryptedPassword);
 
 			Account account = new Account();
 			account.setId(ensureId(id));
 			account.setDomain(domain);
 			account.setUsername(username);
 			account.setSaveTimestamp(now);
-			account.setEncryptedPassword(encryptedPassword);
+			account.setPasswordFile(passwordFile);
 			return accountDao.save(account);
 		} catch (CodecOperationException e) {
 			throw new StashException(e);

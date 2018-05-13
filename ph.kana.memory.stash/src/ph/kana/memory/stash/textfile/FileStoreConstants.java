@@ -16,7 +16,9 @@ final class FileStoreConstants {
 		}
 	}
 
+	static final String TEMP_ROOT = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator");
 	static final String AUTH_PATH = String.format("%s/a", LOCKER_ROOT);
+	static final String ZIP_PATH = String.format("%s/p", LOCKER_ROOT);
 
 	private static void hideFile(File file) {
 		String os = System.getProperty("os.name").toLowerCase();
