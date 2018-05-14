@@ -38,6 +38,7 @@ public class AccountService {
 	}
 
 	public void deleteAccount(Account account) throws StashException {
+		passwordService.removePassword(account);
 		accountDao.delete(account);
 	}
 

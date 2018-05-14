@@ -20,19 +20,23 @@ public class PasswordService {
 	private PasswordService() {}
 
 	public byte[] fetchClearPassword(Account account) throws StashException {
-		String passwordFile = account.getPasswordFile();
+		var passwordFile = account.getPasswordFile();
 
-		String encryptedPassword = passwordDao.readPassword(passwordFile);
-		String timestamp = Long.toString(account.getSaveTimestamp());
+		var encryptedPassword = passwordDao.readPassword(passwordFile);
+		var timestamp = Long.toString(account.getSaveTimestamp());
 		return authService.decryptPassword(encryptedPassword, timestamp);
 	}
 
 	public String savePassword(Account account, String rawPassword) throws StashException {
 		try {
-			String encryptedPassword = passwordCodec.encrypt(rawPassword, Long.toString(account.getSaveTimestamp()));
+			var encryptedPassword = passwordCodec.encrypt(rawPassword, Long.toString(account.getSaveTimestamp()));
 			return passwordDao.storePassword(encryptedPassword);
 		} catch (CodecOperationException e) {
 			throw new StashException(e);
 		}
+	}
+
+	public void removePassword(Account account) throws StashException {
+		passwordDao.removePassword(account.getPasswordFile());
 	}
 }

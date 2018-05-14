@@ -19,8 +19,8 @@ public class PasswordZipFileDao implements PasswordDao {
 
 	@Override
 	public String storePassword(String password) throws StashException {
-		String filename = randomUUID().toString();
-		File passwordFile = createTempFile(filename);
+		var filename = randomUUID().toString();
+		var passwordFile = createTempFile(filename);
 
 		try {
 			Files.write(passwordFile.toPath(), password.getBytes());
@@ -37,15 +37,15 @@ public class PasswordZipFileDao implements PasswordDao {
 	@Override
 	public String readPassword(String passwordFile) throws StashException {
 		try {
-			ZipFile zipFile = new ZipFile(ZIP_PATH);
+			var zipFile = new ZipFile(ZIP_PATH);
 			if (zipFile.isEncrypted()) {
 				zipFile.setPassword("test-pass"); // TODO implement
 			}
 
-			File targetFile = createTempFile(passwordFile);
+			var targetFile = createTempFile(passwordFile);
 			zipFile.extractFile(passwordFile, TEMP_ROOT);
 
-			byte[] content = Files.readAllBytes(targetFile.toPath());
+			var content = Files.readAllBytes(targetFile.toPath());
 			targetFile.delete();
 
 			return new String(content);
@@ -54,14 +54,32 @@ public class PasswordZipFileDao implements PasswordDao {
 		}
 	}
 
+	@Override
+	public void removePassword(String passwordFile) throws StashException {
+		try {
+			var zipFile = new ZipFile(ZIP_PATH);
+			if (zipFile.isEncrypted()) {
+				zipFile.setPassword("test-pass"); // TODO implement
+			}
+			zipFile.removeFile(passwordFile);
+		} catch (ZipException e) {
+			throw new StashException(e);
+		}
+	}
+
 	private File createTempFile(String filename) {
-		File tempFile = new File(TEMP_ROOT + filename);
+		var tempFile = new File(TEMP_ROOT + filename);
 		tempFile.deleteOnExit();
 		return tempFile;
 	}
 
 	private void addFileToZip(File file) throws ZipException {
-		ZipParameters params = new ZipParameters();
+		var zipFile = new ZipFile(ZIP_PATH);
+		zipFile.addFile(file,  buildZipParameters());
+	}
+
+	private ZipParameters buildZipParameters() {
+		var params = new ZipParameters();
 
 		params.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
 		params.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_FASTEST);
@@ -71,7 +89,6 @@ public class PasswordZipFileDao implements PasswordDao {
 		params.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_256);
 		params.setPassword("test-pass"); // TODO implement
 
-		ZipFile zipFile = new ZipFile(ZIP_PATH);
-		zipFile.addFile(file, params);
+		return params;
 	}
 }
