@@ -12,9 +12,9 @@ import static java.util.UUID.randomUUID;
 
 public class AccountService {
 
-	private AccountDao accountDao = new AccountSqlJetDao();
-	private PasswordDao passwordDao = new PasswordZipFileDao();
-	private PasswordCodec passwordCodec = new PasswordCodec();
+	private final AccountDao accountDao = new AccountSqlJetDao();
+	private final PasswordDao passwordDao = new PasswordZipFileDao();
+	private final PasswordCodec passwordCodec = new PasswordCodec();
 
 	private static final AccountService INSTANCE = new AccountService();
 
