@@ -1,10 +1,7 @@
 package ph.kana.memory.stash;
 
-import ph.kana.memory.codec.CodecOperationException;
-import ph.kana.memory.codec.PasswordCodec;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.sqljet.AccountSqlJetDao;
-import ph.kana.memory.stash.textfile.PasswordZipFileDao;
 
 import java.util.List;
 
@@ -13,8 +10,7 @@ import static java.util.UUID.randomUUID;
 public class AccountService {
 
 	private final AccountDao accountDao = new AccountSqlJetDao();
-	private final PasswordDao passwordDao = new PasswordZipFileDao();
-	private final PasswordCodec passwordCodec = new PasswordCodec();
+	private final PasswordService passwordService = PasswordService.getInstance();
 
 	private static final AccountService INSTANCE = new AccountService();
 
@@ -29,23 +25,16 @@ public class AccountService {
 	}
 
 	public Account saveAccount(String id, String domain, String username, String rawPassword) throws StashException {
-		try {
-			long now = System.currentTimeMillis();
+		Account account = new Account();
+		account.setId(ensureId(id));
+		account.setDomain(domain);
+		account.setUsername(username);
+		account.setSaveTimestamp(System.currentTimeMillis());
 
-			// TODO encapsulate password storage logic
-			String encryptedPassword = passwordCodec.encrypt(rawPassword, Long.toString(now));
-			String passwordFile = passwordDao.storePassword(encryptedPassword);
+		String passwordFile = passwordService.savePassword(account, rawPassword);
+		account.setPasswordFile(passwordFile);
 
-			Account account = new Account();
-			account.setId(ensureId(id));
-			account.setDomain(domain);
-			account.setUsername(username);
-			account.setSaveTimestamp(now);
-			account.setPasswordFile(passwordFile);
-			return accountDao.save(account);
-		} catch (CodecOperationException e) {
-			throw new StashException(e);
-		}
+		return accountDao.save(account);
 	}
 
 	public void deleteAccount(Account account) throws StashException {
