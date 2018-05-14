@@ -2,17 +2,15 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.TilePane?>
-
-<fx:root alignment="CENTER" prefHeight="159.0" prefWidth="330.0" styleClass="modal-darkening" type="TilePane" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.layout.*?>
+<fx:root alignment="CENTER" prefHeight="159.0" prefWidth="330.0" styleClass="modal-darkening" type="TilePane" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ph.kana.memory.ui.fxml.modal.ResetModal">
 <children>
     <AnchorPane prefHeight="145.0" prefWidth="260.0" styleClass="modal">
         <children>
             <Label layoutX="40.0" layoutY="21.0" styleClass="title" text="Database is corrupted!" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
-            <Button layoutX="104.0" layoutY="110.0" mnemonicParsing="false" onAction="#revertApplication" style="-fx-background-color: #f93e3e; -fx-font-weight: bold;" text="Wipe Database and Exit App" textFill="#ffeeee" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" />
             <Label layoutX="14.0" layoutY="40.0" text="The application must revert to initial state." AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="45.0" />
             <Label layoutX="30.0" layoutY="73.0" text="For security, the database must be wiped!" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="60.0" />
+            <Button layoutX="104.0" layoutY="110.0" mnemonicParsing="false" onAction="#revertApplication" style="-fx-background-color: #f93e3e; -fx-font-weight: bold;" text="Wipe Database and Exit App" textFill="#ffeeee" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" />
         </children>
     </AnchorPane>
 </children>
