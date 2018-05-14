@@ -4,7 +4,7 @@ import ph.kana.memory.codec.CodecOperationException;
 import ph.kana.memory.codec.PasswordCodec;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.sqljet.AccountSqlJetDao;
-import ph.kana.memory.stash.textfile.PasswordFileDao;
+import ph.kana.memory.stash.textfile.PasswordZipFileDao;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import static java.util.UUID.randomUUID;
 public class AccountService {
 
 	private AccountDao accountDao = new AccountSqlJetDao();
-	private PasswordDao passwordDao = new PasswordFileDao();
+	private PasswordDao passwordDao = new PasswordZipFileDao();
 	private PasswordCodec passwordCodec = new PasswordCodec();
 
 	private static final AccountService INSTANCE = new AccountService();

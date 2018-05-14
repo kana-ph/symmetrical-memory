@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import static java.util.UUID.randomUUID;
 import static ph.kana.memory.stash.textfile.FileStoreConstants.TEMP_ROOT;
 
-public class PasswordFileDao implements PasswordDao {
+public class PasswordZipFileDao implements PasswordDao {
 
 	@Override
 	public String storePassword(String password) throws StashException {

@@ -27,6 +27,8 @@ final class FileStoreConstants {
 			if (os.startsWith("windows")) {
 				Files.setAttribute(file.toPath(), "dos:hidden", true);
 			}
-		} catch (IOException e) {}
+		} catch (IOException e) {
+
+		}
 	}
 }
