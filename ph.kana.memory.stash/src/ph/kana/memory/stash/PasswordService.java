@@ -17,6 +17,8 @@ public class PasswordService {
 		return INSTANCE;
 	}
 
+	private PasswordService() {}
+
 	public byte[] fetchClearPassword(Account account) throws StashException {
 		String passwordFile = account.getPasswordFile();
 
