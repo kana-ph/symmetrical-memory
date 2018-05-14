@@ -24,7 +24,7 @@ public class AuthService {
 
 	public PinStatus initializePin() {
 		try {
-			String currentPin = authDao.readStoredPin();
+			byte[] currentPin = authDao.readStoredPin();
 
 			if (pinExists(currentPin)) {
 				return PinStatus.EXISTING;
@@ -44,12 +44,12 @@ public class AuthService {
 	}
 
 	public void saveClearPin(String pin) throws StashException {
-		String hashPin = pinHasher.hash(pin);
+		byte[] hashPin = pinHasher.hash(pin);
 		authDao.savePin(hashPin);
 	}
 
 	public boolean checkValidPin(String pin) throws StashException {
-		String storedPin = authDao.readStoredPin();
+		byte[] storedPin = authDao.readStoredPin();
 		return pinHasher.validate(pin, storedPin);
 	}
 
@@ -61,7 +61,7 @@ public class AuthService {
 		}
 	}
 
-	private boolean pinExists(String pin) {
-		return !"".equals(pin);
+	private boolean pinExists(byte[] pin) {
+		return pin.length > 0;
 	}
 }

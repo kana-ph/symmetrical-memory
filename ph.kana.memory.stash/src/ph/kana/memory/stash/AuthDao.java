@@ -2,7 +2,7 @@ package ph.kana.memory.stash;
 
 public interface AuthDao {
 
-	String readStoredPin() throws StashException;
+	byte[] readStoredPin() throws StashException;
 
-	void savePin(String hashedPin) throws StashException;
+	void savePin(byte[] hashedPin) throws StashException;
 }

@@ -2,6 +2,8 @@ package ph.kana.memory.codec;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PinHasherTest {
@@ -20,18 +22,18 @@ class PinHasherTest {
 	public void hash_clearString_hashString() throws Exception {
 		String clearString = "12345";
 
-		String hashString = pinHasher.hash(clearString);
+		byte[] hashString = pinHasher.hash(clearString);
 
-		assertNotEquals(clearString, hashString);
+		assertFalse(Arrays.equals(clearString.getBytes(), hashString));
 	}
 
 	@Test
 	public void hash_idempotent() throws Exception {
 		String clearString = "12345";
 
-		String hash1 = pinHasher.hash(clearString);
-		String hash2 = pinHasher.hash(clearString);
+		byte[] hash1 = pinHasher.hash(clearString);
+		byte[] hash2 = pinHasher.hash(clearString);
 
-		assertEquals(hash1, hash2);
+		assertArrayEquals(hash1, hash2);
 	}
 }

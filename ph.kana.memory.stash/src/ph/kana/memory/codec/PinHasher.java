@@ -1,29 +1,27 @@
 package ph.kana.memory.codec;
 
 import java.nio.ByteBuffer;
-import java.util.Base64;
+import java.util.Arrays;
 
 public class PinHasher {
 
-	public String hash(String pin) {
+	public byte[] hash(String pin) {
 		Long pinNumber = Long.valueOf(pin);
 		String hexPin = Long.toHexString(pinNumber);
 		int hash = pin.hashCode() + pin.length()
 				+ hexPin.hashCode() + hexPin.length();
-		return encodeBase64(hash);
+		return fetchBytes(hash);
 	}
 
-	public boolean validate(String pin, String savedPin) {
-		String hashedPin = hash(pin);
-		return savedPin.equals(hashedPin);
+	public boolean validate(String pin, byte[] savedPin) {
+		byte[] hashedPin = hash(pin);
+		return Arrays.equals(savedPin, hashedPin);
 	}
 
-	private String encodeBase64(int hash) {
-		byte[] bytes = ByteBuffer.allocate(Integer.BYTES)
+	private byte[] fetchBytes(int hash) {
+		return ByteBuffer.allocate(Integer.BYTES)
 				.putInt(hash)
 				.array();
-		return Base64.getEncoder()
-				.encodeToString(bytes);
 	}
 
 }
