@@ -20,9 +20,7 @@ public class PasswordZipFileDao implements PasswordDao {
 	@Override
 	public String storePassword(String password) throws StashException {
 		String filename = randomUUID().toString();
-		String fullPath = TEMP_ROOT + filename;
-		File passwordFile = new File(fullPath);
-		passwordFile.deleteOnExit();
+		File passwordFile = createTempFile(filename);
 
 		try {
 			Files.write(passwordFile.toPath(), password.getBytes());
@@ -34,6 +32,32 @@ public class PasswordZipFileDao implements PasswordDao {
 			throw new StashException(e);
 		}
 		return filename;
+	}
+
+	@Override
+	public String readPassword(String passwordFile) throws StashException {
+		try {
+			ZipFile zipFile = new ZipFile(ZIP_PATH);
+			if (zipFile.isEncrypted()) {
+				zipFile.setPassword("test-pass"); // TODO implement
+			}
+
+			File targetFile = createTempFile(passwordFile);
+			zipFile.extractFile(passwordFile, TEMP_ROOT);
+
+			byte[] content = Files.readAllBytes(targetFile.toPath());
+			targetFile.delete();
+
+			return new String(content);
+		} catch (IOException | ZipException e) {
+			throw new StashException(e);
+		}
+	}
+
+	private File createTempFile(String filename) {
+		File tempFile = new File(TEMP_ROOT + filename);
+		tempFile.deleteOnExit();
+		return tempFile;
 	}
 
 	private void addFileToZip(File file) throws ZipException {

@@ -78,8 +78,7 @@ public class MainFormController implements Initializable {
 				showCenterMessage("No saved accounts!\nClick 'Add' to get started!");
 			} else {
 				clearCenterMessage();
-				accounts.stream()
-						.forEach(this::renderAccountCard);
+				accounts.forEach(this::renderAccountCard);
 			}
 		} catch (StashException e) {
 			showBottomMessage("Loading failed!");

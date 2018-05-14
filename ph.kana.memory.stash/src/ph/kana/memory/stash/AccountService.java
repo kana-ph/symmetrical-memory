@@ -31,6 +31,8 @@ public class AccountService {
 	public Account saveAccount(String id, String domain, String username, String rawPassword) throws StashException {
 		try {
 			long now = System.currentTimeMillis();
+
+			// TODO encapsulate password storage logic
 			String encryptedPassword = passwordCodec.encrypt(rawPassword, Long.toString(now));
 			String passwordFile = passwordDao.storePassword(encryptedPassword);
 
