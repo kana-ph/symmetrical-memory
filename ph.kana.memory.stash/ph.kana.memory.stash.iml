@@ -44,5 +44,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="jbcrypt-0.4" level="project" />
   </component>
 </module>
