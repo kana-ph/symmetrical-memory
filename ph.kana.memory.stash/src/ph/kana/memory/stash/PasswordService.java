@@ -7,7 +7,7 @@ import ph.kana.memory.stash.textfile.PasswordZipFileDao;
 
 public class PasswordService {
 
-	private final AuthService authService = new AuthService();
+	private final AuthService authService = AuthService.getInstance();
 	private final PasswordDao passwordDao = new PasswordZipFileDao();
 	private final PasswordCodec passwordCodec = new PasswordCodec();
 

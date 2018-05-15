@@ -20,7 +20,7 @@ public class PasswordCodec {
 
 	public String encrypt(String rawPassword, String salt) throws CodecOperationException {
 		try {
-			SecretKeySpec keySpec = createSecretKey(WAGSTAFF_PRIME, salt.getBytes());
+			SecretKeySpec keySpec = createSecretKey(salt.getBytes());
 			Cipher cipher = fetchCipher();
 			cipher.init(Cipher.ENCRYPT_MODE, keySpec);
 			AlgorithmParameters parameters = cipher.getParameters();
@@ -39,7 +39,7 @@ public class PasswordCodec {
 			String iv = split[0];
 			String cryptoText = split[1];
 
-			SecretKeySpec keySpec = createSecretKey(WAGSTAFF_PRIME, salt.getBytes());
+			SecretKeySpec keySpec = createSecretKey(salt.getBytes());
 			Cipher cipher = fetchCipher();
 			cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(base64Decode(iv)));
 			return cipher.doFinal(base64Decode(cryptoText));
@@ -52,9 +52,9 @@ public class PasswordCodec {
 		return Cipher.getInstance("AES/CBC/PKCS5Padding");
 	}
 
-	private SecretKeySpec createSecretKey(char[] password, byte[] salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
+	private SecretKeySpec createSecretKey(byte[] salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
 		SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
-		PBEKeySpec keySpec = new PBEKeySpec(password, salt, 42000, 128);
+		PBEKeySpec keySpec = new PBEKeySpec(WAGSTAFF_PRIME, salt, 42000, 128);
 		SecretKey secretKey = keyFactory.generateSecret(keySpec);
 		return new SecretKeySpec(secretKey.getEncoded(),"AES");
 	}
