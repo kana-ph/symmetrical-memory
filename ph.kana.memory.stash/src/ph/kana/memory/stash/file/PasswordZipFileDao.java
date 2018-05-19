@@ -38,8 +38,9 @@ public class PasswordZipFileDao implements PasswordDao {
 
 			addFilesToZip(ivFile, valueFile);
 
-			ivFile.delete();
-			valueFile.delete();
+			if (!ivFile.delete() || !valueFile.delete()) {
+				throw new StashException("Failed to delete temp files.");
+			}
 		} catch (IOException | ZipException e) {
 			throw new StashException(e);
 		}
@@ -66,8 +67,10 @@ public class PasswordZipFileDao implements PasswordDao {
 			var iv = Files.readAllBytes(ivFile.toPath());
 			var value = Files.readAllBytes(valueFile.toPath());
 
-			ivFile.delete();
-			valueFile.delete();
+
+			if (!ivFile.delete() || !valueFile.delete()) {
+				throw new StashException("Failed to delete temp files.");
+			}
 
 			return new EncryptedPassword(iv, value);
 		} catch (IOException | ZipException e) {
