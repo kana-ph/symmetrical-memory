@@ -10,7 +10,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.model.PinStatus;
 import ph.kana.memory.stash.AccountService;
@@ -59,7 +62,7 @@ public class MainFormController implements Initializable {
 		if (PinStatus.MISSING == pinStatus) {
 			showModal(new ResetModal(), null);
 		} else {
-			showModal(new LoginModal(), pinStatus);
+			showLoginModal(pinStatus);
 			Platform.runLater(this::loadAccounts);
 		}
 	}
@@ -145,6 +148,24 @@ public class MainFormController implements Initializable {
 	private void showModalWithReload(AbstractTilePaneModal modal, Object data) {
 		modal.setOnClose(this::loadAccounts);
 		showModal(modal, data);
+	}
+
+	private void showLoginModal(PinStatus pinStatus) {
+		var rootChildren = rootPane.getChildren();
+
+		var blur = new AnchorPane();
+		var paint = Color.WHITESMOKE
+				.deriveColor(0, 1, 0.9, 0.8);
+		var background = new Background(new BackgroundFill(paint, null, null));
+		blur.setBackground(background);
+
+		rootChildren.add(blur);
+		UiCommons.assignAnchors(blur, 0.0, 0.0, 0.0, 0.0);
+
+		var loginModal = new LoginModal();
+		loginModal.setOnClose(() -> rootChildren.remove(blur));
+
+		showModal(loginModal, pinStatus);
 	}
 
 	private void showCenterMessage(String message) {
