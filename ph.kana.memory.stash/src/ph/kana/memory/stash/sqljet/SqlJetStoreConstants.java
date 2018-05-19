@@ -22,7 +22,7 @@ final class SqlJetStoreConstants {
 
 	public static SqlJetDb connection;
 
-	public static final String DB_PATH = String.format("%s/db", LOCKER_ROOT);
+	public static final String DB_PATH = String.format("%s/d", LOCKER_ROOT);
 
 	private static final int SQL_USER_VERSION = 1;
 

@@ -1,4 +1,4 @@
-package ph.kana.memory.stash.textfile;
+package ph.kana.memory.stash.file;
 
 import ph.kana.memory.stash.AuthDao;
 import ph.kana.memory.stash.StashException;
@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import static ph.kana.memory.stash.textfile.FileStoreConstants.AUTH_PATH;
+import static ph.kana.memory.stash.file.FileStoreConstants.AUTH_PATH;
 
 public class AuthFileDao implements AuthDao {
 
@@ -22,21 +22,18 @@ public class AuthFileDao implements AuthDao {
 	}
 
 	@Override
-	public String readStoredPin() throws StashException {
+	public byte[] readStoredPin() throws StashException {
 		try {
-			return Files.lines(PIN_STORE.toPath())
-					.findFirst()
-					.orElse("");
+			return Files.readAllBytes(PIN_STORE.toPath());
 		} catch (IOException e) {
 			throw new StashException(e);
 		}
 	}
 
 	@Override
-	public void savePin(String hashedPin) throws StashException {
-		String printFormat = String.format("%s\n", hashedPin);
+	public void savePin(byte[] hashedPin) throws StashException {
 		try {
-			Files.write(PIN_STORE.toPath(), printFormat.getBytes());
+			Files.write(PIN_STORE.toPath(), hashedPin);
 		} catch (IOException e) {
 			throw new StashException(e);
 		}

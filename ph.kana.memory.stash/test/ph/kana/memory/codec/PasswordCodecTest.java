@@ -2,7 +2,7 @@ package ph.kana.memory.codec;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PasswordCodecTest {
 
@@ -12,7 +12,7 @@ class PasswordCodecTest {
 		String salt = Long.toString(System.currentTimeMillis());
 		PasswordCodec codec = new PasswordCodec();
 
-		String encrypted = codec.encrypt(rawPassword, salt);
+		EncryptedPassword encrypted = codec.encrypt(rawPassword, salt);
 		String decrypted = new String(codec.decrypt(encrypted, salt));
 
 		assertEquals(rawPassword, decrypted);

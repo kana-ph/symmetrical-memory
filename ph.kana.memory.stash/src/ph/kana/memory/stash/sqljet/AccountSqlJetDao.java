@@ -51,7 +51,7 @@ public class AccountSqlJetDao implements AccountDao {
 						account.setId(cursor.getString("id"));
 						account.setDomain(cursor.getString("domain"));
 						account.setUsername(cursor.getString("username"));
-						account.setEncryptedPassword(cursor.getString("password"));
+						account.setPasswordFile(cursor.getString("password"));
 						account.setSaveTimestamp(cursor.getInteger("timestamp"));
 						accounts.add(account);
 					} while (cursor.next());
@@ -76,7 +76,7 @@ public class AccountSqlJetDao implements AccountDao {
 					"id", account.getId(),
 					"domain", account.getDomain(),
 					"username", account.getUsername(),
-					"password", account.getEncryptedPassword(),
+					"password", account.getPasswordFile(),
 					"timestamp", account.getSaveTimestamp()
 				);
 

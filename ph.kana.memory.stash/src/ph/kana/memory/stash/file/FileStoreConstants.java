@@ -1,9 +1,8 @@
-package ph.kana.memory.stash.textfile;
+package ph.kana.memory.stash.file;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.attribute.DosFileAttributes;
 
 final class FileStoreConstants {
 	private FileStoreConstants() {}
@@ -17,10 +16,9 @@ final class FileStoreConstants {
 		}
 	}
 
-	public static final String AUTH_PATH = String.format("%s/a", LOCKER_ROOT);
-	public static final String STORE_PATH = String.format("%s/s", LOCKER_ROOT);
-
-	public static final String ENTRY_SEPARATOR = "%";
+	static final String TEMP_ROOT = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator");
+	static final String AUTH_PATH = String.format("%s/a", LOCKER_ROOT);
+	static final String ZIP_PATH = String.format("%s/p", LOCKER_ROOT);
 
 	private static void hideFile(File file) {
 		String os = System.getProperty("os.name").toLowerCase();
@@ -29,6 +27,8 @@ final class FileStoreConstants {
 			if (os.startsWith("windows")) {
 				Files.setAttribute(file.toPath(), "dos:hidden", true);
 			}
-		} catch (IOException e) {}
+		} catch (IOException e) {
+
+		}
 	}
 }
