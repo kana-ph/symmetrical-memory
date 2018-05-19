@@ -5,6 +5,7 @@ import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
 import ph.kana.memory.codec.EncryptedPassword;
+import ph.kana.memory.stash.AuthDao;
 import ph.kana.memory.stash.PasswordDao;
 import ph.kana.memory.stash.StashException;
 
@@ -12,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import static java.util.UUID.randomUUID;
@@ -19,6 +21,8 @@ import static ph.kana.memory.stash.file.FileStoreConstants.TEMP_ROOT;
 import static ph.kana.memory.stash.file.FileStoreConstants.ZIP_PATH;
 
 public class PasswordZipFileDao implements PasswordDao {
+
+	private final AuthDao authDao = new AuthFileDao();
 
 	private final static String NO_ZIP_REASON = "zip file does not exist";
 
@@ -47,7 +51,7 @@ public class PasswordZipFileDao implements PasswordDao {
 		try {
 			var zipFile = new ZipFile(ZIP_PATH);
 			if (zipFile.isEncrypted()) {
-				zipFile.setPassword("test-pass"); // TODO implement
+				zipFile.setPassword(fetchZipPassword());
 			}
 
 			var ivFilename = passwordFile + 'i';
@@ -76,7 +80,7 @@ public class PasswordZipFileDao implements PasswordDao {
 		try {
 			var zipFile = new ZipFile(ZIP_PATH);
 			if (zipFile.isEncrypted()) {
-				zipFile.setPassword("test-pass"); // TODO implement
+				zipFile.setPassword(fetchZipPassword());
 			}
 			zipFile.removeFile(passwordFile);
 		} catch (ZipException e) {
@@ -97,13 +101,13 @@ public class PasswordZipFileDao implements PasswordDao {
 		return tempFile;
 	}
 
-	private static void addFilesToZip(File file1, File file2) throws ZipException {
+	private void addFilesToZip(File file1, File file2) throws StashException, ZipException {
 		var zipFile = new ZipFile(ZIP_PATH);
 		var files = new ArrayList<>(List.of(file1, file2));
-		zipFile.addFiles(files,  buildZipParameters());
+		zipFile.addFiles(files, buildZipParameters());
 	}
 
-	private static ZipParameters buildZipParameters() {
+	private ZipParameters buildZipParameters() throws StashException {
 		var params = new ZipParameters();
 
 		params.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
@@ -112,8 +116,14 @@ public class PasswordZipFileDao implements PasswordDao {
 		params.setEncryptFiles(true);
 		params.setEncryptionMethod(Zip4jConstants.ENC_METHOD_AES);
 		params.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_256);
-		params.setPassword("test-pass"); // TODO implement
+		params.setPassword(fetchZipPassword());
 
 		return params;
+	}
+
+	private String fetchZipPassword() throws StashException {
+		var pinBytes = authDao.readStoredPin();
+		return Base64.getEncoder()
+				.encodeToString(pinBytes);
 	}
 }
