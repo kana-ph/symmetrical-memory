@@ -1,4 +1,4 @@
-package ph.kana.memory.stash.textfile;
+package ph.kana.memory.stash.file;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.UUID.randomUUID;
-import static ph.kana.memory.stash.textfile.FileStoreConstants.TEMP_ROOT;
-import static ph.kana.memory.stash.textfile.FileStoreConstants.ZIP_PATH;
+import static ph.kana.memory.stash.file.FileStoreConstants.TEMP_ROOT;
+import static ph.kana.memory.stash.file.FileStoreConstants.ZIP_PATH;
 
 public class PasswordZipFileDao implements PasswordDao {
 

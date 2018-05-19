@@ -3,7 +3,7 @@ package ph.kana.memory.stash;
 import ph.kana.memory.codec.CodecOperationException;
 import ph.kana.memory.codec.PasswordCodec;
 import ph.kana.memory.model.Account;
-import ph.kana.memory.stash.textfile.PasswordZipFileDao;
+import ph.kana.memory.stash.file.PasswordZipFileDao;
 
 public class PasswordService {
 

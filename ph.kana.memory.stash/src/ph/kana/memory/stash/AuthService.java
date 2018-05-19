@@ -5,8 +5,8 @@ import ph.kana.memory.codec.EncryptedPassword;
 import ph.kana.memory.codec.PasswordCodec;
 import ph.kana.memory.codec.PinBcryptEncryptor;
 import ph.kana.memory.model.PinStatus;
+import ph.kana.memory.stash.file.AuthFileDao;
 import ph.kana.memory.stash.sqljet.AccountSqlJetDao;
-import ph.kana.memory.stash.textfile.AuthFileDao;
 
 public class AuthService {
 
