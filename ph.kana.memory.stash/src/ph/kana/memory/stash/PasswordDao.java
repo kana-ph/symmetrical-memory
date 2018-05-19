@@ -1,10 +1,12 @@
 package ph.kana.memory.stash;
 
+import ph.kana.memory.codec.EncryptedPassword;
+
 public interface PasswordDao {
 
-	String storePassword(String password) throws StashException;
+	String storePassword(EncryptedPassword password) throws StashException;
 
-	String readPassword(String passwordFile) throws StashException;
+	EncryptedPassword readPassword(String passwordFile) throws StashException;
 
 	void removePassword(String passwordFile) throws StashException;
 }

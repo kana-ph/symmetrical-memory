@@ -4,12 +4,15 @@ import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
+import ph.kana.memory.codec.EncryptedPassword;
 import ph.kana.memory.stash.PasswordDao;
 import ph.kana.memory.stash.StashException;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.UUID.randomUUID;
 import static ph.kana.memory.stash.textfile.FileStoreConstants.TEMP_ROOT;
@@ -17,17 +20,22 @@ import static ph.kana.memory.stash.textfile.FileStoreConstants.ZIP_PATH;
 
 public class PasswordZipFileDao implements PasswordDao {
 
+	private final static String NO_ZIP_REASON = "zip file does not exist";
+
 	@Override
-	public String storePassword(String password) throws StashException {
+	public String storePassword(EncryptedPassword password) throws StashException {
 		var filename = generateFilename();
-		var passwordFile = createTempFile(filename);
+		var ivFile = createTempFile(filename + 'i');
+		var valueFile = createTempFile(filename + 'v');
 
 		try {
-			Files.write(passwordFile.toPath(), password.getBytes());
+			Files.write(ivFile.toPath(), password.getInitializationVector());
+			Files.write(valueFile.toPath(), password.getValue());
 
-			addFileToZip(passwordFile);
+			addFilesToZip(ivFile, valueFile);
 
-			passwordFile.delete();
+			ivFile.delete();
+			valueFile.delete();
 		} catch (IOException | ZipException e) {
 			throw new StashException(e);
 		}
@@ -35,20 +43,29 @@ public class PasswordZipFileDao implements PasswordDao {
 	}
 
 	@Override
-	public String readPassword(String passwordFile) throws StashException {
+	public EncryptedPassword readPassword(String passwordFile) throws StashException {
 		try {
 			var zipFile = new ZipFile(ZIP_PATH);
 			if (zipFile.isEncrypted()) {
 				zipFile.setPassword("test-pass"); // TODO implement
 			}
 
-			var targetFile = createTempFile(passwordFile);
-			zipFile.extractFile(passwordFile, TEMP_ROOT);
+			var ivFilename = passwordFile + 'i';
+			var valueFilename = passwordFile + 'v';
 
-			var content = Files.readAllBytes(targetFile.toPath());
-			targetFile.delete();
+			var ivFile = createTempFile(ivFilename);
+			var valueFile = createTempFile(valueFilename);
 
-			return new String(content);
+			zipFile.extractFile(ivFilename, TEMP_ROOT);
+			zipFile.extractFile(valueFilename, TEMP_ROOT);
+
+			var iv = Files.readAllBytes(ivFile.toPath());
+			var value = Files.readAllBytes(valueFile.toPath());
+
+			ivFile.delete();
+			valueFile.delete();
+
+			return new EncryptedPassword(iv, value);
 		} catch (IOException | ZipException e) {
 			throw new StashException(e);
 		}
@@ -63,7 +80,9 @@ public class PasswordZipFileDao implements PasswordDao {
 			}
 			zipFile.removeFile(passwordFile);
 		} catch (ZipException e) {
-			throw new StashException(e);
+			if (!NO_ZIP_REASON.equals(e.getMessage())) {
+				throw new StashException(e);
+			}
 		}
 	}
 
@@ -78,9 +97,10 @@ public class PasswordZipFileDao implements PasswordDao {
 		return tempFile;
 	}
 
-	private static void addFileToZip(File file) throws ZipException {
+	private static void addFilesToZip(File file1, File file2) throws ZipException {
 		var zipFile = new ZipFile(ZIP_PATH);
-		zipFile.addFile(file,  buildZipParameters());
+		var files = new ArrayList<>(List.of(file1, file2));
+		zipFile.addFiles(files,  buildZipParameters());
 	}
 
 	private static ZipParameters buildZipParameters() {

@@ -1,6 +1,7 @@
 package ph.kana.memory.stash;
 
 import ph.kana.memory.codec.CodecOperationException;
+import ph.kana.memory.codec.EncryptedPassword;
 import ph.kana.memory.codec.PasswordCodec;
 import ph.kana.memory.codec.PinBcryptEncryptor;
 import ph.kana.memory.model.PinStatus;
@@ -53,7 +54,7 @@ public class AuthService {
 		return pinEncryptor.validate(pin, storedPin);
 	}
 
-	public byte[] decryptPassword(String encryptedPassword, String salt) throws StashException {
+	public byte[] decryptPassword(EncryptedPassword encryptedPassword, String salt) throws StashException {
 		try {
 			return passwordCodec.decrypt(encryptedPassword, salt);
 		} catch (CodecOperationException e) {
