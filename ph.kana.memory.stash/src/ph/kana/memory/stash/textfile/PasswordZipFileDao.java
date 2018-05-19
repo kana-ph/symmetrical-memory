@@ -19,7 +19,7 @@ public class PasswordZipFileDao implements PasswordDao {
 
 	@Override
 	public String storePassword(String password) throws StashException {
-		var filename = randomUUID().toString();
+		var filename = generateFilename();
 		var passwordFile = createTempFile(filename);
 
 		try {
@@ -67,18 +67,23 @@ public class PasswordZipFileDao implements PasswordDao {
 		}
 	}
 
-	private File createTempFile(String filename) {
+	private static String generateFilename() {
+		return randomUUID().toString()
+				.replaceAll("-", "");
+	}
+
+	private static File createTempFile(String filename) {
 		var tempFile = new File(TEMP_ROOT + filename);
 		tempFile.deleteOnExit();
 		return tempFile;
 	}
 
-	private void addFileToZip(File file) throws ZipException {
+	private static void addFileToZip(File file) throws ZipException {
 		var zipFile = new ZipFile(ZIP_PATH);
 		zipFile.addFile(file,  buildZipParameters());
 	}
 
-	private ZipParameters buildZipParameters() {
+	private static ZipParameters buildZipParameters() {
 		var params = new ZipParameters();
 
 		params.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
