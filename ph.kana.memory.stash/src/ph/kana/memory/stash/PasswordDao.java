@@ -9,4 +9,6 @@ public interface PasswordDao {
 	EncryptedPassword readPassword(String passwordFile) throws StashException;
 
 	void removePassword(String passwordFile) throws StashException;
+
+	void updatePasswordStoreEncryption(byte[] encyrption) throws StashException;
 }

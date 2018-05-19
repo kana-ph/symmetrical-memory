@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.UUID.randomUUID;
 import static ph.kana.memory.stash.file.FileStoreConstants.TEMP_ROOT;
@@ -87,11 +88,33 @@ public class PasswordZipFileDao implements PasswordDao {
 			if (null == zipFile) {
 				throw new StashException("Cannot fetch password; missing store file");
 			}
+
 			zipFile.removeFile(passwordFile);
 		} catch (ZipException e) {
 			if (!NO_ZIP_REASON.equals(e.getMessage())) {
 				throw new StashException(e);
 			}
+		}
+	}
+
+	@Override
+	public void updatePasswordStoreEncryption(byte[] encryption) throws StashException {
+		try {
+			var zipFile = openZipFile();
+
+			if (null == zipFile) {
+				return;
+			}
+
+			var tempDestination = createTempFile(generateFilename());
+			zipFile.extractAll(tempDestination.getAbsolutePath());
+
+			if (zipFile.getFile().delete()) {
+				var files = Objects.requireNonNull(tempDestination.listFiles());
+				createNewZipFile(encryption, List.of(files));
+			}
+		} catch (ZipException e) {
+			throw new StashException(e);
 		}
 	}
 
@@ -142,5 +165,15 @@ public class PasswordZipFileDao implements PasswordDao {
 		var pinBytes = authDao.readStoredPin();
 		return Base64.getEncoder()
 				.encodeToString(pinBytes);
+	}
+
+	private void createNewZipFile(byte[] password, List<File> files) throws StashException, ZipException {
+		var zipParameters = buildZipParameters();
+		var zipPassword = Base64.getEncoder()
+				.encodeToString(password);
+		zipParameters.setPassword(zipPassword);
+
+		var zipFile = new ZipFile(ZIP_PATH);
+		zipFile.createZipFile(new ArrayList<>(files), zipParameters);
 	}
 }

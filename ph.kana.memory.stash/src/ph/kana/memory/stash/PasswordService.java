@@ -5,15 +5,18 @@ import ph.kana.memory.codec.PasswordCodec;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.file.PasswordZipFileDao;
 
-public class PasswordService {
+public final class PasswordService {
 
 	private final AuthService authService = AuthService.getInstance();
 	private final PasswordDao passwordDao = new PasswordZipFileDao();
 	private final PasswordCodec passwordCodec = new PasswordCodec();
 
-	private static final PasswordService INSTANCE = new PasswordService();
+	private static PasswordService INSTANCE;
 
 	public static PasswordService getInstance() {
+		if (null == INSTANCE) {
+			INSTANCE = new PasswordService();
+		}
 		return INSTANCE;
 	}
 
@@ -38,5 +41,9 @@ public class PasswordService {
 
 	public void removePassword(Account account) throws StashException {
 		passwordDao.removePassword(account.getPasswordFile());
+	}
+
+	public void updateStoreEncryption(byte[] newPassword) throws StashException {
+		passwordDao.updatePasswordStoreEncryption(newPassword);
 	}
 }

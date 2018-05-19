@@ -14,6 +14,7 @@ public class AuthService {
 	private final AuthDao authDao = new AuthFileDao();
 
 	private final PasswordCodec passwordCodec = new PasswordCodec();
+	private final PasswordService passwordService = PasswordService.getInstance();
 	private final PinBcryptEncryptor pinEncryptor = new PinBcryptEncryptor();
 
 	public final static String DEFAULT_PIN = "12345678";
@@ -46,6 +47,7 @@ public class AuthService {
 
 	public void saveClearPin(String pin) throws StashException {
 		byte[] hashPin = pinEncryptor.hash(pin);
+		passwordService.updateStoreEncryption(hashPin);
 		authDao.savePin(hashPin);
 	}
 
