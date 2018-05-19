@@ -50,9 +50,10 @@ public class PasswordZipFileDao implements PasswordDao {
 	@Override
 	public EncryptedPassword readPassword(String passwordFile) throws StashException {
 		try {
-			var zipFile = new ZipFile(ZIP_PATH);
-			if (zipFile.isEncrypted()) {
-				zipFile.setPassword(fetchZipPassword());
+			var zipFile = openZipFile();
+
+			if (null == zipFile) {
+				throw new StashException("Cannot fetch password; missing store file");
 			}
 
 			var ivFilename = passwordFile + 'i';
@@ -81,9 +82,10 @@ public class PasswordZipFileDao implements PasswordDao {
 	@Override
 	public void removePassword(String passwordFile) throws StashException {
 		try {
-			var zipFile = new ZipFile(ZIP_PATH);
-			if (zipFile.isEncrypted()) {
-				zipFile.setPassword(fetchZipPassword());
+			var zipFile = openZipFile();
+
+			if (null == zipFile) {
+				throw new StashException("Cannot fetch password; missing store file");
 			}
 			zipFile.removeFile(passwordFile);
 		} catch (ZipException e) {
@@ -91,6 +93,18 @@ public class PasswordZipFileDao implements PasswordDao {
 				throw new StashException(e);
 			}
 		}
+	}
+
+	private ZipFile openZipFile() throws StashException, ZipException  {
+		var zipFile = new ZipFile(ZIP_PATH);
+
+		if (zipFile.getFile().exists()) {
+			if (zipFile.isEncrypted()) {
+				zipFile.setPassword(fetchZipPassword());
+			}
+			return zipFile;
+		}
+		return null;
 	}
 
 	private static String generateFilename() {
