@@ -3,14 +3,11 @@ package ph.kana.memory.ui.fxml.modal;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import ph.kana.memory.model.PinStatus;
 import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.StashException;
-import ph.kana.memory.ui.fxml.UiCommons;
 
 import static ph.kana.memory.ui.fxml.UiCommons.forceNumericalInput;
-import static ph.kana.memory.ui.fxml.UiCommons.showBottomFadingText;
 
 public class LoginModal extends AbstractTilePaneModal<PinStatus> {
 
@@ -35,7 +32,7 @@ public class LoginModal extends AbstractTilePaneModal<PinStatus> {
 
 	@FXML
 	public void validatePin() {
-		String pin = pinTextBox.getText();
+		var pin = pinTextBox.getText();
 		if (pin.isEmpty()) {
 			return;
 		}
