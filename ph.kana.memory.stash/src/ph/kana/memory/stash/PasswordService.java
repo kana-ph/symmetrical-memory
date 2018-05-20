@@ -46,4 +46,8 @@ public final class PasswordService {
 	public void updateStoreEncryption(byte[] newPassword) throws StashException {
 		passwordDao.updatePasswordStoreEncryption(newPassword);
 	}
+
+	public boolean storeExists() throws StashException {
+		return passwordDao.passwordStoreExists();
+	}
 }

@@ -118,6 +118,11 @@ public class PasswordZipFileDao implements PasswordDao {
 		}
 	}
 
+	@Override
+	public boolean passwordStoreExists() {
+		return Files.exists(new File(ZIP_PATH).toPath());
+	}
+
 	private ZipFile openZipFile() throws StashException, ZipException  {
 		var zipFile = new ZipFile(ZIP_PATH);
 

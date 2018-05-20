@@ -31,7 +31,7 @@ public class AuthService {
 			if (pinExists(currentPin)) {
 				return PinStatus.EXISTING;
 			} else {
-				if (accountDao.anyExists()) {
+				if (dataExists()) {
 					return PinStatus.MISSING;
 				} else {
 					saveClearPin(DEFAULT_PIN);
@@ -66,5 +66,9 @@ public class AuthService {
 
 	private boolean pinExists(byte[] pin) {
 		return pin.length > 0;
+	}
+
+	private boolean dataExists() throws StashException {
+		return accountDao.anyExists() || passwordService.storeExists();
 	}
 }

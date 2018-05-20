@@ -11,4 +11,6 @@ public interface PasswordDao {
 	void removePassword(String passwordFile) throws StashException;
 
 	void updatePasswordStoreEncryption(byte[] encyrption) throws StashException;
+
+	boolean passwordStoreExists() throws StashException;
 }
