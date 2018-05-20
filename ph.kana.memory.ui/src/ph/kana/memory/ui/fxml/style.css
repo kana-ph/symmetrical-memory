@@ -43,6 +43,10 @@
     -fx-font-weight: bold;
 }
 
+.login-modal-darkening {
+    -fx-background-color: rgba(0, 0, 0, 0.95);
+}
+
 .modal-darkening {
     -fx-background-color: rgba(0, 0, 0, 0.9);
 }
