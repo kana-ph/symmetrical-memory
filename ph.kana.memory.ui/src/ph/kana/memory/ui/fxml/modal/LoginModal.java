@@ -38,7 +38,7 @@ public class LoginModal extends AbstractTilePaneModal<PinStatus> {
 		}
 		try {
 			if (authService.checkValidPin(pin)) {
-				setVisible(false);
+				close();
 			} else {
 				pinTextBox.setText("");
 			}

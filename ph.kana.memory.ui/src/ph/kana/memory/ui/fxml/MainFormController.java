@@ -1,7 +1,7 @@
 package ph.kana.memory.ui.fxml;
 
 import javafx.application.HostServices;
-import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -10,10 +10,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.model.PinStatus;
 import ph.kana.memory.stash.AccountService;
@@ -32,9 +30,12 @@ public class MainFormController implements Initializable {
 
 	private final Logger logger = Logger.getLogger(MainFormController.class.getName());
 	private HostServices hostServices;
+	private IdleMonitor idleMonitor = null;
 
 	private final AccountService accountService = AccountService.getInstance();
 	private final AuthService authService = AuthService.getInstance();
+
+	private final Duration SESSION_EXPIRE_DURATION = Duration.seconds(30);
 
 	@FXML private Pane rootPane;
 	@FXML private Pane viewPane;
@@ -58,13 +59,7 @@ public class MainFormController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		PinStatus pinStatus = authService.initializePin();
-		if (PinStatus.MISSING == pinStatus) {
-			showModal(new ResetModal(), null);
-		} else {
-			showLoginModal(pinStatus);
-			Platform.runLater(this::loadAccounts);
-		}
+		showLoginModal(true);
 	}
 
 	public void setHostServices(HostServices hostServices) {
@@ -150,22 +145,25 @@ public class MainFormController implements Initializable {
 		showModal(modal, data);
 	}
 
-	private void showLoginModal(PinStatus pinStatus) {
-		var rootChildren = rootPane.getChildren();
+	private void showLoginModal(boolean startup) {
+		PinStatus pinStatus = authService.initializePin();
+		if (PinStatus.MISSING == pinStatus) {
+			showModal(new ResetModal(), null);
+		} else {
+			var loginModal = new LoginModal();
 
-		var blur = new AnchorPane();
-		var paint = Color.WHITESMOKE
-				.deriveColor(0, 1, 0.9, 0.8);
-		var background = new Background(new BackgroundFill(paint, null, null));
-		blur.setBackground(background);
+			if (startup) {
+				loginModal.setOnClose(() -> {
+					loadAccounts();
+					initializeIdleMonitor();
+				});
+			} else {
+				idleMonitor.stopMonitoring();
+				loginModal.setOnClose(idleMonitor::startMonitoring);
+			}
 
-		rootChildren.add(blur);
-		UiCommons.assignAnchors(blur, 0.0, 0.0, 0.0, 0.0);
-
-		var loginModal = new LoginModal();
-		loginModal.setOnClose(() -> rootChildren.remove(blur));
-
-		showModal(loginModal, pinStatus);
+			showModal(loginModal, pinStatus);
+		}
 	}
 
 	private void showCenterMessage(String message) {
@@ -185,5 +183,13 @@ public class MainFormController implements Initializable {
 
 	private void showBottomMessage(String message) {
 		UiCommons.showBottomFadingText(message, rootPane.getChildren());
+	}
+
+	private void initializeIdleMonitor() {
+		if (null == idleMonitor) {
+			idleMonitor = new IdleMonitor(SESSION_EXPIRE_DURATION, () -> showLoginModal(false));
+			idleMonitor.register(rootPane.getScene(), Event.ANY);
+			idleMonitor.startMonitoring();
+		}
 	}
 }
