@@ -133,14 +133,14 @@ public class MainFormController implements Initializable {
 		classes.add(cssClass);
 	}
 
-	private void showModal(AbstractTilePaneModal modal, Object data) {
+	private <T> void showModal(AbstractTilePaneModal<T> modal, T data) {
 		List<Node> rootChildren = rootPane.getChildren();
 		rootChildren.add(modal);
 		UiCommons.assignAnchors(modal, 0.0, 0.0, 0.0, 0.0);
 		modal.showModal(data);
 	}
 
-	private void showModalWithReload(AbstractTilePaneModal modal, Object data) {
+	private <T> void showModalWithReload(AbstractTilePaneModal<T> modal, T data) {
 		modal.setOnClose(this::loadAccounts);
 		showModal(modal, data);
 	}
