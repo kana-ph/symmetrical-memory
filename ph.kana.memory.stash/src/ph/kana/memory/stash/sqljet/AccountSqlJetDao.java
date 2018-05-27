@@ -24,15 +24,27 @@ public class AccountSqlJetDao implements AccountDao {
 	private final static String TABLE_NAME = "accounts";
 	private final static String CREATE_TABLE_SQL =
 		"CREATE TABLE IF NOT EXISTS accounts (id TEXT NOT NULL PRIMARY KEY, domain TEXT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL, timestamp INTEGER NOT NULL)";
-	private final static String ID_INDEX_NAME = "accounts_pkey";
-	private final static String CREATE_ID_INDEX_SQL = "CREATE INDEX IF NOT EXISTS accounts_pkey ON accounts(id)";
+
+	private final static String ID_INDEX_NAME = "accounts_pk";
+	private final static String CREATE_ID_INDEX_SQL = "CREATE INDEX IF NOT EXISTS " + ID_INDEX_NAME + " ON accounts(id)";
+
+	private final static String DOMAIN_INDEX_NAME = "domain_idx";
+	private final static String CREATE_DOMAIN_INDEX_SQL = "CREATE INDEX IF NOT EXISTS " + DOMAIN_INDEX_NAME + " ON accounts(domain)";
+
+	private final static String FIELD_ID = "id";
+	private final static String FIELD_DOMAIN = "domain";
+	private final static String FIELD_USERNAME = "username";
+	private final static String FIELD_PASSWORD_FILE = "password";
+	private final static String FIELD_SAVE_TIMESTAMP = "timestamp";
 
 	public AccountSqlJetDao() {
 		try {
 			sqlJetDb = SqlJetStoreConstants.getConnection();
 			sqlJetDb.runWriteTransaction(db -> {
 				db.createTable(CREATE_TABLE_SQL);
+
 				db.createIndex(CREATE_ID_INDEX_SQL);
+				db.createIndex(CREATE_DOMAIN_INDEX_SQL);
 				return null;
 			});
 		} catch (SqlJetException e) {
@@ -45,25 +57,29 @@ public class AccountSqlJetDao implements AccountDao {
 	public List<Account> fetchAll() throws StashException {
 		try {
 			@SuppressWarnings("unchecked")
-			List<Account> allAccounts = (List) sqlJetDb.runReadTransaction(db -> {
-				ISqlJetTable table = db.getTable(TABLE_NAME);
-				ISqlJetCursor cursor = table.order(ID_INDEX_NAME);
+			var allAccounts = (List<Account>) sqlJetDb.runReadTransaction(db -> {
+				var table = db.getTable(TABLE_NAME);
+				var cursor = table.order(ID_INDEX_NAME);
 
-				List<Account> accounts = new ArrayList<>();
-				if (!cursor.eof()) {
-					do {
-						Account account = new Account();
-						account.setId(cursor.getString("id"));
-						account.setDomain(cursor.getString("domain"));
-						account.setUsername(cursor.getString("username"));
-						account.setPasswordFile(cursor.getString("password"));
-						account.setSaveTimestamp(cursor.getInteger("timestamp"));
-						accounts.add(account);
-					} while (cursor.next());
-				}
-				return accounts;
+				return transformToAccountList(cursor);
 			});
 			return allAccounts;
+		} catch (SqlJetException e) {
+			throw new StashException(e);
+		}
+	}
+
+	@Override
+	public List<Account> findAccounts(String searchString) throws StashException {
+		try {
+			@SuppressWarnings("unchecked")
+			var filteredAccounts = (List<Account>) sqlJetDb.runReadTransaction(db -> {
+				var table = db.getTable(TABLE_NAME);
+				var cursor = table.lookup(DOMAIN_INDEX_NAME, searchString);
+
+				return transformToAccountList(cursor);
+			});
+			return filteredAccounts;
 		} catch (SqlJetException e) {
 			throw new StashException(e);
 		}
@@ -78,11 +94,11 @@ public class AccountSqlJetDao implements AccountDao {
 				cursor.setLimit(1L);
 
 				Map<String, Object> data = Map.of(
-					"id", account.getId(),
-					"domain", account.getDomain(),
-					"username", account.getUsername(),
-					"password", account.getPasswordFile(),
-					"timestamp", account.getSaveTimestamp()
+					FIELD_ID, account.getId(),
+					FIELD_DOMAIN, account.getDomain(),
+					FIELD_USERNAME, account.getUsername(),
+					FIELD_PASSWORD_FILE, account.getPasswordFile(),
+					FIELD_SAVE_TIMESTAMP, account.getSaveTimestamp()
 				);
 
 				if (cursor.eof()) {
@@ -136,5 +152,21 @@ public class AccountSqlJetDao implements AccountDao {
 		} catch (IOException e) {
 			throw new StashException(e);
 		}
+	}
+
+	private List<Account> transformToAccountList(ISqlJetCursor cursor) throws SqlJetException {
+		List<Account> accounts = new ArrayList<>();
+		if (!cursor.eof()) {
+			do {
+				var account = new Account();
+				account.setId(cursor.getString(FIELD_ID));
+				account.setDomain(cursor.getString(FIELD_DOMAIN));
+				account.setUsername(cursor.getString(FIELD_USERNAME));
+				account.setPasswordFile(cursor.getString(FIELD_PASSWORD_FILE));
+				account.setSaveTimestamp(cursor.getInteger(FIELD_SAVE_TIMESTAMP));
+				accounts.add(account);
+			} while (cursor.next());
+		}
+		return accounts;
 	}
 }
