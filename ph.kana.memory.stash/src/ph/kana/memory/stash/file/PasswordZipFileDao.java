@@ -12,10 +12,7 @@ import ph.kana.memory.stash.StashException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static java.util.UUID.randomUUID;
 import static ph.kana.memory.stash.file.FileStoreConstants.TEMP_ROOT;
@@ -27,13 +24,18 @@ public class PasswordZipFileDao implements PasswordDao {
 
 	private final static String NO_ZIP_REASON = "zip file does not exist";
 
+	private final static char I_KEY = 'i';
+	private final static char V_KEY = 'v';
+
 	@Override
 	public String storePassword(EncryptedPassword password) throws StashException {
 		var filename = generateFilename();
-		var ivFile = createTempFile(filename + 'i');
-		var valueFile = createTempFile(filename + 'v');
+		var passwordFiles = fetchPasswordFiles(filename);
 
 		try {
+			var ivFile = createTempFile(passwordFiles.get(I_KEY));
+			var valueFile = createTempFile(passwordFiles.get(V_KEY));
+
 			Files.write(ivFile.toPath(), password.getInitializationVector());
 			Files.write(valueFile.toPath(), password.getValue());
 
@@ -57,24 +59,23 @@ public class PasswordZipFileDao implements PasswordDao {
 				throw new StashException("Cannot fetch password; missing store file");
 			}
 
-			var ivFilename = passwordFile + 'i';
-			var valueFilename = passwordFile + 'v';
+			var passwordFiles = fetchPasswordFiles(passwordFile);
+			var passwordData = new HashMap<Character, byte[]>();
+			for (var key : passwordFiles.keySet()) {
+				var file = passwordFiles.get(key);
+				zipFile.extractFile(file, TEMP_ROOT);
 
-			var ivFile = createTempFile(ivFilename);
-			var valueFile = createTempFile(valueFilename);
+				var tempFile = createTempFile(file);
+				var data = Files.readAllBytes(tempFile.toPath());
 
-			zipFile.extractFile(ivFilename, TEMP_ROOT);
-			zipFile.extractFile(valueFilename, TEMP_ROOT);
+				passwordData.put(key, data);
 
-			var iv = Files.readAllBytes(ivFile.toPath());
-			var value = Files.readAllBytes(valueFile.toPath());
-
-
-			if (!ivFile.delete() || !valueFile.delete()) {
-				throw new StashException("Failed to delete temp files.");
+				if (!tempFile.delete()) {
+					// TODO log warning
+				}
 			}
 
-			return new EncryptedPassword(iv, value);
+			return new EncryptedPassword(passwordData.get(I_KEY), passwordData.get(V_KEY));
 		} catch (IOException | ZipException e) {
 			throw new StashException(e);
 		}
@@ -89,7 +90,9 @@ public class PasswordZipFileDao implements PasswordDao {
 				throw new StashException("Cannot fetch password; missing store file");
 			}
 
-			zipFile.removeFile(passwordFile);
+			var passwordFiles = fetchPasswordFiles(passwordFile);
+			zipFile.removeFile(passwordFiles.get(I_KEY));
+			zipFile.removeFile(passwordFiles.get(V_KEY));
 		} catch (ZipException e) {
 			if (!NO_ZIP_REASON.equals(e.getMessage())) {
 				throw new StashException(e);
@@ -189,5 +192,11 @@ public class PasswordZipFileDao implements PasswordDao {
 
 		var zipFile = new ZipFile(ZIP_PATH);
 		zipFile.createZipFile(new ArrayList<>(files), zipParameters);
+	}
+
+	private Map<Character, String> fetchPasswordFiles(String passwordFile) {
+		return Map.of(
+				I_KEY, passwordFile + 'i',
+				V_KEY, passwordFile + 'v');
 	}
 }

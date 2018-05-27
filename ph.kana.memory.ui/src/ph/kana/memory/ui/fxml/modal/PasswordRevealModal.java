@@ -29,6 +29,7 @@ public class PasswordRevealModal extends AbstractTilePaneModal<Account> {
 		} catch (StashException e) {
 			close();
 			showBottomFadingText("Failed retrieve password.");
+			// TODO add logging
 		}
 	}
 
