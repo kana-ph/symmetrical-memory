@@ -8,9 +8,14 @@ import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountDao;
 import ph.kana.memory.stash.StashException;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static ph.kana.memory.stash.sqljet.SqlJetStoreConstants.DB_PATH;
 
 public class AccountSqlJetDao implements AccountDao {
 
@@ -120,6 +125,15 @@ public class AccountSqlJetDao implements AccountDao {
 				return cursor.getRowCount() > 0L;
 			});
 		} catch (SqlJetException e) {
+			throw new StashException(e);
+		}
+	}
+
+	@Override
+	public void deleteAll() throws StashException {
+		try {
+			Files.delete(new File(DB_PATH).toPath());
+		} catch (IOException e) {
 			throw new StashException(e);
 		}
 	}

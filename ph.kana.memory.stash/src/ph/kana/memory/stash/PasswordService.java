@@ -50,4 +50,8 @@ public final class PasswordService {
 	public boolean storeExists() throws StashException {
 		return passwordDao.passwordStoreExists();
 	}
+
+	public void purge() throws StashException {
+		passwordDao.deletePasswordStore();
+	}
 }

@@ -42,6 +42,11 @@ public class AccountService {
 		accountDao.delete(account);
 	}
 
+	public void purge() throws StashException {
+		accountDao.deleteAll();
+		passwordService.purge();
+	}
+
 	private String ensureId(String id) {
 		if (id == null || id.isEmpty()) {
 			return randomUUID().toString();

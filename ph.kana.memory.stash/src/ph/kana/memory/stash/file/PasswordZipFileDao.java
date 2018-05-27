@@ -123,6 +123,15 @@ public class PasswordZipFileDao implements PasswordDao {
 		return Files.exists(new File(ZIP_PATH).toPath());
 	}
 
+	@Override
+	public void deletePasswordStore() throws StashException {
+		try {
+			Files.delete(new File(ZIP_PATH).toPath());
+		} catch (IOException e) {
+			throw new StashException(e);
+		}
+	}
+
 	private ZipFile openZipFile() throws StashException, ZipException  {
 		var zipFile = new ZipFile(ZIP_PATH);
 

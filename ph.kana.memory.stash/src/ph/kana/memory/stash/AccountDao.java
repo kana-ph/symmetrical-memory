@@ -13,4 +13,6 @@ public interface AccountDao {
 	void delete(Account account) throws StashException;
 
 	boolean anyExists() throws StashException;
+
+	void deleteAll() throws StashException;
 }
