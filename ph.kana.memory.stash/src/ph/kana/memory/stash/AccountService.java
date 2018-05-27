@@ -3,6 +3,7 @@ package ph.kana.memory.stash;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.sqljet.AccountSqlJetDao;
 
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.UUID.randomUUID;
@@ -22,6 +23,10 @@ public class AccountService {
 
 	public List<Account> fetchAccounts() throws StashException {
 		return accountDao.fetchAll();
+	}
+
+	public List<Account> searchAccounts(String searchString) throws StashException {
+		return Collections.emptyList();
 	}
 
 	public Account saveAccount(String id, String domain, String username, String rawPassword) throws StashException {

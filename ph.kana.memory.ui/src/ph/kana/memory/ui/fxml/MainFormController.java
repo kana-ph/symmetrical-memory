@@ -1,14 +1,12 @@
 package ph.kana.memory.ui.fxml;
 
 import javafx.application.HostServices;
+import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
@@ -40,6 +38,8 @@ public class MainFormController implements Initializable {
 	@FXML private Pane rootPane;
 	@FXML private Pane viewPane;
 
+	@FXML private TextField filterTextBox;
+
 	@FXML
 	public void showAddAccountDialog() {
 		showModalWithReload(new SaveAccountModal(), Optional.empty());
@@ -57,9 +57,36 @@ public class MainFormController implements Initializable {
 		hostServices.showDocument(url);
 	}
 
+	@FXML
+	public void clearSearchFilter() {
+		filterTextBox.setText("");
+		loadAccounts();
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		showLoginModal(true);
+
+		filterTextBox.textProperty()
+				.addListener(this::filterAccounts);
+	}
+
+	private void filterAccounts(ObservableValue observable, String oldText, String newText) {
+		viewPane.getChildren()
+				.clear();
+		showCenterMessage("Searching...");
+
+		if (newText.isEmpty()) {
+			loadAccounts();
+		} else {
+			try {
+				var accounts = accountService.searchAccounts(newText);
+				renderAccounts(accounts, String.format("No search results for\n'%s'", cutString(newText)));
+			} catch (StashException e) {
+				showBottomMessage("Loading failed!");
+				logger.severe(e::getMessage);
+			}
+		}
 	}
 
 	public void setHostServices(HostServices hostServices) {
@@ -67,20 +94,24 @@ public class MainFormController implements Initializable {
 	}
 
 	private void loadAccounts() {
+		viewPane.getChildren()
+				.clear();
+		showCenterMessage("Loading...");
 		try {
-			viewPane.getChildren()
-					.clear();
-			showCenterMessage("Loading...");
-			List<Account> accounts = accountService.fetchAccounts();
-			if (accounts.isEmpty()) {
-				showCenterMessage("No saved accounts!\nClick 'Add' to get started!");
-			} else {
-				clearCenterMessage();
-				accounts.forEach(this::renderAccountCard);
-			}
+			var accounts = accountService.fetchAccounts();
+			renderAccounts(accounts, "No saved accounts!\nClick 'Add' to get started!");
 		} catch (StashException e) {
 			showBottomMessage("Loading failed!");
 			logger.severe(e::getMessage);
+		}
+	}
+
+	private void renderAccounts(List<Account> accounts, String emptyAccountsMessage) {
+		if (accounts.isEmpty()) {
+			showCenterMessage(emptyAccountsMessage);
+		} else {
+			clearCenterMessage();
+			accounts.forEach(this::renderAccountCard);
 		}
 	}
 
@@ -191,5 +222,12 @@ public class MainFormController implements Initializable {
 			idleMonitor.register(rootPane.getScene(), Event.ANY);
 			idleMonitor.startMonitoring();
 		}
+	}
+
+	private String cutString(String string) {
+		if (string.length() > 18) {
+			return string.substring(0, 18) + '\u2026';
+		}
+		return string;
 	}
 }

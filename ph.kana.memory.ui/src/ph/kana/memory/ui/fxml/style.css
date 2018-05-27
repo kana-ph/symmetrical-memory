@@ -61,3 +61,17 @@
     -fx-font-weight: bold;
     -fx-font-style: italic;
 }
+
+.text-box-button {
+    -fx-background-color: white;
+    -fx-text-alignment: right;
+    -fx-alignment: center-right;
+    -fx-pref-height: 20;
+    -fx-pref-width: 20;
+    -fx-max-height: 20;
+    -fx-max-width: 20;
+    -fx-min-height: 20;
+    -fx-min-width: 20;
+    -fx-focus-traversable: false;
+    -fx-cursor: hand;
+}
