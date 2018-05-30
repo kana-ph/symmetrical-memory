@@ -1,7 +1,7 @@
 package ph.kana.memory.stash;
 
 import ph.kana.memory.model.Account;
-import ph.kana.memory.stash.sqljet.AccountSqlJetDao;
+import ph.kana.memory.stash.derby.AccountDerbyDbDao;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import static java.util.UUID.randomUUID;
 
 public class AccountService {
 
-	private final AccountDao accountDao = new AccountSqlJetDao();
+	private final AccountDao accountDao = new AccountDerbyDbDao();
 	private final PasswordService passwordService = PasswordService.getInstance();
 
 	private static final AccountService INSTANCE = new AccountService();

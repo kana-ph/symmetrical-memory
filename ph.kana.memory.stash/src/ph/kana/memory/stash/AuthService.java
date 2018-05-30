@@ -5,12 +5,12 @@ import ph.kana.memory.codec.EncryptedPassword;
 import ph.kana.memory.codec.PasswordCodec;
 import ph.kana.memory.codec.PinBcryptEncryptor;
 import ph.kana.memory.model.PinStatus;
+import ph.kana.memory.stash.derby.AccountDerbyDbDao;
 import ph.kana.memory.stash.file.AuthFileDao;
-import ph.kana.memory.stash.sqljet.AccountSqlJetDao;
 
 public class AuthService {
 
-	private final AccountDao accountDao = new AccountSqlJetDao();
+	private final AccountDao accountDao = new AccountDerbyDbDao();
 	private final AuthDao authDao = new AuthFileDao();
 
 	private final PasswordCodec passwordCodec = new PasswordCodec();

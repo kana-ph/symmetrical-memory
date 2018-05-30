@@ -17,6 +17,7 @@ import java.util.Map;
 
 import static ph.kana.memory.stash.sqljet.SqlJetStoreConstants.DB_PATH;
 
+@Deprecated(forRemoval = true)
 public class AccountSqlJetDao implements AccountDao {
 
 	private SqlJetDb sqlJetDb;

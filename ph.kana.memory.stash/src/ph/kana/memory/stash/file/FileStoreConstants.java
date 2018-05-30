@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-final class FileStoreConstants {
+public final class FileStoreConstants {
 	private FileStoreConstants() {}
 
-	private static final String LOCKER_ROOT = System.getProperty("user.home") + System.getProperty("file.separator") + ".pstash";
+	public static final String LOCKER_ROOT = System.getProperty("user.home") + System.getProperty("file.separator") + ".pstash";
 	static {
 		File rootDir = new File(LOCKER_ROOT);
 		if (!rootDir.exists()) {
