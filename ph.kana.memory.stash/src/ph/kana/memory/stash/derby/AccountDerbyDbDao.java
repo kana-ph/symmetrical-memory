@@ -2,6 +2,7 @@ package ph.kana.memory.stash.derby;
 
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountDao;
+import ph.kana.memory.stash.CorruptDataException;
 import ph.kana.memory.stash.StashException;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ public final class AccountDerbyDbDao implements AccountDao {
 	private DerbyDbConnection dbConnection = null;
 
 	@Override
-	public List<Account> fetchAll() throws StashException {
+	public List<Account> fetchAll() throws CorruptDataException, StashException {
 		try {
 			var connection = fetchConnection();
 			var statement = connection
@@ -29,7 +30,7 @@ public final class AccountDerbyDbDao implements AccountDao {
 	}
 
 	@Override
-	public List<Account> findAccounts(String searchString) throws StashException {
+	public List<Account> findAccounts(String searchString) throws CorruptDataException, StashException {
 		try {
 			var connection = fetchConnection();
 			var statement = connection
@@ -46,7 +47,7 @@ public final class AccountDerbyDbDao implements AccountDao {
 	}
 
 	@Override
-	public Account save(Account account) throws StashException {
+	public Account save(Account account) throws CorruptDataException, StashException {
 		try {
 			var connection = fetchConnection();
 			var searchStatement = connection
@@ -66,7 +67,7 @@ public final class AccountDerbyDbDao implements AccountDao {
 	}
 
 	@Override
-	public void delete(Account account) throws StashException {
+	public void delete(Account account) throws CorruptDataException, StashException {
 		try {
 			var connection = fetchConnection();
 			var statement = connection
@@ -80,7 +81,7 @@ public final class AccountDerbyDbDao implements AccountDao {
 	}
 
 	@Override
-	public boolean anyExists() throws StashException {
+	public boolean anyExists() throws CorruptDataException, StashException {
 		try {
 			var connection = fetchConnection();
 			var result = connection
@@ -106,11 +107,19 @@ public final class AccountDerbyDbDao implements AccountDao {
 		}
 	}
 
-	private Connection fetchConnection() throws SQLException {
-		if (null == dbConnection) {
-			dbConnection = DerbyDbConnection.getInstance();
+	private Connection fetchConnection() throws CorruptDataException, SQLException {
+		try {
+			if (null == dbConnection) {
+				dbConnection = DerbyDbConnection.getInstance();
+			}
+			return dbConnection.getSqlConnection();
+		} catch (SQLException e) {
+			if (e.getMessage().endsWith("Reason: Invalid authentication..")) {
+				throw new CorruptDataException("Derby DB failed", e);
+			} else {
+				throw e;
+			}
 		}
-		return dbConnection.getSqlConnection();
 	}
 
 	private List<Account> queryAndTransformAccounts(PreparedStatement statement) throws SQLException {

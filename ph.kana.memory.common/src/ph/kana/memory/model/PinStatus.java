@@ -9,10 +9,5 @@ public enum PinStatus {
 	/**
 	 * Pin file was created and there is at least a stash record.
 	 */
-	EXISTING,
-
-	/**
-	 * Pin file was created but missing and there is at least a stash record.
-	 */
-	MISSING
+	EXISTING
 }

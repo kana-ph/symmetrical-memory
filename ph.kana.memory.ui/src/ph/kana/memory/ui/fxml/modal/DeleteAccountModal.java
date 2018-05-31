@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountService;
+import ph.kana.memory.stash.CorruptDataException;
 import ph.kana.memory.stash.StashException;
 import ph.kana.memory.ui.fxml.UiCommons;
 
@@ -36,6 +37,8 @@ public class DeleteAccountModal extends AbstractTilePaneModal<Account> {
 		} catch (StashException e) {
 			UiCommons.showBottomFadingText("Delete failed!", getChildren());
 			e.printStackTrace(System.err);
+		} catch (CorruptDataException e) {
+			handleCorruptDb(e);
 		} finally {
 			close();
 		}

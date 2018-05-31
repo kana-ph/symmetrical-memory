@@ -7,6 +7,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountService;
+import ph.kana.memory.stash.CorruptDataException;
 import ph.kana.memory.stash.StashException;
 
 import java.util.Optional;
@@ -59,6 +60,8 @@ public class SaveAccountModal extends AbstractTilePaneModal<Optional<Account>> {
 			showBottomFadingText("Saving failed!");
 			e.printStackTrace(System.err);
 			close();
+		} catch (CorruptDataException e) {
+			handleCorruptDb(e);
 		} finally {
 			domainTextBox.setText("");
 			usernameTextBox.setText("");

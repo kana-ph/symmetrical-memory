@@ -24,7 +24,7 @@ public class AuthService {
 		return INSTANCE;
 	}
 
-	public PinStatus initializePin() {
+	public PinStatus initializePin() throws CorruptDataException {
 		try {
 			byte[] currentPin = authDao.readStoredPin();
 
@@ -32,7 +32,7 @@ public class AuthService {
 				return PinStatus.EXISTING;
 			} else {
 				if (dataExists()) {
-					return PinStatus.MISSING;
+					throw new CorruptDataException("Missing PIN file");
 				} else {
 					saveClearPin(DEFAULT_PIN);
 					return PinStatus.NEW;
@@ -68,7 +68,7 @@ public class AuthService {
 		return pin.length > 0;
 	}
 
-	private boolean dataExists() throws StashException {
+	private boolean dataExists() throws CorruptDataException, StashException {
 		return accountDao.anyExists() || passwordService.storeExists();
 	}
 }

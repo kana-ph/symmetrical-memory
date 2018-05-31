@@ -14,6 +14,7 @@ import ph.kana.memory.model.Account;
 import ph.kana.memory.model.PinStatus;
 import ph.kana.memory.stash.AccountService;
 import ph.kana.memory.stash.AuthService;
+import ph.kana.memory.stash.CorruptDataException;
 import ph.kana.memory.stash.StashException;
 import ph.kana.memory.ui.fxml.message.LargeCenterText;
 import ph.kana.memory.ui.fxml.modal.*;
@@ -94,6 +95,8 @@ public class MainFormController implements Initializable {
 			} catch (StashException e) {
 				showBottomMessage("Loading failed!");
 				logger.severe(e::getMessage);
+			} catch (CorruptDataException e) {
+				handleCorruptDb(e);
 			}
 		}
 	}
@@ -112,6 +115,8 @@ public class MainFormController implements Initializable {
 		} catch (StashException e) {
 			showBottomMessage("Loading failed!");
 			logger.severe(e::getMessage);
+		} catch (CorruptDataException e) {
+			handleCorruptDb(e);
 		}
 	}
 
@@ -177,6 +182,8 @@ public class MainFormController implements Initializable {
 		List<Node> rootChildren = rootPane.getChildren();
 		rootChildren.add(modal);
 		UiCommons.assignAnchors(modal, 0.0, 0.0, 0.0, 0.0);
+
+		modal.setOnHandleCorruptDb(this::handleCorruptDb);
 		modal.showModal(data);
 	}
 
@@ -186,10 +193,9 @@ public class MainFormController implements Initializable {
 	}
 
 	private void showLoginModal(boolean startup) {
-		PinStatus pinStatus = authService.initializePin();
-		if (PinStatus.MISSING == pinStatus) {
-			showModal(new ResetModal(), null);
-		} else {
+		try {
+			PinStatus pinStatus = authService.initializePin();
+
 			var loginModal = new LoginModal();
 
 			if (startup) {
@@ -203,6 +209,8 @@ public class MainFormController implements Initializable {
 			}
 
 			showModal(loginModal, pinStatus);
+		} catch (CorruptDataException e) {
+			handleCorruptDb(e);
 		}
 	}
 
@@ -238,5 +246,10 @@ public class MainFormController implements Initializable {
 			return string.substring(0, 18) + '\u2026';
 		}
 		return string;
+	}
+
+	private void handleCorruptDb(CorruptDataException e) {
+		showModal(new ResetModal(), null);
+		logger.severe(e::getMessage);
 	}
 }

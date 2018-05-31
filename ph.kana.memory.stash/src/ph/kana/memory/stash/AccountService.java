@@ -20,15 +20,15 @@ public class AccountService {
 
 	private AccountService() {}
 
-	public List<Account> fetchAccounts() throws StashException {
+	public List<Account> fetchAccounts() throws CorruptDataException, StashException {
 		return accountDao.fetchAll();
 	}
 
-	public List<Account> searchAccounts(String searchString) throws StashException {
+	public List<Account> searchAccounts(String searchString) throws CorruptDataException, StashException {
 		return accountDao.findAccounts(searchString);
 	}
 
-	public Account saveAccount(String id, String domain, String username, String rawPassword) throws StashException {
+	public Account saveAccount(String id, String domain, String username, String rawPassword) throws CorruptDataException, StashException {
 		Account account = new Account();
 		account.setId(ensureId(id));
 		account.setDomain(domain);
@@ -41,7 +41,7 @@ public class AccountService {
 		return accountDao.save(account);
 	}
 
-	public void deleteAccount(Account account) throws StashException {
+	public void deleteAccount(Account account) throws CorruptDataException, StashException {
 		passwordService.removePassword(account);
 		accountDao.delete(account);
 	}
