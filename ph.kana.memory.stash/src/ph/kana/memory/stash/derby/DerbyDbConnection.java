@@ -3,11 +3,13 @@ package ph.kana.memory.stash.derby;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Base64;
+import java.util.Comparator;
 import java.util.Properties;
 
 import static ph.kana.memory.stash.file.FileStoreConstants.LOCKER_ROOT;
@@ -34,7 +36,10 @@ final class DerbyDbConnection {
 	}
 
 	static void deleteDbFile() throws IOException {
-		Files.delete(new File(DB_FILE).toPath());
+		Files.walk(new File(DB_FILE).toPath())
+				.sorted(Comparator.reverseOrder())
+				.map(Path::toFile)
+				.forEach(File::delete);
 	}
 
 	private static void ensureDatabaseSettings() throws SQLException {
