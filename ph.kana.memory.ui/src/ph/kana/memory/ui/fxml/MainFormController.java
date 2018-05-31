@@ -40,6 +40,8 @@ public class MainFormController implements Initializable {
 
 	@FXML private TextField filterTextBox;
 
+	@FXML private ToggleGroup sortGroup;
+
 	@FXML
 	public void showAddAccountDialog() {
 		showModalWithReload(new SaveAccountModal(), Optional.empty());
@@ -69,9 +71,16 @@ public class MainFormController implements Initializable {
 
 		filterTextBox.textProperty()
 				.addListener(this::filterAccounts);
+
+		sortGroup.selectedToggleProperty()
+				.addListener(this::updateSort);
 	}
 
-	private void filterAccounts(ObservableValue observable, String oldText, String newText) {
+	public void setHostServices(HostServices hostServices) {
+		this.hostServices = hostServices;
+	}
+
+	private void filterAccounts(ObservableValue<? extends String> observable, String oldText, String newText) {
 		viewPane.getChildren()
 				.clear();
 		showCenterMessage("Searching...");
@@ -89,8 +98,8 @@ public class MainFormController implements Initializable {
 		}
 	}
 
-	public void setHostServices(HostServices hostServices) {
-		this.hostServices = hostServices;
+	private void updateSort(ObservableValue<? extends Toggle> observableValue, Toggle oldToggle, Toggle newToggle) {
+		// TODO implement
 	}
 
 	private void loadAccounts() {
