@@ -6,6 +6,9 @@ import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Base64;
+import java.util.Properties;
 
 import static ph.kana.memory.stash.file.FileStoreConstants.LOCKER_ROOT;
 
@@ -14,13 +17,18 @@ final class DerbyDbConnection {
 	private final Connection sqlConnection;
 
 	private static DerbyDbConnection instance = null;
+
 	private final static String DB_FILE = LOCKER_ROOT + "/d";
-	private final static String DB_CONNECTION_STRING = "jdbc:derby:" + DB_FILE  + ";create=true";
+	private final static String DB_CONNECTION_STRING = "jdbc:derby:" + DB_FILE;
+
+	private final static String DB_USERNAME = "LOCKER";
+	private final static String DB_PASSWORD = Base64.getEncoder()
+		.encodeToString(String.format("%s,%s",System.getProperty("os.name"), DB_FILE).getBytes());
 
 	public static DerbyDbConnection getInstance() throws SQLException {
 		if (null == instance) {
 			instance = new DerbyDbConnection();
-			ensureDatabase();
+			ensureDatabaseSettings();
 		}
 		return instance;
 	}
@@ -29,7 +37,7 @@ final class DerbyDbConnection {
 		Files.delete(new File(DB_FILE).toPath());
 	}
 
-	private static void ensureDatabase() throws SQLException {
+	private static void ensureDatabaseSettings() throws SQLException {
 		var connection = instance.getSqlConnection();
 
 		var dbMetaData = connection.getMetaData();
@@ -37,15 +45,33 @@ final class DerbyDbConnection {
 
 		if (!tableQuery.next()) {
 			var statement = connection.createStatement();
-			statement.executeUpdate("CREATE TABLE accounts (id VARCHAR(64) NOT NULL PRIMARY KEY, domain VARCHAR(255) NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, timestamp TIMESTAMP NOT NULL)");
-			statement.executeUpdate("CREATE INDEX domain_idx ON accounts (domain)");
-			statement.executeUpdate("CREATE INDEX username_idx ON accounts (username)");
+			setupDatabaseProperties(statement);
+			setupDatabaseTables(statement);
 		}
 	}
 
+	private static void setupDatabaseProperties(Statement statement) throws SQLException {
+		statement.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.connection.requireAuthentication', 'true')");
+		statement.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.authentication.provider', 'BUILTIN')");
+		statement.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.user." + DB_USERNAME + "', '" + DB_PASSWORD + "')");
+		statement.executeUpdate("CALL SYSCS_UTIL.SYSCS_SET_DATABASE_PROPERTY('derby.database.propertiesOnly', 'true')");
+	}
+
+
+	private static void setupDatabaseTables(Statement statement) throws SQLException {
+		statement.executeUpdate("CREATE TABLE app.accounts (id VARCHAR(64) NOT NULL PRIMARY KEY, domain VARCHAR(255) NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, timestamp TIMESTAMP NOT NULL)");
+		statement.executeUpdate("CREATE INDEX domain_idx ON app.accounts (domain)");
+		statement.executeUpdate("CREATE INDEX username_idx ON app.accounts (username)");
+	}
 
 	private DerbyDbConnection() throws SQLException {
-		sqlConnection = DriverManager.getConnection(DB_CONNECTION_STRING);
+		var connectionProperties = new Properties();
+		connectionProperties.setProperty("create", "true");
+		connectionProperties.setProperty("user", DB_USERNAME);
+		connectionProperties.setProperty("password", DB_PASSWORD);
+
+		sqlConnection = DriverManager.getConnection(DB_CONNECTION_STRING, connectionProperties);
+		sqlConnection.setSchema("APP");
 	}
 
 	Connection getSqlConnection() {
