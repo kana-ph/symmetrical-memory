@@ -20,20 +20,35 @@ final class DerbyDbConnection {
 	public static DerbyDbConnection getInstance() throws SQLException {
 		if (null == instance) {
 			instance = new DerbyDbConnection();
+			ensureDatabase();
 		}
-		// TODO check if no database, initialize if needed
 		return instance;
 	}
 
-	public static void deleteDbFile() throws IOException {
+	static void deleteDbFile() throws IOException {
 		Files.delete(new File(DB_FILE).toPath());
 	}
+
+	private static void ensureDatabase() throws SQLException {
+		var connection = instance.getSqlConnection();
+
+		var dbMetaData = connection.getMetaData();
+		var tableQuery = dbMetaData.getTables(null, "APP", "ACCOUNTS", null);
+
+		if (!tableQuery.next()) {
+			var statement = connection.createStatement();
+			statement.executeUpdate("CREATE TABLE accounts (id VARCHAR(64) NOT NULL PRIMARY KEY, domain VARCHAR(255) NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, timestamp TIMESTAMP NOT NULL)");
+			statement.executeUpdate("CREATE INDEX domain_idx ON accounts (domain)");
+			statement.executeUpdate("CREATE INDEX username_idx ON accounts (username)");
+		}
+	}
+
 
 	private DerbyDbConnection() throws SQLException {
 		sqlConnection = DriverManager.getConnection(DB_CONNECTION_STRING);
 	}
 
-	public Connection getSqlConnection() {
+	Connection getSqlConnection() {
 		return sqlConnection;
 	}
 }
