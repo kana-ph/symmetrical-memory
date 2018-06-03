@@ -4,7 +4,6 @@ import ph.kana.memory.codec.CodecOperationException;
 import ph.kana.memory.codec.EncryptedPassword;
 import ph.kana.memory.codec.PasswordCodec;
 import ph.kana.memory.codec.PinBcryptEncryptor;
-import ph.kana.memory.model.PinStatus;
 import ph.kana.memory.stash.derby.AccountDerbyDbDao;
 import ph.kana.memory.stash.file.AuthFileDao;
 
@@ -24,25 +23,25 @@ public class AuthService {
 		return INSTANCE;
 	}
 
-	public PinStatus initializePin() throws CorruptDataException {
+	public boolean initializePin() throws CorruptDataException {
 		try {
 			byte[] currentPin = authDao.readStoredPin();
 
 			if (pinExists(currentPin)) {
-				return PinStatus.EXISTING;
+				return true;
 			} else {
 				if (dataExists()) {
 					throw new CorruptDataException("Missing PIN file");
 				} else {
 					saveClearPin(DEFAULT_PIN);
-					return PinStatus.NEW;
+					return false;
 				}
 			}
 		} catch (StashException e) {
 			e.printStackTrace(System.err);
 			System.exit(1);
-			return null;
 		}
+		return false;
 	}
 
 	public void saveClearPin(String pin) throws StashException {

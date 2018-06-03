@@ -3,15 +3,15 @@ package ph.kana.memory.ui.fxml.modal;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import ph.kana.memory.model.PinStatus;
 import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.StashException;
+import ph.kana.memory.type.LoginFlag;
 
 import static ph.kana.memory.ui.fxml.UiCommons.forceNumericalInput;
 
-public class LoginModal extends AbstractTilePaneModal<PinStatus> {
+public class LoginModal extends AbstractTilePaneModal<LoginFlag> {
 
-	@FXML private Label firstTimeLabel;
+	@FXML private Label subMessageLabel;
 	@FXML private TextField pinTextBox;
 
 	private final AuthService authService = AuthService.getInstance();
@@ -22,10 +22,12 @@ public class LoginModal extends AbstractTilePaneModal<PinStatus> {
 	}
 
 	@Override
-	public void showModal(PinStatus pinStatus) {
-		if (PinStatus.NEW == pinStatus) {
+	public void showModal(LoginFlag pinStatus) {
+		if (LoginFlag.FIRST_TIME == pinStatus) {
 			String message = String.format("Initial PIN Code: %s", AuthService.DEFAULT_PIN);
-			firstTimeLabel.setText(message);
+			subMessageLabel.setText(message);
+		} else if (LoginFlag.SESSION_EXPIRE == pinStatus) {
+			subMessageLabel.setText("Logged out due to inactivity.");
 		}
 		setVisible(true);
 	}

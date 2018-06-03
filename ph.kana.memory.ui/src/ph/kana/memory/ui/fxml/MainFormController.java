@@ -11,11 +11,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import ph.kana.memory.model.Account;
-import ph.kana.memory.model.PinStatus;
 import ph.kana.memory.stash.AccountService;
 import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.CorruptDataException;
 import ph.kana.memory.stash.StashException;
+import ph.kana.memory.type.LoginFlag;
 import ph.kana.memory.ui.fxml.message.LargeCenterText;
 import ph.kana.memory.ui.fxml.modal.*;
 
@@ -34,7 +34,7 @@ public class MainFormController implements Initializable {
 	private final AccountService accountService = AccountService.getInstance();
 	private final AuthService authService = AuthService.getInstance();
 
-	private final Duration SESSION_EXPIRE_DURATION = Duration.seconds(30);
+	private final Duration SESSION_EXPIRE_DURATION = Duration.seconds(3);
 
 	@FXML private Pane rootPane;
 	@FXML private Pane viewPane;
@@ -194,21 +194,26 @@ public class MainFormController implements Initializable {
 
 	private void showLoginModal(boolean startup) {
 		try {
-			PinStatus pinStatus = authService.initializePin();
+			boolean pinExists = authService.initializePin();
 
 			var loginModal = new LoginModal();
+			var flag = LoginFlag.REGULAR;
 
 			if (startup) {
 				loginModal.setOnClose(() -> {
 					loadAccounts();
 					initializeIdleMonitor();
 				});
+				if (!pinExists) {
+					flag = LoginFlag.FIRST_TIME;
+				}
 			} else {
 				idleMonitor.stopMonitoring();
 				loginModal.setOnClose(idleMonitor::startMonitoring);
+				flag = LoginFlag.SESSION_EXPIRE;
 			}
 
-			showModal(loginModal, pinStatus);
+			showModal(loginModal, flag);
 		} catch (CorruptDataException e) {
 			handleCorruptDb(e);
 		}
