@@ -71,7 +71,7 @@ public class MainFormController implements Initializable {
 		showLoginModal(true);
 
 		filterTextBox.textProperty()
-				.addListener(this::filterAccounts);
+				.addListener((observable, oldValue, newValue) -> filterAccounts(newValue));
 
 		sortGroup.selectedToggleProperty()
 				.addListener(this::updateSort);
@@ -81,17 +81,17 @@ public class MainFormController implements Initializable {
 		this.hostServices = hostServices;
 	}
 
-	private void filterAccounts(ObservableValue<? extends String> observable, String oldText, String newText) {
+	private void filterAccounts(String searchString) {
 		viewPane.getChildren()
 				.clear();
 		showCenterMessage("Searching...");
 
-		if (newText.isEmpty()) {
+		if (searchString.isEmpty()) {
 			loadAccounts();
 		} else {
 			try {
-				var accounts = accountService.searchAccounts(newText);
-				renderAccounts(accounts, String.format("No search results for\n'%s'", cutString(newText)));
+				var accounts = accountService.searchAccounts(searchString);
+				renderAccounts(accounts, String.format("No search results for\n'%s'", cutString(searchString)));
 			} catch (StashException e) {
 				showBottomMessage("Loading failed!");
 				logger.severe(e::getMessage);
