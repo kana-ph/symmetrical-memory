@@ -36,7 +36,7 @@ public class MainFormController implements Initializable {
 	private final AccountService accountService = AccountService.getInstance();
 	private final AuthService authService = AuthService.getInstance();
 
-	private final Duration SESSION_EXPIRE_DURATION = Duration.seconds(3);
+	private final Duration SESSION_EXPIRE_DURATION = Duration.seconds(30);
 
 	@FXML private Pane rootPane;
 	@FXML private Pane viewPane;
