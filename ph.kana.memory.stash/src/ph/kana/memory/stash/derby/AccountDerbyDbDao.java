@@ -167,6 +167,6 @@ public final class AccountDerbyDbDao implements AccountDao {
 	private String determineOrderBy(SortColumn sortColumn) {
 		return (SortColumn.DOMAIN == sortColumn)? "domain":
 				(SortColumn.USERNAME == sortColumn)? "username":
-				"id";
+				"timestamp";
 	}
 }

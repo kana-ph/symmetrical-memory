@@ -30,7 +30,7 @@ public class MainFormController implements Initializable {
 
 	private HostServices hostServices;
 	private IdleMonitor idleMonitor = null;
-	private SortColumn sortColumn = SortColumn.ID;
+	private SortColumn sortColumn = SortColumn.DATE_ADDED;
 
 	private final AccountService accountService = AccountService.getInstance();
 	private final AuthService authService = AuthService.getInstance();

@@ -1,5 +1,5 @@
 package ph.kana.memory.type;
 
 public enum SortColumn {
-	ID, DOMAIN, USERNAME
+	DATE_ADDED, DOMAIN, USERNAME
 }

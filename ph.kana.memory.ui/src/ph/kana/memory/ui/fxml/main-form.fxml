@@ -19,7 +19,7 @@
                   <MenuItem mnemonicParsing="false" onAction="#showSetPinModal" text="Update PIN Code" />
                   <Menu mnemonicParsing="false" text="Sort">
                      <items>
-                        <RadioMenuItem mnemonicParsing="false" selected="true" text="by Date Added" userData="ID">
+                        <RadioMenuItem mnemonicParsing="false" selected="true" text="by Date Added" userData="DATE_ADDED">
                            <toggleGroup>
                               <ToggleGroup fx:id="sortGroup" />
                            </toggleGroup>
