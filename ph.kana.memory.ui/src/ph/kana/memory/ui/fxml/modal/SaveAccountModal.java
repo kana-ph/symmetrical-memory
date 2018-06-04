@@ -10,9 +10,9 @@ import ph.kana.memory.stash.AccountService;
 import ph.kana.memory.stash.CorruptDataException;
 import ph.kana.memory.stash.StashException;
 
-import java.util.Optional;
+import java.util.Objects;
 
-public class SaveAccountModal extends AbstractTilePaneModal<Optional<Account>> {
+public class SaveAccountModal extends AbstractTilePaneModal<Account> {
 
 	@FXML private Label titleLabel;
 	@FXML private TextField domainTextBox;
@@ -22,7 +22,7 @@ public class SaveAccountModal extends AbstractTilePaneModal<Optional<Account>> {
 	@FXML private CheckBox maskPasswordToggle;
 
 	private final AccountService accountService = AccountService.getInstance();
-	private Optional<Account> account;
+	private Account account;
 
 	public SaveAccountModal() {
 		super("save-account-modal.fxml");
@@ -31,19 +31,21 @@ public class SaveAccountModal extends AbstractTilePaneModal<Optional<Account>> {
 	}
 
 	@Override
-	public void showModal(Optional<Account> account) {
+	public void showModal(Account account) {
 		this.account = account;
-		account.ifPresentOrElse(this::initializeFields, () -> {
+
+		if (Objects.isNull(account)) {
 			titleLabel.setText("Add Account");
-		});
+		} else {
+			initializeFields(account);
+		}
 		maskedPasswordTextBox.setText("");
 		setVisible(true);
 	}
 
 	@FXML
 	public void saveAccount() {
-		String accountId = account.map(Account::getId)
-				.orElse(null);
+		String accountId = (null != account)? account.getId(): null;
 		String domain = domainTextBox.getText();
 		String username = usernameTextBox.getText();
 		String rawPassword = maskedPasswordTextBox.getText();

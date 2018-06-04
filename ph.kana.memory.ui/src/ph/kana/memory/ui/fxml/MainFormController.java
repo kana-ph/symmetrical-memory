@@ -21,7 +21,6 @@ import ph.kana.memory.ui.fxml.modal.*;
 
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -47,7 +46,7 @@ public class MainFormController implements Initializable {
 
 	@FXML
 	public void showAddAccountDialog() {
-		showModalWithReload(new SaveAccountModal(), Optional.empty());
+		showModalWithReload(new SaveAccountModal(), null);
 	}
 
 	@FXML
@@ -169,7 +168,7 @@ public class MainFormController implements Initializable {
 		List<MenuItem> menuItems = accountMenu.getItems();
 		MenuItem updateMenuItem = new MenuItem("Update");
 		menuItems.add(updateMenuItem);
-		updateMenuItem.setOnAction(event -> showModalWithReload(new SaveAccountModal(), Optional.of(account)));
+		updateMenuItem.setOnAction(event -> showModalWithReload(new SaveAccountModal(), account));
 
 		MenuItem deleteMenuItem = new MenuItem("Delete");
 		menuItems.add(deleteMenuItem);
