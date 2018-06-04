@@ -19,13 +19,13 @@
                   <MenuItem mnemonicParsing="false" onAction="#showSetPinModal" text="Update PIN Code" />
                   <Menu mnemonicParsing="false" text="Sort">
                      <items>
-                        <RadioMenuItem mnemonicParsing="false" selected="true" text="by Date Added">
+                        <RadioMenuItem mnemonicParsing="false" selected="true" text="by Date Added" userData="ID">
                            <toggleGroup>
                               <ToggleGroup fx:id="sortGroup" />
                            </toggleGroup>
                         </RadioMenuItem>
-                        <RadioMenuItem mnemonicParsing="false" text="by Domain Name" toggleGroup="$sortGroup" />
-                        <RadioMenuItem mnemonicParsing="false" text="by Username" toggleGroup="$sortGroup" />
+                        <RadioMenuItem mnemonicParsing="false" text="by Domain Name" toggleGroup="$sortGroup" userData="DOMAIN"/>
+                        <RadioMenuItem mnemonicParsing="false" text="by Username" toggleGroup="$sortGroup" userData="USERNAME"/>
                      </items>
                   </Menu>
                   <SeparatorMenuItem mnemonicParsing="false" />

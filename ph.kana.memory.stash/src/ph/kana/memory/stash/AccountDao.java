@@ -1,12 +1,13 @@
 package ph.kana.memory.stash;
 
 import ph.kana.memory.model.Account;
+import ph.kana.memory.type.SortColumn;
 
 import java.util.List;
 
 public interface AccountDao {
 
-	List<Account> fetchAll() throws CorruptDataException, StashException;
+	List<Account> fetchAll(SortColumn sortColumn) throws CorruptDataException, StashException;
 
 	List<Account> findAccounts(String searchString) throws CorruptDataException, StashException;
 

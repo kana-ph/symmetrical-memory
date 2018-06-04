@@ -4,6 +4,7 @@ import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountDao;
 import ph.kana.memory.stash.CorruptDataException;
 import ph.kana.memory.stash.StashException;
+import ph.kana.memory.type.SortColumn;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -18,11 +19,12 @@ public final class AccountDerbyDbDao implements AccountDao {
 	private DerbyDbConnection dbConnection = null;
 
 	@Override
-	public List<Account> fetchAll() throws CorruptDataException, StashException {
+	public List<Account> fetchAll(SortColumn sortColumn) throws CorruptDataException, StashException {
 		try {
 			var connection = fetchConnection();
+			var order = determineOrderBy(sortColumn);
 			var statement = connection
-				.prepareStatement("SELECT id, domain, username, password, timestamp FROM accounts");
+				.prepareStatement("SELECT id, domain, username, password, timestamp FROM accounts ORDER BY " + order);
 			return queryAndTransformAccounts(statement);
 		} catch (SQLException e) {
 			throw new StashException(e);
@@ -160,5 +162,11 @@ public final class AccountDerbyDbDao implements AccountDao {
 		statement.setString(4, account.getPasswordFile());
 		statement.setTimestamp(5, new Timestamp(account.getSaveTimestamp()));
 		return statement;
+	}
+
+	private String determineOrderBy(SortColumn sortColumn) {
+		return (SortColumn.DOMAIN == sortColumn)? "domain":
+				(SortColumn.USERNAME == sortColumn)? "username":
+				"id";
 	}
 }

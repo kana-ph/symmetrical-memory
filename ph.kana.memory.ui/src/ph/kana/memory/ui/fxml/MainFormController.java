@@ -1,7 +1,6 @@
 package ph.kana.memory.ui.fxml;
 
 import javafx.application.HostServices;
-import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,6 +15,7 @@ import ph.kana.memory.stash.AuthService;
 import ph.kana.memory.stash.CorruptDataException;
 import ph.kana.memory.stash.StashException;
 import ph.kana.memory.type.LoginFlag;
+import ph.kana.memory.type.SortColumn;
 import ph.kana.memory.ui.fxml.message.LargeCenterText;
 import ph.kana.memory.ui.fxml.modal.*;
 
@@ -28,8 +28,10 @@ import java.util.logging.Logger;
 public class MainFormController implements Initializable {
 
 	private final Logger logger = Logger.getLogger(MainFormController.class.getName());
+
 	private HostServices hostServices;
 	private IdleMonitor idleMonitor = null;
+	private SortColumn sortColumn = SortColumn.ID;
 
 	private final AccountService accountService = AccountService.getInstance();
 	private final AuthService authService = AuthService.getInstance();
@@ -74,7 +76,7 @@ public class MainFormController implements Initializable {
 				.addListener((observable, oldValue, newValue) -> filterAccounts(newValue));
 
 		sortGroup.selectedToggleProperty()
-				.addListener(this::updateSort);
+				.addListener((observable, oldValue, newValue) -> updateSort());
 	}
 
 	public void setHostServices(HostServices hostServices) {
@@ -101,8 +103,12 @@ public class MainFormController implements Initializable {
 		}
 	}
 
-	private void updateSort(ObservableValue<? extends Toggle> observableValue, Toggle oldToggle, Toggle newToggle) {
-		// TODO implement
+	private void updateSort() {
+		var selectedSort = sortGroup.getSelectedToggle();
+		var data = selectedSort.getUserData().toString();
+		sortColumn = SortColumn.valueOf(data);
+
+		loadAccounts();
 	}
 
 	private void loadAccounts() {
@@ -110,7 +116,7 @@ public class MainFormController implements Initializable {
 				.clear();
 		showCenterMessage("Loading...");
 		try {
-			var accounts = accountService.fetchAccounts();
+			var accounts = accountService.fetchAccounts(sortColumn);
 			renderAccounts(accounts, "No saved accounts!\nClick 'Add' to get started!");
 		} catch (StashException e) {
 			showBottomMessage("Loading failed!");

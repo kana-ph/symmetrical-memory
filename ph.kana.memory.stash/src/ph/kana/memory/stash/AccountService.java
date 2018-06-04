@@ -2,6 +2,7 @@ package ph.kana.memory.stash;
 
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.derby.AccountDerbyDbDao;
+import ph.kana.memory.type.SortColumn;
 
 import java.util.List;
 
@@ -20,8 +21,8 @@ public class AccountService {
 
 	private AccountService() {}
 
-	public List<Account> fetchAccounts() throws CorruptDataException, StashException {
-		return accountDao.fetchAll();
+	public List<Account> fetchAccounts(SortColumn sortColumn) throws CorruptDataException, StashException {
+		return accountDao.fetchAll(sortColumn);
 	}
 
 	public List<Account> searchAccounts(String searchString) throws CorruptDataException, StashException {
