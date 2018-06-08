@@ -190,6 +190,28 @@ public class MainFormController implements Initializable {
 		return new AccountCard(pane, account);
 	}
 
+	private void updateAccountCard(Account account) {
+		var accountCard = accountCards.get(account);
+		var card = accountCard.getCard();
+
+		var cardContents = card.getChildren();
+
+		var domainLabel = (Label) cardContents.get(0);
+		domainLabel.setText(account.getDomain());
+
+		var usernameLabel = (Label) cardContents.get(1);
+		usernameLabel.setText(account.getUsername());
+	}
+
+	private void removeAccountCard(Account account) {
+		var accountCard = accountCards.get(account);
+		var card = accountCard.getCard();
+
+		viewPane.getChildren()
+				.remove(card);
+		accountCards.remove(account);
+	}
+
 	private void addCssClass(Node node, String cssClass) {
 		List<String> classes = node.getStyleClass();
 		classes.add(cssClass);
@@ -278,27 +300,5 @@ public class MainFormController implements Initializable {
 	private void handleCorruptDb(CorruptDataException e) {
 		showModal(new ResetModal(), null);
 		logger.severe(e::getMessage);
-	}
-
-	private void updateAccountCard(Account account) {
-		AccountCard accountCard = accountCards.get(account);
-		Pane card = accountCard.getCard();
-
-		List<Node> cardContents = card.getChildren();
-
-		Label domainLabel = (Label) cardContents.get(0);
-		domainLabel.setText(account.getDomain());
-
-		Label usernameLabel = (Label) cardContents.get(1);
-		usernameLabel.setText(account.getUsername());
-	}
-
-	private void removeAccountCard(Account account) {
-		var accountCard = accountCards.get(account);
-		var card = accountCard.getCard();
-
-		viewPane.getChildren()
-				.remove(card);
-		accountCards.remove(account);
 	}
 }
