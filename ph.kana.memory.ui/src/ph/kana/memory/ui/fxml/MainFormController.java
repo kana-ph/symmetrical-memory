@@ -180,7 +180,7 @@ public class MainFormController implements Initializable {
 
 		MenuItem deleteMenuItem = new MenuItem("Delete");
 		menuItems.add(deleteMenuItem);
-		deleteMenuItem.setOnAction(event -> showModalWithReload(new DeleteAccountModal(), account));
+		deleteMenuItem.setOnAction(event -> showDeleteModal(new DeleteAccountModal(), account));
 
 		viewPane.getChildren()
 				.add(pane);
@@ -209,6 +209,11 @@ public class MainFormController implements Initializable {
 
 	private void showUpdateModal(SaveAccountModal modal, Account account) {
 		modal.setOnClose(this::updateAccountCard);
+		showModal(modal, account);
+	}
+
+	private void showDeleteModal(DeleteAccountModal modal, Account account) {
+		modal.setOnClose(r -> removeAccountCard(account));
 		showModal(modal, account);
 	}
 
@@ -289,5 +294,14 @@ public class MainFormController implements Initializable {
 
 		Label usernameLabel = (Label) cardContents.get(1);
 		usernameLabel.setText(account.getUsername());
+	}
+
+	private void removeAccountCard(Account account) {
+		var accountCard = accountCards.get(account);
+		var card = accountCard.getCard();
+
+		viewPane.getChildren()
+				.remove(card);
+		accountCards.remove(account);
 	}
 }
