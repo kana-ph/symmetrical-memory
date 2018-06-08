@@ -52,7 +52,9 @@ public class MainFormController implements Initializable {
 
 	@FXML
 	public void showAddAccountDialog() {
-		showModalWithReload(new SaveAccountModal(), null);
+		var saveAccountModal = new SaveAccountModal();
+		saveAccountModal.setOnClose(this::renderAccountCard);
+		showModal(saveAccountModal, null);
 	}
 
 	@FXML
@@ -200,11 +202,6 @@ public class MainFormController implements Initializable {
 
 		modal.setOnHandleCorruptDb(this::handleCorruptDb);
 		modal.showModal(data);
-	}
-
-	@Deprecated
-	private void showModalWithReload(AbstractTilePaneModal<Account> modal, Account data) {
-		showModal(modal, data);
 	}
 
 	private void showUpdateModal(SaveAccountModal modal, Account account) {
