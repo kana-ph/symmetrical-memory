@@ -18,9 +18,12 @@ import ph.kana.memory.type.LoginFlag;
 import ph.kana.memory.type.SortColumn;
 import ph.kana.memory.ui.fxml.message.LargeCenterText;
 import ph.kana.memory.ui.fxml.modal.*;
+import ph.kana.memory.ui.model.AccountCard;
 
 import java.net.URL;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -35,7 +38,10 @@ public class MainFormController implements Initializable {
 	private final AccountService accountService = AccountService.getInstance();
 	private final AuthService authService = AuthService.getInstance();
 
+	private final Map<Account, AccountCard> accountCards = new LinkedHashMap<>();
+
 	private final Duration SESSION_EXPIRE_DURATION = Duration.seconds(30);
+
 
 	@FXML private Pane rootPane;
 	@FXML private Pane viewPane;
@@ -130,11 +136,13 @@ public class MainFormController implements Initializable {
 			showCenterMessage(emptyAccountsMessage);
 		} else {
 			clearCenterMessage();
-			accounts.forEach(this::renderAccountCard);
+			accounts.stream()
+					.map(this::renderAccountCard)
+					.forEach(accountCard -> accountCards.put(accountCard.getAccount(), accountCard));
 		}
 	}
 
-	private void renderAccountCard(Account account) {
+	private AccountCard renderAccountCard(Account account) {
 		Pane pane = new AnchorPane();
 		addCssClass(pane, "account-card");
 		pane.setPrefHeight(70.0);
@@ -168,7 +176,7 @@ public class MainFormController implements Initializable {
 		List<MenuItem> menuItems = accountMenu.getItems();
 		MenuItem updateMenuItem = new MenuItem("Update");
 		menuItems.add(updateMenuItem);
-		updateMenuItem.setOnAction(event -> showModalWithReload(new SaveAccountModal(), account));
+		updateMenuItem.setOnAction(event -> showUpdateModal(new SaveAccountModal(), account));
 
 		MenuItem deleteMenuItem = new MenuItem("Delete");
 		menuItems.add(deleteMenuItem);
@@ -176,6 +184,8 @@ public class MainFormController implements Initializable {
 
 		viewPane.getChildren()
 				.add(pane);
+
+		return new AccountCard(pane, account);
 	}
 
 	private void addCssClass(Node node, String cssClass) {
@@ -192,9 +202,14 @@ public class MainFormController implements Initializable {
 		modal.showModal(data);
 	}
 
-	private <T> void showModalWithReload(AbstractTilePaneModal<T> modal, T data) {
-		modal.setOnClose(this::loadAccounts);
+	@Deprecated
+	private void showModalWithReload(AbstractTilePaneModal<Account> modal, Account data) {
 		showModal(modal, data);
+	}
+
+	private void showUpdateModal(SaveAccountModal modal, Account account) {
+		modal.setOnClose(this::updateAccountCard);
+		showModal(modal, account);
 	}
 
 	private void showLoginModal(boolean startup) {
@@ -205,7 +220,7 @@ public class MainFormController implements Initializable {
 			var flag = LoginFlag.REGULAR;
 
 			if (startup) {
-				loginModal.setOnClose(() -> {
+				loginModal.setOnClose(r -> {
 					loadAccounts();
 					initializeIdleMonitor();
 				});
@@ -214,7 +229,7 @@ public class MainFormController implements Initializable {
 				}
 			} else {
 				idleMonitor.stopMonitoring();
-				loginModal.setOnClose(idleMonitor::startMonitoring);
+				loginModal.setOnClose(r -> idleMonitor.startMonitoring());
 				flag = LoginFlag.SESSION_EXPIRE;
 			}
 
@@ -261,5 +276,18 @@ public class MainFormController implements Initializable {
 	private void handleCorruptDb(CorruptDataException e) {
 		showModal(new ResetModal(), null);
 		logger.severe(e::getMessage);
+	}
+
+	private void updateAccountCard(Account account) {
+		AccountCard accountCard = accountCards.get(account);
+		Pane card = accountCard.getCard();
+
+		List<Node> cardContents = card.getChildren();
+
+		Label domainLabel = (Label) cardContents.get(0);
+		domainLabel.setText(account.getDomain());
+
+		Label usernameLabel = (Label) cardContents.get(1);
+		usernameLabel.setText(account.getUsername());
 	}
 }

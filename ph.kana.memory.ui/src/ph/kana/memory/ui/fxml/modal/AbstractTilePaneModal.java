@@ -10,8 +10,10 @@ import java.util.function.Consumer;
 
 public abstract class AbstractTilePaneModal<TData> extends TilePane {
 
-	private Runnable onClose = null;
+	private Consumer<TData> onClose = null;
 	private Consumer<CorruptDataException> onHandleCorruptDb = null;
+
+	private TData result;
 
 	AbstractTilePaneModal(String fxmlPath) {
 		UiCommons.loadFxmlFile(this, fxmlPath);
@@ -24,7 +26,7 @@ public abstract class AbstractTilePaneModal<TData> extends TilePane {
 	public void close() {
 		setVisible(false);
 		if (null != onClose) {
-			onClose.run();
+			onClose.accept(result);
 		}
 
 		Pane parent = (Pane) getParent();
@@ -32,8 +34,12 @@ public abstract class AbstractTilePaneModal<TData> extends TilePane {
 				.remove(this);
 	}
 
-	public void setOnClose(Runnable onClose) {
+	public void setOnClose(Consumer<TData> onClose) {
 		this.onClose = onClose;
+	}
+
+	protected void setResult(TData result) {
+		this.result = result;
 	}
 
 	public void setOnHandleCorruptDb(Consumer<CorruptDataException>  onHandleCorruptDb) {

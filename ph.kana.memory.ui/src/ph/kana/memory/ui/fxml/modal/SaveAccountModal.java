@@ -45,16 +45,17 @@ public class SaveAccountModal extends AbstractTilePaneModal<Account> {
 
 	@FXML
 	public void saveAccount() {
-		String accountId = (null != account)? account.getId(): null;
-		String domain = domainTextBox.getText();
-		String username = usernameTextBox.getText();
-		String rawPassword = maskedPasswordTextBox.getText();
+		var accountId = (Objects.nonNull(account))? account.getId(): null;
+		var domain = domainTextBox.getText();
+		var username = usernameTextBox.getText();
+		var rawPassword = maskedPasswordTextBox.getText();
 		if (domain.isEmpty() || username.isEmpty() || rawPassword.isEmpty()) {
 			showBottomFadingText("All fields required!");
 			return;
 		}
 		try {
-			accountService.saveAccount(accountId, domain, username, rawPassword);
+			var account = accountService.saveAccount(accountId, domain, username, rawPassword);
+			setResult(account);
 
 			showBottomFadingText("Saving success!");
 			close();
