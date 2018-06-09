@@ -56,6 +56,8 @@ public class MainFormController implements Initializable {
 			if (Objects.nonNull(account)) {
 				var accountCard = renderAccountCard(account);
 				accountCards.put(account, accountCard);
+
+				filterAccounts(filterTextBox.getText());
 			}
 		});
 		showModal(saveAccountModal, null);
@@ -102,6 +104,7 @@ public class MainFormController implements Initializable {
 		if (searchString.isEmpty()) {
 			accountCards.values()
 					.forEach(this::renderAccountCard);
+			attemptShowingNoAccountMessage();
 		} else {
 			var filteredAccounts = accountCards.keySet()
 					.stream()
@@ -141,6 +144,8 @@ public class MainFormController implements Initializable {
 		try {
 			var accounts = accountService.fetchAccounts(SortColumn.DATE_ADDED);
 			renderAccounts(accounts);
+
+			attemptShowingNoAccountMessage();
 		} catch (StashException e) {
 			showBottomMessage("Loading failed!");
 			logger.severe(e::getMessage);
@@ -150,14 +155,10 @@ public class MainFormController implements Initializable {
 	}
 
 	private void renderAccounts(Collection<Account> accounts) {
-		if (accounts.isEmpty()) {
-			showCenterMessage("No saved accounts!\nClick 'Add' to get started!");
-		} else {
-			clearCenterMessage();
-			accounts.stream()
-					.map(this::renderAccountCard)
-					.forEach(accountCard -> accountCards.put(accountCard.getAccount(), accountCard));
-		}
+		clearCenterMessage();
+		accounts.stream()
+				.map(this::renderAccountCard)
+				.forEach(accountCard -> accountCards.put(accountCard.getAccount(), accountCard));
 	}
 
 	private AccountCard renderAccountCard(Account account) {
@@ -235,6 +236,8 @@ public class MainFormController implements Initializable {
 		viewPane.getChildren()
 				.remove(card);
 		accountCards.remove(account);
+
+		attemptShowingNoAccountMessage();
 	}
 
 	private void addCssClass(Node node, String cssClass) {
@@ -366,5 +369,13 @@ public class MainFormController implements Initializable {
 	private void handleCorruptDb(CorruptDataException e) {
 		showModal(new ResetModal(), null);
 		logger.severe(e::getMessage);
+	}
+
+	private void attemptShowingNoAccountMessage() {
+		if (accountCards.isEmpty()) {
+			showCenterMessage("No saved accounts!\nClick 'Add' to get started!");
+		} else {
+			clearCenterMessage();
+		}
 	}
 }
