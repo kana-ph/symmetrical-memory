@@ -131,7 +131,7 @@ public class MainFormController implements Initializable {
 
 		viewPane.getChildren()
 				.clear();
-		renderAccounts(accountCards.keySet(), "No saved accounts!\nClick 'Add' to get started!")		;
+		renderAccounts(accountCards.keySet());
 	}
 
 	private void loadAccounts() {
@@ -140,7 +140,7 @@ public class MainFormController implements Initializable {
 		showCenterMessage("Loading...");
 		try {
 			var accounts = accountService.fetchAccounts(SortColumn.DATE_ADDED);
-			renderAccounts(accounts, "No saved accounts!\nClick 'Add' to get started!");
+			renderAccounts(accounts);
 		} catch (StashException e) {
 			showBottomMessage("Loading failed!");
 			logger.severe(e::getMessage);
@@ -149,9 +149,9 @@ public class MainFormController implements Initializable {
 		}
 	}
 
-	private void renderAccounts(Collection<Account> accounts, String emptyAccountsMessage) {
+	private void renderAccounts(Collection<Account> accounts) {
 		if (accounts.isEmpty()) {
-			showCenterMessage(emptyAccountsMessage);
+			showCenterMessage("No saved accounts!\nClick 'Add' to get started!");
 		} else {
 			clearCenterMessage();
 			accounts.stream()
@@ -357,11 +357,10 @@ public class MainFormController implements Initializable {
 
 	private boolean matchesDomainOrUsername(Account account, String string) {
 		var search = string.toLowerCase();
-		var match = account.getDomain().toLowerCase()
+		return account.getDomain().toLowerCase()
 				.contains(search) ||
 			account.getUsername().toLowerCase()
 				.contains(search);
-		return match;
 	}
 
 	private void handleCorruptDb(CorruptDataException e) {
