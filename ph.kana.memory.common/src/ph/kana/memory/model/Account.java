@@ -56,7 +56,7 @@ public class Account {
 			return false;
 		}
 
-		Account account = (Account) that;
+		var account = (Account) that;
 		return id.equals(account.id);
 	}
 

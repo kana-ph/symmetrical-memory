@@ -19,12 +19,10 @@ import ph.kana.memory.type.SortColumn;
 import ph.kana.memory.ui.fxml.message.LargeCenterText;
 import ph.kana.memory.ui.fxml.modal.*;
 import ph.kana.memory.ui.model.AccountCard;
+import ph.kana.memory.ui.model.AccountComparator;
 
 import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class MainFormController implements Initializable {
@@ -33,12 +31,13 @@ public class MainFormController implements Initializable {
 
 	private HostServices hostServices;
 	private IdleMonitor idleMonitor = null;
-	private SortColumn sortColumn = SortColumn.DATE_ADDED;
 
 	private final AccountService accountService = AccountService.getInstance();
 	private final AuthService authService = AuthService.getInstance();
 
-	private final Map<Account, AccountCard> accountCards = new LinkedHashMap<>();
+	private Comparator<Account> activeComparator = AccountComparator.of((SortColumn.DATE_ADDED));
+	private SortedMap<Account, AccountCard> accountCards =
+			new TreeMap<>(activeComparator);
 
 	private final Duration SESSION_EXPIRE_DURATION = Duration.seconds(30);
 
@@ -113,9 +112,17 @@ public class MainFormController implements Initializable {
 	private void updateSort() {
 		var selectedSort = sortGroup.getSelectedToggle();
 		var data = selectedSort.getUserData().toString();
-		sortColumn = SortColumn.valueOf(data);
+		var sortColumn = SortColumn.valueOf(data);
 
-		loadAccounts();
+		activeComparator = AccountComparator.of(sortColumn);
+
+		var updatedSortMap = new TreeMap<Account, AccountCard>(activeComparator);
+		updatedSortMap.putAll(accountCards);
+		accountCards = updatedSortMap;
+
+		viewPane.getChildren()
+				.clear();
+		renderAccounts(accountCards.keySet(), "No saved accounts!\nClick 'Add' to get started!")		;
 	}
 
 	private void loadAccounts() {
@@ -123,7 +130,7 @@ public class MainFormController implements Initializable {
 				.clear();
 		showCenterMessage("Loading...");
 		try {
-			var accounts = accountService.fetchAccounts(sortColumn);
+			var accounts = accountService.fetchAccounts(SortColumn.DATE_ADDED);
 			renderAccounts(accounts, "No saved accounts!\nClick 'Add' to get started!");
 		} catch (StashException e) {
 			showBottomMessage("Loading failed!");
@@ -133,7 +140,7 @@ public class MainFormController implements Initializable {
 		}
 	}
 
-	private void renderAccounts(List<Account> accounts, String emptyAccountsMessage) {
+	private void renderAccounts(Collection<Account> accounts, String emptyAccountsMessage) {
 		if (accounts.isEmpty()) {
 			showCenterMessage(emptyAccountsMessage);
 		} else {
@@ -184,8 +191,11 @@ public class MainFormController implements Initializable {
 		menuItems.add(deleteMenuItem);
 		deleteMenuItem.setOnAction(event -> showDeleteModal(new DeleteAccountModal(), account));
 
+		pane.setUserData(account);
+
+		var insertIndex = calculateInsertIndex(account);
 		viewPane.getChildren()
-				.add(pane);
+				.add(insertIndex, pane);
 
 		return new AccountCard(pane, account);
 	}
@@ -215,6 +225,39 @@ public class MainFormController implements Initializable {
 	private void addCssClass(Node node, String cssClass) {
 		List<String> classes = node.getStyleClass();
 		classes.add(cssClass);
+	}
+
+	private int calculateInsertIndex(Account account) {
+		var childNodes = viewPane.getChildren();
+
+		if (childNodes.isEmpty()) {
+			return 0;
+		}
+
+		var lowerBound = 0;
+		var upperBound = childNodes.size() - 1;
+		int index;
+
+		for (;;) {
+			index = (upperBound + lowerBound) / 2;
+
+			var sampleAccount = (Account) childNodes.get(index).getUserData();
+			var compare = activeComparator
+					.compare(sampleAccount, account);
+			if (0 == compare) {
+				return index;
+			} else if (0 > compare) {
+				lowerBound = index + 1;
+				if (lowerBound > upperBound) {
+					return index + 1;
+				}
+			} else {
+				upperBound = index - 1;
+				if (lowerBound > upperBound) {
+					return index;
+				}
+			}
+		}
 	}
 
 	private <T> void showModal(AbstractTilePaneModal<T> modal, T data) {
