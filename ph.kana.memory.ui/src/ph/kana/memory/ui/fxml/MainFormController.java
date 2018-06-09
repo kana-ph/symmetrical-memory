@@ -293,7 +293,11 @@ public class MainFormController implements Initializable {
 	}
 
 	private void showDeleteModal(DeleteAccountModal modal, Account account) {
-		modal.setOnClose(r -> removeAccountCard(account));
+		modal.setOnClose(result -> {
+			if (result) {
+				removeAccountCard(account);
+			}
+		});
 		showModal(modal, account);
 	}
 
