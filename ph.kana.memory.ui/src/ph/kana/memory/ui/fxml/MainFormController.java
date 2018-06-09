@@ -142,7 +142,7 @@ public class MainFormController implements Initializable {
 				.clear();
 		showCenterMessage("Loading...");
 		try {
-			var accounts = accountService.fetchAccounts(SortColumn.DATE_ADDED);
+			var accounts = accountService.fetchAccounts();
 			renderAccounts(accounts);
 
 			attemptShowingNoAccountMessage();

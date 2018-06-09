@@ -4,7 +4,6 @@ import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountDao;
 import ph.kana.memory.stash.CorruptDataException;
 import ph.kana.memory.stash.StashException;
-import ph.kana.memory.type.SortColumn;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -19,29 +18,11 @@ public final class AccountDerbyDbDao implements AccountDao {
 	private DerbyDbConnection dbConnection = null;
 
 	@Override
-	public List<Account> fetchAll(SortColumn sortColumn) throws CorruptDataException, StashException {
-		try {
-			var connection = fetchConnection();
-			var order = determineOrderBy(sortColumn);
-			var statement = connection
-				.prepareStatement("SELECT id, domain, username, password, save_timestamp, last_update_timestamp FROM app.accounts ORDER BY " + order);
-			return queryAndTransformAccounts(statement);
-		} catch (SQLException e) {
-			throw new StashException(e);
-		}
-	}
-
-	@Override
-	public List<Account> findAccounts(String searchString) throws CorruptDataException, StashException {
+	public List<Account> fetchAll() throws CorruptDataException, StashException {
 		try {
 			var connection = fetchConnection();
 			var statement = connection
-				.prepareStatement("SELECT id, domain, username, password, save_timestamp, last_update_timestamp FROM app.accounts WHERE domain LIKE ? OR username LIKE ?");
-
-			String likeParameter = String.format("%%%s%%", searchString);
-			statement.setString(1, likeParameter);
-			statement.setString(2, likeParameter);
-
+				.prepareStatement("SELECT id, domain, username, password, save_timestamp, last_update_timestamp FROM app.accounts ORDER BY save_timestamp");
 			return queryAndTransformAccounts(statement);
 		} catch (SQLException e) {
 			throw new StashException(e);
@@ -165,11 +146,5 @@ public final class AccountDerbyDbDao implements AccountDao {
 		statement.setTimestamp(5, new Timestamp(account.getSaveTimestamp()));
 		statement.setTimestamp(6, new Timestamp(account.getLastUpdateTimestamp()));
 		return statement;
-	}
-
-	private String determineOrderBy(SortColumn sortColumn) {
-		return (SortColumn.DOMAIN == sortColumn)? "domain":
-				(SortColumn.USERNAME == sortColumn)? "username":
-				"save_timestamp";
 	}
 }
