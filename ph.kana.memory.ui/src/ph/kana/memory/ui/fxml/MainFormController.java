@@ -24,6 +24,7 @@ import ph.kana.memory.ui.model.AccountComparator;
 import java.net.URL;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class MainFormController implements Initializable {
 
@@ -75,7 +76,7 @@ public class MainFormController implements Initializable {
 	@FXML
 	public void clearSearchFilter() {
 		filterTextBox.setText("");
-		loadAccounts();
+		filterAccounts("");
 	}
 
 	@Override
@@ -99,16 +100,20 @@ public class MainFormController implements Initializable {
 		showCenterMessage("Searching...");
 
 		if (searchString.isEmpty()) {
-			loadAccounts();
+			accountCards.values()
+					.forEach(this::renderAccountCard);
 		} else {
-			try {
-				var accounts = accountService.searchAccounts(searchString);
-				renderAccounts(accounts, String.format("No search results for\n'%s'", cutString(searchString)));
-			} catch (StashException e) {
-				showBottomMessage("Loading failed!");
-				logger.severe(e::getMessage);
-			} catch (CorruptDataException e) {
-				handleCorruptDb(e);
+			var filteredAccounts = accountCards.keySet()
+					.stream()
+					.filter(account -> matchesDomainOrUsername(account, searchString))
+					.map(accountCards::get)
+					.collect(Collectors.toUnmodifiableList());
+			if (filteredAccounts.isEmpty()) {
+				showCenterMessage(String.format("No search results for\n'%s'", cutString(searchString)));
+			} else {
+				filteredAccounts
+						.forEach(this::renderAccountCard);
+				clearCenterMessage();
 			}
 		}
 	}
@@ -202,6 +207,12 @@ public class MainFormController implements Initializable {
 				.add(insertIndex, pane);
 
 		return new AccountCard(pane, account);
+	}
+
+	private AccountCard renderAccountCard(AccountCard accountCard) {
+		var createdAccountCard = renderAccountCard(accountCard.getAccount());
+		accountCard.setCard(createdAccountCard.getCard());
+		return accountCard;
 	}
 
 	private void updateAccountCard(Account account) {
@@ -342,6 +353,15 @@ public class MainFormController implements Initializable {
 			return string.substring(0, 18) + '\u2026';
 		}
 		return string;
+	}
+
+	private boolean matchesDomainOrUsername(Account account, String string) {
+		var search = string.toLowerCase();
+		var match = account.getDomain().toLowerCase()
+				.contains(search) ||
+			account.getUsername().toLowerCase()
+				.contains(search);
+		return match;
 	}
 
 	private void handleCorruptDb(CorruptDataException e) {

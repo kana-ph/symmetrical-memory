@@ -5,15 +5,11 @@ import ph.kana.memory.model.Account;
 
 public class AccountCard {
 	private final Account account;
-	private final Pane card;
+	private Pane card;
 
 	public AccountCard(Pane card, Account account) {
 		this.card = card;
 		this.account = account;
-	}
-
-	public void setVisible(boolean visible) {
-		card.setVisible(visible);
 	}
 
 	public Account getAccount() {
@@ -24,7 +20,7 @@ public class AccountCard {
 		return card;
 	}
 
-	public boolean isVisible() {
-		return card.isVisible();
+	public void setCard(Pane card) {
+		this.card = card;
 	}
 }
