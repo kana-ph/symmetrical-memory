@@ -41,7 +41,6 @@ public class MainFormController implements Initializable {
 
 	private final Duration SESSION_EXPIRE_DURATION = Duration.seconds(30);
 
-
 	@FXML private Pane rootPane;
 	@FXML private Pane viewPane;
 
@@ -52,7 +51,12 @@ public class MainFormController implements Initializable {
 	@FXML
 	public void showAddAccountDialog() {
 		var saveAccountModal = new SaveAccountModal();
-		saveAccountModal.setOnClose(this::renderAccountCard);
+		saveAccountModal.setOnClose(account -> {
+			if (Objects.nonNull(account)) {
+				var accountCard = renderAccountCard(account);
+				accountCards.put(account, accountCard);
+			}
+		});
 		showModal(saveAccountModal, null);
 	}
 
