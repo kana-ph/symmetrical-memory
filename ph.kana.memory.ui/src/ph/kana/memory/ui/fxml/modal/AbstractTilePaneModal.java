@@ -8,12 +8,12 @@ import ph.kana.memory.ui.fxml.UiCommons;
 
 import java.util.function.Consumer;
 
-public abstract class AbstractTilePaneModal<TData> extends TilePane {
+public abstract class AbstractTilePaneModal<TData, TResult> extends TilePane {
 
-	private Consumer<TData> onClose = null;
+	private Consumer<TResult> onClose = null;
 	private Consumer<CorruptDataException> onHandleCorruptDb = null;
 
-	private TData result;
+	private TResult result;
 
 	AbstractTilePaneModal(String fxmlPath) {
 		UiCommons.loadFxmlFile(this, fxmlPath);
@@ -34,11 +34,11 @@ public abstract class AbstractTilePaneModal<TData> extends TilePane {
 				.remove(this);
 	}
 
-	public void setOnClose(Consumer<TData> onClose) {
+	public void setOnClose(Consumer<TResult> onClose) {
 		this.onClose = onClose;
 	}
 
-	protected void setResult(TData result) {
+	protected void setResult(TResult result) {
 		this.result = result;
 	}
 

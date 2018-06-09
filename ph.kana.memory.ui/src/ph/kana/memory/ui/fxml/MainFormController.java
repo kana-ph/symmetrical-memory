@@ -278,7 +278,7 @@ public class MainFormController implements Initializable {
 		}
 	}
 
-	private <T> void showModal(AbstractTilePaneModal<T> modal, T data) {
+	private <T, R> void showModal(AbstractTilePaneModal<T, R> modal, T data) {
 		List<Node> rootChildren = rootPane.getChildren();
 		rootChildren.add(modal);
 		UiCommons.assignAnchors(modal, 0.0, 0.0, 0.0, 0.0);

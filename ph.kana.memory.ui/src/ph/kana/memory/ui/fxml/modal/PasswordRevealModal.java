@@ -10,7 +10,7 @@ import ph.kana.memory.stash.StashException;
 
 import java.util.Arrays;
 
-public class PasswordRevealModal extends AbstractTilePaneModal<Account> {
+public class PasswordRevealModal extends AbstractTilePaneModal<Account, Void> {
 
 	@FXML private TextField passwordRevealTextBox;
 

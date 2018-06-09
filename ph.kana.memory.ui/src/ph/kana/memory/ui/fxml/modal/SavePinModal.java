@@ -10,7 +10,7 @@ import ph.kana.memory.ui.fxml.UiCommons;
 
 import java.util.List;
 
-public class SavePinModal extends AbstractTilePaneModal<Void> {
+public class SavePinModal extends AbstractTilePaneModal<Void, Void> {
 
 	@FXML private PasswordField currentPinTextBox;
 	@FXML private TextField unmaskedPinTextBox;

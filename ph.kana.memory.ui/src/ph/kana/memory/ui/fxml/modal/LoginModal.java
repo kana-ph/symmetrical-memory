@@ -9,7 +9,7 @@ import ph.kana.memory.type.LoginFlag;
 
 import static ph.kana.memory.ui.fxml.UiCommons.forceNumericalInput;
 
-public class LoginModal extends AbstractTilePaneModal<LoginFlag> {
+public class LoginModal extends AbstractTilePaneModal<LoginFlag, Void> {
 
 	@FXML private Label subMessageLabel;
 	@FXML private TextField pinTextBox;

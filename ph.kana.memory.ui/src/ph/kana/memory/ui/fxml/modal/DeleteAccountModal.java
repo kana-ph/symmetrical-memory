@@ -8,7 +8,7 @@ import ph.kana.memory.stash.CorruptDataException;
 import ph.kana.memory.stash.StashException;
 import ph.kana.memory.ui.fxml.UiCommons;
 
-public class DeleteAccountModal extends AbstractTilePaneModal<Account> {
+public class DeleteAccountModal extends AbstractTilePaneModal<Account, Boolean> {
 
 	@FXML private Text usernameText;
 	@FXML private Text domainText;
@@ -18,6 +18,7 @@ public class DeleteAccountModal extends AbstractTilePaneModal<Account> {
 
 	public DeleteAccountModal() {
 		super("delete-account-modal.fxml");
+		setResult(false);
 	}
 
 	@Override
@@ -34,6 +35,7 @@ public class DeleteAccountModal extends AbstractTilePaneModal<Account> {
 			accountService.deleteAccount(account);
 
 			UiCommons.showBottomFadingText("Deletion success!", getChildren());
+			setResult(true);
 		} catch (StashException e) {
 			UiCommons.showBottomFadingText("Delete failed!", getChildren());
 			e.printStackTrace(System.err);

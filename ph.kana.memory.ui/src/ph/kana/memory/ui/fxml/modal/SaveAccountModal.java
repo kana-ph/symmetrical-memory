@@ -12,7 +12,7 @@ import ph.kana.memory.stash.StashException;
 
 import java.util.Objects;
 
-public class SaveAccountModal extends AbstractTilePaneModal<Account> {
+public class SaveAccountModal extends AbstractTilePaneModal<Account, Account> {
 
 	@FXML private Label titleLabel;
 	@FXML private TextField domainTextBox;
