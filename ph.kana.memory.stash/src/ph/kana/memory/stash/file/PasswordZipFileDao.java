@@ -93,6 +93,10 @@ public class PasswordZipFileDao implements PasswordDao {
 			var passwordFiles = fetchPasswordFiles(passwordFile);
 			zipFile.removeFile(passwordFiles.get(I_KEY));
 			zipFile.removeFile(passwordFiles.get(V_KEY));
+
+			if (zipFile.getFileHeaders().isEmpty()) {
+				deletePasswordStore();
+			}
 		} catch (ZipException e) {
 			if (!NO_ZIP_REASON.equals(e.getMessage())) {
 				throw new StashException(e);
