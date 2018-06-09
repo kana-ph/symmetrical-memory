@@ -36,20 +36,6 @@ public class AccountService {
 		return accountDao.save(account);
 	}
 
-	@Deprecated
-	public Account saveAccount(String id, String domain, String username, String rawPassword) throws CorruptDataException, StashException {
-		Account account = new Account();
-		account.setId(ensureId(id));
-		account.setDomain(domain);
-		account.setUsername(username);
-		account.setSaveTimestamp(System.currentTimeMillis());
-
-		String passwordFile = passwordService.savePassword(account, rawPassword);
-		account.setPasswordFile(passwordFile);
-
-		return accountDao.save(account);
-	}
-
 	public void deleteAccount(Account account) throws CorruptDataException, StashException {
 		passwordService.removePassword(account);
 		accountDao.delete(account);
@@ -58,15 +44,6 @@ public class AccountService {
 	public void purge() throws StashException {
 		accountDao.deleteAll();
 		passwordService.purge();
-	}
-
-	@Deprecated
-	private String ensureId(String id) {
-		if (id == null || id.isEmpty()) {
-			return randomUUID().toString();
-		} else {
-			return id;
-		}
 	}
 
 	private void ensureId(Account account) {

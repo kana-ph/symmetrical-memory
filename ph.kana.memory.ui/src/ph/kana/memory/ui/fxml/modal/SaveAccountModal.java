@@ -54,7 +54,11 @@ public class SaveAccountModal extends AbstractTilePaneModal<Account> {
 			return;
 		}
 		try {
-			var account = accountService.saveAccount(accountId, domain, username, rawPassword);
+			var account = (Objects.nonNull(this.account))? this.account: new Account();
+			account.setId(accountId);
+			account.setDomain(domain);
+			account.setUsername(username);
+			account = accountService.saveAccount(account, rawPassword);
 			setResult(account);
 
 			showBottomFadingText("Saving success!");
