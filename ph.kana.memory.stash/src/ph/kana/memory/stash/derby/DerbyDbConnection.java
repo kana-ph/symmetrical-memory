@@ -64,7 +64,13 @@ final class DerbyDbConnection {
 
 
 	private static void setupDatabaseTables(Statement statement) throws SQLException {
-		statement.executeUpdate("CREATE TABLE app.accounts (id VARCHAR(64) NOT NULL PRIMARY KEY, domain VARCHAR(255) NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, timestamp TIMESTAMP NOT NULL)");
+		statement.executeUpdate("CREATE TABLE app.accounts (" +
+				"id VARCHAR(36) NOT NULL PRIMARY KEY, " +
+				"domain VARCHAR(255) NOT NULL, " +
+				"username VARCHAR(255) NOT NULL, " +
+				"password VARCHAR(255) NOT NULL, " +
+				"save_timestamp TIMESTAMP NOT NULL, " +
+				"last_update_timestamp TIMESTAMP NOT NULL)");
 		statement.executeUpdate("CREATE INDEX domain_idx ON app.accounts (domain)");
 		statement.executeUpdate("CREATE INDEX username_idx ON app.accounts (username)");
 	}

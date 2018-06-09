@@ -5,7 +5,8 @@ public class Account {
 	private String domain;
 	private String username;
 	private String passwordFile;
-	private long saveTimestamp;
+	private long saveTimestamp = 0L;
+	private long lastUpdateTimestamp;
 
 	public String getId() {
 		return id;
@@ -45,6 +46,14 @@ public class Account {
 
 	public void setSaveTimestamp(long saveTimestamp) {
 		this.saveTimestamp = saveTimestamp;
+	}
+
+	public long getLastUpdateTimestamp() {
+		return lastUpdateTimestamp;
+	}
+
+	public void setLastUpdateTimestamp(long lastUpdateTimestamp) {
+		this.lastUpdateTimestamp = lastUpdateTimestamp;
 	}
 
 	@Override

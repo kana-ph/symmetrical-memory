@@ -24,7 +24,7 @@ public final class AccountDerbyDbDao implements AccountDao {
 			var connection = fetchConnection();
 			var order = determineOrderBy(sortColumn);
 			var statement = connection
-				.prepareStatement("SELECT id, domain, username, password, timestamp FROM accounts ORDER BY " + order);
+				.prepareStatement("SELECT id, domain, username, password, save_timestamp, last_update_timestamp FROM app.accounts ORDER BY " + order);
 			return queryAndTransformAccounts(statement);
 		} catch (SQLException e) {
 			throw new StashException(e);
@@ -36,7 +36,7 @@ public final class AccountDerbyDbDao implements AccountDao {
 		try {
 			var connection = fetchConnection();
 			var statement = connection
-				.prepareStatement("SELECT id, domain, username, password, timestamp FROM accounts WHERE domain LIKE ? OR username LIKE ?");
+				.prepareStatement("SELECT id, domain, username, password, save_timestamp, last_update_timestamp FROM app.accounts WHERE domain LIKE ? OR username LIKE ?");
 
 			String likeParameter = String.format("%%%s%%", searchString);
 			statement.setString(1, likeParameter);
@@ -53,7 +53,7 @@ public final class AccountDerbyDbDao implements AccountDao {
 		try {
 			var connection = fetchConnection();
 			var searchStatement = connection
-					.prepareStatement("SELECT id FROM accounts WHERE id = ?");
+					.prepareStatement("SELECT id FROM app.accounts WHERE id = ?");
 			searchStatement.setString(1, account.getId());
 			var result = searchStatement.executeQuery();
 
@@ -73,7 +73,7 @@ public final class AccountDerbyDbDao implements AccountDao {
 		try {
 			var connection = fetchConnection();
 			var statement = connection
-					.prepareStatement("DELETE FROM accounts WHERE id = ?");
+					.prepareStatement("DELETE FROM app.accounts WHERE id = ?");
 			statement.setString(1, account.getId());
 
 			statement.executeUpdate();
@@ -88,7 +88,7 @@ public final class AccountDerbyDbDao implements AccountDao {
 			var connection = fetchConnection();
 			var result = connection
 					.createStatement()
-					.executeQuery("SELECT count(1) FROM accounts");
+					.executeQuery("SELECT count(1) FROM app.accounts");
 
 			if (result.next()) {
 				var count = result.getInt(1);
@@ -134,7 +134,8 @@ public final class AccountDerbyDbDao implements AccountDao {
 			account.setDomain(results.getString("domain"));
 			account.setUsername(results.getString("username"));
 			account.setPasswordFile(results.getString("password"));
-			account.setSaveTimestamp(results.getTimestamp("timestamp").getTime());
+			account.setSaveTimestamp(results.getTimestamp("save_timestamp").getTime());
+			account.setLastUpdateTimestamp(results.getTimestamp("last_update_timestamp").getTime());
 
 			accounts.add(account);
 		}
@@ -144,29 +145,31 @@ public final class AccountDerbyDbDao implements AccountDao {
 
 	private PreparedStatement createUpdateStatement(Connection connection, Account account) throws SQLException {
 		var statement = connection
-				.prepareStatement("UPDATE accounts SET domain = ?, username = ?, password = ?, timestamp =? WHERE id = ?");
+				.prepareStatement("UPDATE app.accounts SET domain = ?, username = ?, password = ?, save_timestamp = ?, last_update_timestamp = ? WHERE id = ?");
 		statement.setString(1, account.getDomain());
 		statement.setString(2, account.getUsername());
 		statement.setString(3, account.getPasswordFile());
 		statement.setTimestamp(4, new Timestamp(account.getSaveTimestamp()));
-		statement.setString(5, account.getId());
+		statement.setTimestamp(5, new Timestamp(account.getLastUpdateTimestamp()));
+		statement.setString(6, account.getId());
 		return statement;
 	}
 
 	private PreparedStatement createInsertStatement(Connection connection, Account account) throws SQLException {
 		var statement = connection
-				.prepareStatement("INSERT INTO accounts(id, domain, username, password, timestamp) VALUES (?, ?, ?, ?, ?)");
+				.prepareStatement("INSERT INTO app.accounts(id, domain, username, password, save_timestamp, last_update_timestamp) VALUES (?, ?, ?, ?, ?, ?)");
 		statement.setString(1, account.getId());
 		statement.setString(2, account.getDomain());
 		statement.setString(3, account.getUsername());
 		statement.setString(4, account.getPasswordFile());
 		statement.setTimestamp(5, new Timestamp(account.getSaveTimestamp()));
+		statement.setTimestamp(6, new Timestamp(account.getLastUpdateTimestamp()));
 		return statement;
 	}
 
 	private String determineOrderBy(SortColumn sortColumn) {
 		return (SortColumn.DOMAIN == sortColumn)? "domain":
 				(SortColumn.USERNAME == sortColumn)? "username":
-				"timestamp";
+				"save_timestamp";
 	}
 }
