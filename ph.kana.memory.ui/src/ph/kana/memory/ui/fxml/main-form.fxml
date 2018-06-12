@@ -9,7 +9,7 @@
       <AnchorPane prefHeight="45.0" prefWidth="350.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Button focusTraversable="false" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onAction="#showAddAccountDialog" text="Add" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
-            <TextField fx:id="filterTextBox" focusTraversable="false" layoutX="90.0" layoutY="10.0" prefHeight="26.0" prefWidth="190.0" promptText="Search" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="10.0">
+            <TextField fx:id="filterTextBox" focusTraversable="false" layoutX="90.0" layoutY="10.0" prefHeight="26.0" prefWidth="190.0" promptText="Search" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="10.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -34,6 +34,14 @@
                         <RadioMenuItem mnemonicParsing="false" text="by Username" toggleGroup="$sortGroup" userData="USERNAME" />
                      </items>
                   </Menu>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <Menu mnemonicParsing="false" text="Manage accounts data">
+                      <items>
+                          <MenuItem mnemonicParsing="false" text="Backup" />
+                          <MenuItem mnemonicParsing="false" text="Restore" />
+                      </items>
+                  </Menu>
+                  <MenuItem disable="true" mnemonicParsing="false" text="Manage MFA backup codes" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#openSourceCodeUrl" text="Source Code (v1.1)" />
               </items>
