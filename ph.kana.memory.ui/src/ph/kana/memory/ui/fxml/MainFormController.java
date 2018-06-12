@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.Clipboard;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
@@ -79,6 +80,13 @@ public class MainFormController implements Initializable {
 	public void clearSearchFilter() {
 		filterTextBox.setText("");
 		filterAccounts("");
+	}
+
+	@FXML
+	public void clearClipboard() {
+		Clipboard.getSystemClipboard()
+				.clear();
+		UiCommons.showBottomFadingText("Clipboard cleared!", rootPane.getChildren());
 	}
 
 	@Override

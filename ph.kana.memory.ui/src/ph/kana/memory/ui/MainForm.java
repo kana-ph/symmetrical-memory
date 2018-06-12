@@ -8,8 +8,8 @@ import ph.kana.memory.ui.fxml.MainFormController;
 
 public class MainForm extends Application {
 
-	private static final double APP_WIDTH = 450.0;
-	private static final double APP_HEIGHT = 695.0;
+	private static final double APP_WIDTH = 400;
+	private static final double APP_HEIGHT = 595;
 
 	public static void main(String[] args) {
 		launch(args);
