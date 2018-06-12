@@ -1,17 +1,15 @@
 package ph.kana.memory.ui;
 
 import javafx.application.Application;
-import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import ph.kana.memory.ui.fxml.MainFormController;
 
 public class MainForm extends Application {
 
-	private static final double APP_WIDTH = 350.0;
-	private static final double APP_HEIGHT = 495.0;
+	private static final double APP_WIDTH = 450.0;
+	private static final double APP_HEIGHT = 695.0;
 
 	public static void main(String[] args) {
 		launch(args);
