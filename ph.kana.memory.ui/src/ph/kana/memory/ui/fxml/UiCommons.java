@@ -44,7 +44,7 @@ public final class UiCommons {
 	}
 
 	public static void showBottomFadingText(String text, List<Node> nodeList) {
-		FadingNotificationText fadingText = new FadingNotificationText();
+		FadingNotificationText fadingText = new FadingNotificationText(nodeList::remove);
 
 		nodeList.stream()
 				.filter(FadingNotificationText.class::isInstance)
@@ -52,6 +52,6 @@ public final class UiCommons {
 
 		nodeList.add(fadingText);
 		assignAnchors(fadingText, null, 20.0, 20.0, 20.0);
-		fadingText.showText(text, nodeList::remove);
+		fadingText.showText(text);
 	}
 }
