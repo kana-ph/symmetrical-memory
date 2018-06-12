@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<?import javafx.scene.text.Font?>
 <?import javafx.geometry.Insets?>
-
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.text.Font?>
 <fx:root type="TilePane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" maxHeight="25.0" minHeight="25.0" opacity="0.0" prefHeight="25.0" prefWidth="200.0">
 <children>
     <TilePane alignment="CENTER" prefHeight="25.0" prefWidth="0.0" styleClass="bottom-message-darkening">
         <children>
-            <Label fx:id="messageLabel" styleClass="text" textFill="WHITE">
+            <Label fx:id="messageLabel" textAlignment="CENTER" styleClass="text" textFill="WHITE">
                 <font>
                     <Font size="12.0" />
                 </font>
