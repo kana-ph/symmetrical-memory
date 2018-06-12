@@ -6,7 +6,6 @@ import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountService;
 import ph.kana.memory.stash.CorruptDataException;
 import ph.kana.memory.stash.StashException;
-import ph.kana.memory.ui.fxml.UiCommons;
 
 public class DeleteAccountModal extends AbstractTilePaneModal<Account, Boolean> {
 
@@ -33,11 +32,11 @@ public class DeleteAccountModal extends AbstractTilePaneModal<Account, Boolean> 
 	public void deleteAccount() {
 		try {
 			accountService.deleteAccount(account);
-
-			UiCommons.showBottomFadingText("Deletion success!", getChildren());
 			setResult(true);
+
+			showBottomFadingText("Deletion success!");
 		} catch (StashException e) {
-			UiCommons.showBottomFadingText("Delete failed!", getChildren());
+			showBottomFadingText("Delete failed!");
 			e.printStackTrace(System.err);
 		} catch (CorruptDataException e) {
 			handleCorruptDb(e);
