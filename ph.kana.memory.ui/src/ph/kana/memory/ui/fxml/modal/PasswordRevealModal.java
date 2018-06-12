@@ -56,5 +56,7 @@ public class PasswordRevealModal extends AbstractTilePaneModal<Account, Void> {
 
 		Clipboard.getSystemClipboard()
 				.setContent(clipboardContent);
+
+		showBottomFadingText("Password copied to clipboard!\nMake sure to clear clipboard after use.");
 	}
 }
