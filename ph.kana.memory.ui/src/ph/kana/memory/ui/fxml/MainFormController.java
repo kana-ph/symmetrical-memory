@@ -230,6 +230,10 @@ public class MainFormController implements Initializable {
 	}
 
 	private void updateAccountCard(Account account) {
+		if (Objects.isNull(account)) {
+			return;
+		}
+
 		var accountCard = accountCards.get(account);
 		var card = accountCard.getCard();
 
