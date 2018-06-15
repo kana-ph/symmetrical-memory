@@ -89,6 +89,11 @@ public class MainFormController implements Initializable {
 		UiCommons.showBottomFadingText("Clipboard cleared!", rootPane.getChildren());
 	}
 
+	@FXML
+	public void showCreateBackupModal() {
+		showModal(new CreateBackupModal(), null);
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		showLoginModal(true);
