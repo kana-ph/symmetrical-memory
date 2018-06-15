@@ -1,12 +1,13 @@
 package ph.kana.memory.ui.fxml.modal;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import static javafx.stage.FileChooser.ExtensionFilter;
@@ -17,11 +18,6 @@ public class CreateBackupModal extends AbstractTilePaneModal<Void, Void> {
 	@FXML private TextField fileTextBox;
 	private File backupFile = null;
 
-	private static String INITIAL_FILE = System.getProperty("user.home") +
-			System.getProperty("file.separator") +
-			"Documents" +
-			System.getProperty("file.separator") +
-			"pwd-locker.bak";
 	private static ExtensionFilter FILE_FILTER = new ExtensionFilter("Backup File (*.bak)","*.bak");
 
 	public CreateBackupModal() {
@@ -32,7 +28,7 @@ public class CreateBackupModal extends AbstractTilePaneModal<Void, Void> {
 	public void openFileChooser() {
 		var fileChooser = new FileChooser();
 		fileChooser.setTitle("Save Backup as...");
-		fileChooser.setInitialFileName(INITIAL_FILE);
+		fileChooser.setInitialFileName(generateInitialFileName());
 		fileChooser.getExtensionFilters()
 				.add(FILE_FILTER);
 		fileChooser.setSelectedExtensionFilter(FILE_FILTER);
@@ -45,7 +41,7 @@ public class CreateBackupModal extends AbstractTilePaneModal<Void, Void> {
 			fileTextBox.setText(filename);
 			fileTextBox.positionCaret(filename.length());
 
-			Platform.runLater(() ->  saveButton.setDisable(false));
+			saveButton.setDisable(false);
 		}
 	}
 
@@ -58,5 +54,16 @@ public class CreateBackupModal extends AbstractTilePaneModal<Void, Void> {
 	@Override
 	public void showModal(Void data) {
 		setVisible(true);
+	}
+
+	private String generateInitialFileName() {
+		var date = LocalDate.now();
+		return System.getProperty("user.home") +
+				System.getProperty("file.separator") +
+				"Documents" +
+				System.getProperty("file.separator") +
+				"pwd-backup_" +
+				date.format(DateTimeFormatter.ISO_DATE) +
+				".bak";
 	}
 }
