@@ -71,7 +71,7 @@ public class MainFormController implements Initializable {
 
 	@FXML
 	public void openSourceCodeUrl() {
-		String url = "https://github.com/kana0011/symmetrical-memory";
+		String url = "https://gitlab.com/kana0011/symmetrical-memory";
 		showBottomMessage("Opening web browser...");
 		hostServices.showDocument(url);
 	}
