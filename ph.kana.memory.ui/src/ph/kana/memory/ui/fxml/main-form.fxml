@@ -43,7 +43,7 @@
                   </Menu>
                   <MenuItem disable="true" mnemonicParsing="false" text="Manage MFA backup codes" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" onAction="#openSourceCodeUrl" text="Source Code (v1.1)" />
+                  <MenuItem mnemonicParsing="false" onAction="#openSourceCodeUrl" text="Source Code (v2.0-RC1)" />
               </items>
             </MenuButton>
          </children>
