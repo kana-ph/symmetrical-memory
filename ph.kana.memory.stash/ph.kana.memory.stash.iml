@@ -9,20 +9,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="ph.kana.memory.common" />
-    <orderEntry type="module-library">
-      <library name="antlr-runtime-3.4">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/antlr-runtime-3.4.jar!/" />
-          <root url="jar://$MODULE_DIR$/lib/sqljet-1.1.10.jar!/" />
-        </CLASSES>
-        <JAVADOC>
-          <root url="jar://$MODULE_DIR$/lib/sqljet-1.1.10-javadoc.jar!/" />
-        </JAVADOC>
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/lib/sqljet-1.1.10-src.jar!/src" />
-        </SOURCES>
-      </library>
-    </orderEntry>
     <orderEntry type="module-library" scope="TEST">
       <library name="JUnit5.0">
         <CLASSES>

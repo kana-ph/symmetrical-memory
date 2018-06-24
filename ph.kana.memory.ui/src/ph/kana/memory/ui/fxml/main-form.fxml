@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane fx:id="rootPane" prefHeight="595.0" prefWidth="400.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ph.kana.memory.ui.fxml.MainFormController">
+<AnchorPane fx:id="rootPane" prefHeight="595.0" prefWidth="400.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ph.kana.memory.ui.fxml.MainFormController">
    <children>
       <AnchorPane prefHeight="45.0" prefWidth="350.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -37,8 +37,8 @@
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <Menu mnemonicParsing="false" text="Manage accounts data">
                       <items>
-                          <MenuItem mnemonicParsing="false" onAction="#showCreateBackupModal" text="Backup" />
-                          <MenuItem mnemonicParsing="false" text="Restore" />
+                          <MenuItem disable="true" mnemonicParsing="false" onAction="#showCreateBackupModal" text="Backup" />
+                          <MenuItem disable="true" mnemonicParsing="false" text="Restore" />
                       </items>
                   </Menu>
                   <MenuItem disable="true" mnemonicParsing="false" text="Manage MFA backup codes" />
