@@ -1,18 +1,24 @@
 package ph.kana.memory.ui.fxml;
 
+import javafx.animation.TranslateTransition;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 import ph.kana.memory.ui.fxml.message.FadingNotificationText;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public final class UiCommons {
 
 	private UiCommons() {}
+
+	private static final Set<Node> NODE_ANIMATION_LOCK = new HashSet<>();
 
 	public static void assignAnchors(Node node, Double top, Double right, Double bottom, Double left) {
 		AnchorPane.setTopAnchor(node, top);
@@ -53,5 +59,24 @@ public final class UiCommons {
 		nodeList.add(fadingText);
 		assignAnchors(fadingText, null, 20.0, 20.0, 20.0);
 		fadingText.showText(text);
+	}
+
+	public static void shake(Node node) {
+		if (NODE_ANIMATION_LOCK.contains(node)) {
+			return;
+		} else {
+			NODE_ANIMATION_LOCK.add(node);
+		}
+		var translateTransition  = new TranslateTransition();
+		translateTransition.setDuration(Duration.millis(100.0));
+		translateTransition.setNode(node);
+
+		translateTransition.setByX(5);
+		translateTransition.setCycleCount(4);
+		translateTransition.setAutoReverse(true);
+
+		translateTransition.setOnFinished(e -> NODE_ANIMATION_LOCK.remove(node));
+
+		translateTransition.play();
 	}
 }

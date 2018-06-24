@@ -1,11 +1,13 @@
 package ph.kana.memory.ui.fxml.modal;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import ph.kana.memory.stash.CorruptDataException;
 import ph.kana.memory.ui.fxml.UiCommons;
 
+import java.util.Map;
 import java.util.function.Consumer;
 
 public abstract class AbstractTilePaneModal<TData, TResult> extends TilePane {
@@ -38,12 +40,12 @@ public abstract class AbstractTilePaneModal<TData, TResult> extends TilePane {
 		this.onClose = onClose;
 	}
 
-	protected void setResult(TResult result) {
-		this.result = result;
-	}
-
 	public void setOnHandleCorruptDb(Consumer<CorruptDataException>  onHandleCorruptDb) {
 		this.onHandleCorruptDb = onHandleCorruptDb;
+	}
+
+	void setResult(TResult result) {
+		this.result = result;
 	}
 
 	void showBottomFadingText(String text) {
@@ -55,5 +57,20 @@ public abstract class AbstractTilePaneModal<TData, TResult> extends TilePane {
 		if (null != onHandleCorruptDb) {
 			onHandleCorruptDb.accept(e);
 		}
+	}
+
+	boolean validateFields(Map<TextField, String> fields) {
+		var valid = true;
+		for (var field : fields.keySet()) {
+			var fieldValid = !field.getText().isEmpty();
+			valid &= fieldValid;
+
+			if (!fieldValid) {
+				UiCommons.shake(field);
+				showBottomFadingText(fields.get(field));
+			}
+		}
+
+		return valid;
 	}
 }
