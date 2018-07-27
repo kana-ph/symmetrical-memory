@@ -37,8 +37,8 @@
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <Menu mnemonicParsing="false" text="Manage accounts data">
                       <items>
-                          <MenuItem disable="true" mnemonicParsing="false" onAction="#showCreateBackupModal" text="Backup" />
-                          <MenuItem disable="true" mnemonicParsing="false" text="Restore" />
+                          <MenuItem mnemonicParsing="false" onAction="#showCreateBackupModal" text="Backup" />
+                          <MenuItem mnemonicParsing="false" text="Restore" />
                       </items>
                   </Menu>
                   <MenuItem disable="true" mnemonicParsing="false" text="Manage MFA backup codes" />

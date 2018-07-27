@@ -168,6 +168,7 @@ public class PasswordZipFileDao implements PasswordDao {
 		zipFile.addFiles(files, buildZipParameters());
 	}
 
+	@Deprecated
 	private ZipParameters buildZipParameters() throws StashException {
 		var params = new ZipParameters();
 

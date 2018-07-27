@@ -7,4 +7,5 @@ module ph.kana.memory.stash {
 	requires jbcrypt;
 
 	exports ph.kana.memory.stash;
+	exports ph.kana.memory.backup;
 }

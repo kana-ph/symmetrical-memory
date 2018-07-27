@@ -6,6 +6,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
+import ph.kana.memory.backup.BackupException;
+import ph.kana.memory.backup.BackupService;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -23,6 +25,8 @@ public class CreateBackupModal extends AbstractTilePaneModal<Void, Void> {
 	@FXML private PasswordField maskedPasswordTextBox;
 	@FXML private CheckBox maskPasswordToggle;
 	private File backupFile = null;
+
+	private final BackupService backupService = BackupService.getInstance();
 
 	private static ExtensionFilter FILE_FILTER = new ExtensionFilter("Backup File (*.bak)","*.bak");
 
@@ -58,12 +62,18 @@ public class CreateBackupModal extends AbstractTilePaneModal<Void, Void> {
 				maskedPasswordTextBox, "Backup password is required!"
 		);
 		var formValid = validateFields(fieldValidateMap);
-		if (!formValid) {
-			return;
-		}
+		if (formValid) {
+			var password = maskedPasswordTextBox.getText();
 
-		showBottomFadingText("Successfully created backup:\n" + backupFile.getAbsolutePath());
-		close();
+			try {
+				var file = backupService.createBackup(backupFile, password);
+				showBottomFadingText("Successfully created backup:\n" + file.getAbsolutePath());
+				close();
+			} catch (BackupException e) {
+				e.printStackTrace();
+				showBottomFadingText(e.getMessage());
+			}
+		}
 	}
 
 	@Override
