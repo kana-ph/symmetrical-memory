@@ -28,6 +28,10 @@ public final class ZipFileService {
 		}
 	}
 
+	public void removeFileFromZip(ZipFile zipFile, String filename) throws ZipException {
+		zipFile.removeFile(filename);
+	}
+
 	private ZipParameters buildZipParameters(String password) {
 		var params = new ZipParameters();
 
