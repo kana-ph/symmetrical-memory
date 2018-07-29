@@ -2,7 +2,6 @@ package ph.kana.memory.backup;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
-import ph.kana.memory.stash.StashException;
 import ph.kana.memory.stash.ZipFileService;
 
 import java.io.File;
@@ -31,7 +30,7 @@ public final class BackupService {
 			var zipFile = zipFileService.addDirectoryToZip(file, lockerRoot, password);
 			removeAuthFile(zipFile);
 			return zipFile.getFile();
-		} catch (StashException | ZipException e) {
+		} catch (ZipException e) {
 			throw new BackupException("Failed to create backup", e);
 		}
 	}

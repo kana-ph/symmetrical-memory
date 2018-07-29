@@ -16,16 +16,12 @@ public final class ZipFileService {
 		return INSTANCE;
 	}
 
-	public ZipFile addDirectoryToZip(File file, File directory, String password) throws StashException {
-		try {
-			var zipFile = new ZipFile(file);
-			var params = buildZipParameters(password);
-			zipFile.addFolder(directory, params);
+	public ZipFile addDirectoryToZip(File file, File directory, String password) throws ZipException {
+		var zipFile = new ZipFile(file);
+		var params = buildZipParameters(password);
+		zipFile.addFolder(directory, params);
 
-			return zipFile;
-		} catch (ZipException e) {
-			throw new StashException(e);
-		}
+		return zipFile;
 	}
 
 	public void removeFileFromZip(ZipFile zipFile, String filename) throws ZipException {
