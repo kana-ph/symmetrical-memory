@@ -64,11 +64,10 @@ public final class UiCommons {
 	}
 
 	public static void shake(Node node) {
-		if (NODE_ANIMATION_LOCK.contains(node)) {
+		if (verifyAnimationLock(node)) {
 			return;
-		} else {
-			NODE_ANIMATION_LOCK.add(node);
 		}
+
 		var translateTransition  = new TranslateTransition();
 		translateTransition.setDuration(Duration.millis(100.0));
 		translateTransition.setNode(node);
@@ -77,7 +76,7 @@ public final class UiCommons {
 		translateTransition.setCycleCount(4);
 		translateTransition.setAutoReverse(true);
 
-		translateTransition.setOnFinished(e -> NODE_ANIMATION_LOCK.remove(node));
+		translateTransition.setOnFinished(e -> removeAnimationLock(node));
 
 		translateTransition.play();
 	}
@@ -90,5 +89,18 @@ public final class UiCommons {
 
 		passwordField.visibleProperty()
 				.bind(toggle.selectedProperty().not());
+	}
+
+	private static boolean verifyAnimationLock(Node node) {
+		var locked = NODE_ANIMATION_LOCK.contains(node);
+
+		if (!locked) {
+			NODE_ANIMATION_LOCK.add(node);
+		}
+		return locked;
+	}
+
+	private static void removeAnimationLock(Node node) {
+		NODE_ANIMATION_LOCK.remove(node);
 	}
 }
