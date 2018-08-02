@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import ph.kana.memory.backup.BackupException;
 import ph.kana.memory.backup.BackupService;
+import ph.kana.memory.ui.fxml.UiCommons;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -33,7 +34,7 @@ public class CreateBackupModal extends AbstractTilePaneModal<Void, Void> {
 	public CreateBackupModal() {
 		super("create-backup-modal.fxml");
 
-		bindPasswordToggle();
+		UiCommons.bindPasswordToggle(maskedPasswordTextBox, unmaskedPasswordTextBox, maskPasswordToggle);
 	}
 
 	@FXML
@@ -79,16 +80,6 @@ public class CreateBackupModal extends AbstractTilePaneModal<Void, Void> {
 	@Override
 	public void showModal(Void data) {
 		setVisible(true);
-	}
-
-	private void bindPasswordToggle() {
-		unmaskedPasswordTextBox.textProperty()
-				.bindBidirectional(maskedPasswordTextBox.textProperty());
-		unmaskedPasswordTextBox.translateXProperty()
-				.bindBidirectional((maskedPasswordTextBox.translateXProperty()));
-
-		maskedPasswordTextBox.visibleProperty()
-				.bind(maskPasswordToggle.selectedProperty().not());
 	}
 
 	private String generateInitialFileName() {

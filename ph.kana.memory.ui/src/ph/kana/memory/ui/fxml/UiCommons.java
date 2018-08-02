@@ -82,7 +82,7 @@ public final class UiCommons {
 		translateTransition.play();
 	}
 
-	public static void bindShowablePasswordField(PasswordField passwordField, TextField textField, CheckBox toggle) {
+	public static void bindPasswordToggle(PasswordField passwordField, TextField textField, CheckBox toggle) {
 		textField.textProperty()
 				.bindBidirectional(passwordField.textProperty());
 		textField.translateXProperty()

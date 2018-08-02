@@ -9,6 +9,7 @@ import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.AccountService;
 import ph.kana.memory.stash.CorruptDataException;
 import ph.kana.memory.stash.StashException;
+import ph.kana.memory.ui.fxml.UiCommons;
 
 import java.util.Objects;
 
@@ -27,7 +28,7 @@ public class SaveAccountModal extends AbstractTilePaneModal<Account, Account> {
 	public SaveAccountModal() {
 		super("save-account-modal.fxml");
 
-		bindPasswordToggle();
+		UiCommons.bindPasswordToggle(maskedPasswordTextBox, unmaskedPasswordTextBox, maskPasswordToggle);
 	}
 
 	@Override
@@ -74,13 +75,6 @@ public class SaveAccountModal extends AbstractTilePaneModal<Account, Account> {
 			usernameTextBox.setText("");
 			maskedPasswordTextBox.setText("");
 		}
-	}
-
-	private void bindPasswordToggle() {
-		unmaskedPasswordTextBox.textProperty()
-				.bindBidirectional(maskedPasswordTextBox.textProperty());
-		maskedPasswordTextBox.visibleProperty()
-				.bind(maskPasswordToggle.selectedProperty().not());
 	}
 
 	private void initializeFields(Account account) {

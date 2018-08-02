@@ -32,7 +32,7 @@ public class RestoreBackupModal extends AbstractTilePaneModal<Void, Void> {
 	public RestoreBackupModal() {
 		super("restore-backup-modal.fxml");
 
-		UiCommons.bindShowablePasswordField(maskedPasswordTextBox, unmaskedPasswordTextBox, maskPasswordToggle);
+		UiCommons.bindPasswordToggle(maskedPasswordTextBox, unmaskedPasswordTextBox, maskPasswordToggle);
 	}
 
 	@FXML
