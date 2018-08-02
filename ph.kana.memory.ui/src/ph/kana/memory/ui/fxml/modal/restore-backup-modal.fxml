@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<fx:root alignment="CENTER" prefHeight="220.0" prefWidth="320.0" styleClass="modal-darkening" type="TilePane" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
+<children>
+    <AnchorPane prefHeight="190.0" prefWidth="320.0" styleClass="modal">
+         <children>
+            <Label layoutX="14.0" layoutY="14.0" styleClass="title" text="Restore Backup" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
+            <Label text="Backup File" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="50.0" />
+            <TextField fx:id="fileTextBox" editable="false" focusTraversable="false" layoutX="15.0" layoutY="47.0" promptText="Select Backup File" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="70.0" />
+            <Label text="Backup Password" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="105.0" />
+            <PasswordField fx:id="maskedPasswordTextBox" layoutX="14.0" layoutY="126.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="125.0" />
+            <TextField fx:id="unmaskedPasswordTextBox" focusTraversable="false" layoutX="14.0" layoutY="126.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="125.0" />
+            <CheckBox fx:id="maskPasswordToggle" focusTraversable="false" mnemonicParsing="false" text="Show?" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="105.0" />
+            <Button layoutX="244.0" layoutY="50.0" mnemonicParsing="false" onAction="#openFileChooser" text="Browse" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="70.0" />
+            <Button fx:id="saveButton" defaultButton="true" layoutX="129.0" layoutY="95.0" mnemonicParsing="false" onAction="#restoreBackup" text="Restore Backup" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="175.0" />
+            <Button layoutX="241.0" layoutY="104.0" mnemonicParsing="false" onAction="#close" text="Cancel" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="175.0" />
+         </children>
+    </AnchorPane>
+</children>
+</fx:root>

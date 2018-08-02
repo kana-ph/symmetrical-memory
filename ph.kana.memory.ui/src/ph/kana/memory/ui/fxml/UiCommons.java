@@ -4,6 +4,8 @@ import javafx.animation.TranslateTransition;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
@@ -78,5 +80,15 @@ public final class UiCommons {
 		translateTransition.setOnFinished(e -> NODE_ANIMATION_LOCK.remove(node));
 
 		translateTransition.play();
+	}
+
+	public static void bindShowablePasswordField(PasswordField passwordField, TextField textField, CheckBox toggle) {
+		textField.textProperty()
+				.bindBidirectional(passwordField.textProperty());
+		textField.translateXProperty()
+				.bindBidirectional((passwordField.translateXProperty()));
+
+		passwordField.visibleProperty()
+				.bind(toggle.selectedProperty().not());
 	}
 }

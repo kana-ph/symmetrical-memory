@@ -35,6 +35,10 @@ public final class BackupService {
 		}
 	}
 
+	public void restoreBackup(File backupFile, String password) throws BackupException {
+
+	}
+
 	private void removeAuthFile(ZipFile zipFile) throws ZipException  {
 		zipFileService.removeFileFromZip(zipFile, "a");
 	}

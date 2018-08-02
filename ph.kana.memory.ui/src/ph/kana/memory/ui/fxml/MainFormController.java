@@ -94,6 +94,11 @@ public class MainFormController implements Initializable {
 		showModal(new CreateBackupModal(), null);
 	}
 
+	@FXML
+	public void showRestoreBackupModal() {
+		showModal(new RestoreBackupModal(), null);
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		showLoginModal(true);
