@@ -1,7 +1,7 @@
 package ph.kana.memory.ui.fxml.modal;
 
 import javafx.fxml.FXML;
-import ph.kana.memory.stash.AccountService;
+import ph.kana.memory.account.AccountService;
 import ph.kana.memory.stash.StashException;
 
 public class ResetModal extends AbstractTilePaneModal<Void, Void> {

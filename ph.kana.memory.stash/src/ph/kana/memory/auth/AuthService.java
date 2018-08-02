@@ -1,11 +1,15 @@
-package ph.kana.memory.stash;
+package ph.kana.memory.auth;
 
+import ph.kana.memory.account.AccountDao;
+import ph.kana.memory.account.CorruptDataException;
+import ph.kana.memory.account.PasswordService;
 import ph.kana.memory.codec.CodecOperationException;
 import ph.kana.memory.codec.EncryptedPassword;
 import ph.kana.memory.codec.PasswordCodec;
 import ph.kana.memory.codec.PinBcryptEncryptor;
-import ph.kana.memory.stash.derby.AccountDerbyDbDao;
-import ph.kana.memory.stash.file.AuthFileDao;
+import ph.kana.memory.derby.AccountDerbyDbDao;
+import ph.kana.memory.file.AuthFileDao;
+import ph.kana.memory.stash.StashException;
 
 public class AuthService {
 

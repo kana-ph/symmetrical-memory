@@ -2,9 +2,9 @@ package ph.kana.memory.ui.fxml.modal;
 
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
+import ph.kana.memory.account.AccountService;
+import ph.kana.memory.account.CorruptDataException;
 import ph.kana.memory.model.Account;
-import ph.kana.memory.stash.AccountService;
-import ph.kana.memory.stash.CorruptDataException;
 import ph.kana.memory.stash.StashException;
 
 public class DeleteAccountModal extends AbstractTilePaneModal<Account, Boolean> {

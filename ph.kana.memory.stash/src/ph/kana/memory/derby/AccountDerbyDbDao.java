@@ -1,8 +1,8 @@
-package ph.kana.memory.stash.derby;
+package ph.kana.memory.derby;
 
+import ph.kana.memory.account.AccountDao;
+import ph.kana.memory.account.CorruptDataException;
 import ph.kana.memory.model.Account;
-import ph.kana.memory.stash.AccountDao;
-import ph.kana.memory.stash.CorruptDataException;
 import ph.kana.memory.stash.StashException;
 
 import java.io.IOException;

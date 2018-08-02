@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
-import ph.kana.memory.stash.CorruptDataException;
+import ph.kana.memory.account.CorruptDataException;
 import ph.kana.memory.ui.fxml.UiCommons;
 
 import java.util.Map;

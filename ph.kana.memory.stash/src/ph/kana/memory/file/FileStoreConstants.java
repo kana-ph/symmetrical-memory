@@ -1,4 +1,4 @@
-package ph.kana.memory.stash.file;
+package ph.kana.memory.file;
 
 import java.io.File;
 import java.io.IOException;

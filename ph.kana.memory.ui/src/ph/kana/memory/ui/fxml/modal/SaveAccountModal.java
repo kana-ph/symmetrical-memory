@@ -5,9 +5,9 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import ph.kana.memory.account.AccountService;
+import ph.kana.memory.account.CorruptDataException;
 import ph.kana.memory.model.Account;
-import ph.kana.memory.stash.AccountService;
-import ph.kana.memory.stash.CorruptDataException;
 import ph.kana.memory.stash.StashException;
 import ph.kana.memory.ui.fxml.UiCommons;
 

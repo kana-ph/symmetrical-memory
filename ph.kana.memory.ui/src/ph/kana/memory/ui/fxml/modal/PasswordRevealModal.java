@@ -4,8 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import ph.kana.memory.account.PasswordService;
 import ph.kana.memory.model.Account;
-import ph.kana.memory.stash.PasswordService;
 import ph.kana.memory.stash.StashException;
 
 import java.util.Arrays;

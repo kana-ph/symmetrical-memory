@@ -1,9 +1,11 @@
-package ph.kana.memory.stash;
+package ph.kana.memory.account;
 
+import ph.kana.memory.auth.AuthService;
 import ph.kana.memory.codec.CodecOperationException;
 import ph.kana.memory.codec.PasswordCodec;
+import ph.kana.memory.file.PasswordZipFileDao;
 import ph.kana.memory.model.Account;
-import ph.kana.memory.stash.file.PasswordZipFileDao;
+import ph.kana.memory.stash.StashException;
 
 public final class PasswordService {
 

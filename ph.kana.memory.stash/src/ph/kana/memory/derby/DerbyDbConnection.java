@@ -1,4 +1,4 @@
-package ph.kana.memory.stash.derby;
+package ph.kana.memory.derby;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.Base64;
 import java.util.Comparator;
 import java.util.Properties;
 
-import static ph.kana.memory.stash.file.FileStoreConstants.LOCKER_ROOT;
+import static ph.kana.memory.file.FileStoreConstants.LOCKER_ROOT;
 
 final class DerbyDbConnection {
 

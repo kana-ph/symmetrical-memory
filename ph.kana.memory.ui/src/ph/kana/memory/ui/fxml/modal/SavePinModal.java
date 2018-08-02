@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import ph.kana.memory.stash.AuthService;
+import ph.kana.memory.auth.AuthService;
 import ph.kana.memory.stash.StashException;
 import ph.kana.memory.ui.fxml.UiCommons;
 

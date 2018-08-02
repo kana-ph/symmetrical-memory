@@ -1,4 +1,4 @@
-package ph.kana.memory.stash;
+package ph.kana.memory.account;
 
 public class CorruptDataException extends Exception {
 

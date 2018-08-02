@@ -1,4 +1,6 @@
-package ph.kana.memory.stash;
+package ph.kana.memory.auth;
+
+import ph.kana.memory.stash.StashException;
 
 public interface AuthDao {
 

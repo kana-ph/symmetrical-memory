@@ -1,6 +1,7 @@
-package ph.kana.memory.stash;
+package ph.kana.memory.account;
 
 import ph.kana.memory.model.Account;
+import ph.kana.memory.stash.StashException;
 
 import java.util.List;
 

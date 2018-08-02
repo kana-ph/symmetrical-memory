@@ -1,7 +1,8 @@
-package ph.kana.memory.stash;
+package ph.kana.memory.account;
 
+import ph.kana.memory.derby.AccountDerbyDbDao;
 import ph.kana.memory.model.Account;
-import ph.kana.memory.stash.derby.AccountDerbyDbDao;
+import ph.kana.memory.stash.StashException;
 
 import java.util.List;
 import java.util.Objects;

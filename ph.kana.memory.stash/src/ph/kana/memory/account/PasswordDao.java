@@ -1,6 +1,7 @@
-package ph.kana.memory.stash;
+package ph.kana.memory.account;
 
 import ph.kana.memory.codec.EncryptedPassword;
+import ph.kana.memory.stash.StashException;
 
 public interface PasswordDao {
 

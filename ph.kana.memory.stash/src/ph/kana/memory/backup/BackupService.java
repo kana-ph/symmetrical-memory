@@ -2,11 +2,11 @@ package ph.kana.memory.backup;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
-import ph.kana.memory.stash.ZipFileService;
+import ph.kana.memory.file.ZipFileService;
 
 import java.io.File;
 
-import static ph.kana.memory.stash.file.FileStoreConstants.LOCKER_ROOT;
+import static ph.kana.memory.file.FileStoreConstants.LOCKER_ROOT;
 
 public final class BackupService {
 

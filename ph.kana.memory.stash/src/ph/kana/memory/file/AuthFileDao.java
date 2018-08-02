@@ -1,13 +1,13 @@
-package ph.kana.memory.stash.file;
+package ph.kana.memory.file;
 
-import ph.kana.memory.stash.AuthDao;
+import ph.kana.memory.auth.AuthDao;
 import ph.kana.memory.stash.StashException;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import static ph.kana.memory.stash.file.FileStoreConstants.AUTH_PATH;
+import static ph.kana.memory.file.FileStoreConstants.AUTH_PATH;
 
 public class AuthFileDao implements AuthDao {
 
