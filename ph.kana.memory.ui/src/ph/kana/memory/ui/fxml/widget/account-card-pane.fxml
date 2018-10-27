@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<fx:root prefHeight="70.0" minHeight="70.0" maxHeight="70.0" styleClass="account-card" type="AnchorPane" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
+<children>
+    <Label fx:id="domainLabel" styleClass="domain-label" AnchorPane.topAnchor="5.0" AnchorPane.rightAnchor="100.0" AnchorPane.leftAnchor="5.0" />
+    <Label fx:id="usernameLabel" styleClass="username-label" AnchorPane.topAnchor="10.0" AnchorPane.rightAnchor="100.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" />
+    <Button text="Show" styleClass="control" focusTraversable="false" onAction="#revealPassword" AnchorPane.topAnchor="5.0" AnchorPane.rightAnchor="10.0" />
+    <MenuButton text="⚙" styleClass="control" focusTraversable="false" AnchorPane.rightAnchor="10.0" AnchorPane.bottomAnchor="5.0">
+    <items>
+        <MenuItem text="Update" onAction="#update" />
+        <MenuItem text="Delete" onAction="#delete" />
+    </items>
+    </MenuButton>
+</children>
+</fx:root>

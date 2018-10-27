@@ -5,9 +5,9 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.Clipboard;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import ph.kana.memory.account.AccountService;
@@ -19,6 +19,7 @@ import ph.kana.memory.type.LoginFlag;
 import ph.kana.memory.type.SortColumn;
 import ph.kana.memory.ui.fxml.message.LargeCenterText;
 import ph.kana.memory.ui.fxml.modal.*;
+import ph.kana.memory.ui.fxml.widget.AccountCardPane;
 import ph.kana.memory.ui.model.AccountCard;
 import ph.kana.memory.ui.model.AccountComparator;
 
@@ -180,46 +181,8 @@ public class MainFormController implements Initializable {
 	}
 
 	private AccountCard renderAccountCard(Account account) {
-		Pane pane = new AnchorPane();
-		addCssClass(pane, "account-card");
-		pane.setPrefHeight(70.0);
-		pane.setMinHeight(70.0);
-		pane.setMaxHeight(70.0);
-		List<Node> children = pane.getChildren();
-
-		Label domainLabel = new Label(account.getDomain());
-		children.add(domainLabel);
-		addCssClass(domainLabel, "domain-label");
-		UiCommons.assignAnchors(domainLabel, 5.0, 100.0, null, 5.0);
-
-		Label usernameLabel = new Label(account.getUsername());
-		children.add(usernameLabel);
-		addCssClass(usernameLabel, "username-label");
-		UiCommons.assignAnchors(usernameLabel, 10.0, 100.0, 15.0, 10.0);
-
-		Button showButton = new Button("Show");
-		children.add(showButton);
-		addCssClass(showButton, "control");
-		showButton.setFocusTraversable(false);
-		showButton.setOnAction(event -> showModal(new PasswordRevealModal(), account));
-		UiCommons.assignAnchors(showButton, 5.0, 10.0, null, null);
-
-		MenuButton accountMenu = new MenuButton("\u2699");
-		children.add(accountMenu);
-		addCssClass(accountMenu, "control");
-		accountMenu.setFocusTraversable(false);
-		UiCommons.assignAnchors(accountMenu, null, 10.0, 5.0, null);
-
-		List<MenuItem> menuItems = accountMenu.getItems();
-		MenuItem updateMenuItem = new MenuItem("Update");
-		menuItems.add(updateMenuItem);
-		updateMenuItem.setOnAction(event -> showUpdateModal(new SaveAccountModal(), account));
-
-		MenuItem deleteMenuItem = new MenuItem("Delete");
-		menuItems.add(deleteMenuItem);
-		deleteMenuItem.setOnAction(event -> showDeleteModal(new DeleteAccountModal(), account));
-
-		pane.setUserData(account);
+		var pane = new AccountCardPane(account, rootPane, this::handleCorruptDb);
+		pane.setOnDeleteAccount(this::attemptShowingNoAccountMessage);
 
 		var insertIndex = calculateInsertIndex(account);
 		viewPane.getChildren()
@@ -232,39 +195,6 @@ public class MainFormController implements Initializable {
 		var createdAccountCard = renderAccountCard(accountCard.getAccount());
 		accountCard.setCard(createdAccountCard.getCard());
 		return accountCard;
-	}
-
-	private void updateAccountCard(Account account) {
-		if (Objects.isNull(account)) {
-			return;
-		}
-
-		var accountCard = accountCards.get(account);
-		var card = accountCard.getCard();
-
-		var cardContents = card.getChildren();
-
-		var domainLabel = (Label) cardContents.get(0);
-		domainLabel.setText(account.getDomain());
-
-		var usernameLabel = (Label) cardContents.get(1);
-		usernameLabel.setText(account.getUsername());
-	}
-
-	private void removeAccountCard(Account account) {
-		var accountCard = accountCards.get(account);
-		var card = accountCard.getCard();
-
-		viewPane.getChildren()
-				.remove(card);
-		accountCards.remove(account);
-
-		attemptShowingNoAccountMessage();
-	}
-
-	private void addCssClass(Node node, String cssClass) {
-		List<String> classes = node.getStyleClass();
-		classes.add(cssClass);
 	}
 
 	private int calculateInsertIndex(Account account) {
@@ -307,20 +237,6 @@ public class MainFormController implements Initializable {
 
 		modal.setOnHandleCorruptDb(this::handleCorruptDb);
 		modal.showModal(data);
-	}
-
-	private void showUpdateModal(SaveAccountModal modal, Account account) {
-		modal.setOnClose(this::updateAccountCard);
-		showModal(modal, account);
-	}
-
-	private void showDeleteModal(DeleteAccountModal modal, Account account) {
-		modal.setOnClose(result -> {
-			if (result) {
-				removeAccountCard(account);
-			}
-		});
-		showModal(modal, account);
 	}
 
 	private void showLoginModal(boolean startup) {
