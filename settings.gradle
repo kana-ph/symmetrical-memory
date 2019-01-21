@@ -1,0 +1,5 @@
+rootProject.name = 'memory'
+include 'memory.ui'
+include 'memory.stash'
+include 'memory.common'
+

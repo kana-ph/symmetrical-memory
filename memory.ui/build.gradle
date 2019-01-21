@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.7'
+}
+
+group 'ph.kana'
+version '2.0-RC'
+
+sourceCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':memory.common')
+    implementation project(':memory.stash')
+
+    implementation 'org.openjfx:javafx-controls:11.0.2'
+    implementation 'org.openjfx:javafx-fxml:11.0.2'
+    implementation 'org.openjfx:javafx-graphics:11.0.2'
+}
+
+sourceSets {
+    main.output.resourcesDir = main.java.outputDir
+}
+
+javafx {
+    version = '11.0.+'
+    modules = [
+        'javafx.controls',
+        'javafx.fxml',
+        'javafx.graphics'
+    ]
+}
+
+mainClassName = "ph.kana.memory.ui.MainForm"

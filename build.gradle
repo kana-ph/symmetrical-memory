@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+group 'ph.kana'
+version '2.0-RC'
+
+sourceCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
