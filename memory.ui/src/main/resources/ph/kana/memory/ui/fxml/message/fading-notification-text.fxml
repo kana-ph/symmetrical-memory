@@ -4,7 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.text.Font?>
-<fx:root type="TilePane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" maxHeight="25.0" minHeight="25.0" opacity="0.0" prefHeight="25.0" prefWidth="200.0">
+<fx:root type="TilePane" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" maxHeight="25.0" minHeight="25.0" opacity="0.0" prefHeight="25.0" prefWidth="200.0">
 <children>
     <TilePane alignment="CENTER" prefHeight="25.0" prefWidth="0.0" styleClass="bottom-message-darkening">
         <children>

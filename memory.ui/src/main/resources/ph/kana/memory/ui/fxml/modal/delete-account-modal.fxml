@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.Font?>
 
-<fx:root type="TilePane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" styleClass="modal-darkening" visible="false">
+<fx:root type="TilePane" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" prefHeight="200.0" prefWidth="200.0" styleClass="modal-darkening" visible="false">
 <children>
     <AnchorPane prefHeight="180.0" prefWidth="320.0" styleClass="modal">
         <children>

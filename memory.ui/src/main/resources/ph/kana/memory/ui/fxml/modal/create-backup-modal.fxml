@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<fx:root alignment="CENTER" prefHeight="220.0" prefWidth="320.0" styleClass="modal-darkening" type="TilePane" xmlns="http://javafx.com/javafx/10" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root alignment="CENTER" prefHeight="220.0" prefWidth="320.0" styleClass="modal-darkening" type="TilePane" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
 <children>
     <AnchorPane prefHeight="190.0" prefWidth="320.0" styleClass="modal">
          <children>
