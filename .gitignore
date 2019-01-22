@@ -105,5 +105,6 @@ gradle-app.setting
 # End of https://www.gitignore.io/api/gradle,intellij+all
 
 **/derby.log
+test-data/
 
 

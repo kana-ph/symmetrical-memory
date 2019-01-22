@@ -40,12 +40,16 @@ javafx {
 
 mainClassName = "ph.kana.memory.ui/ph.kana.memory.ui.MainForm"
 
-if (project.hasProperty('profile')) {
-    switch (project.property('profile').toString().toLowerCase()) {
-        case 'dev':
-            apply from: 'gradle/profile_dev.gradle'
-            break
-    }
+def activeProfile = project.hasProperty('profile')?
+    project.property('profile').toString().toLowerCase():
+    'default'
+
+switch (activeProfile) {
+    case 'dev':
+        apply from: 'gradle/profile_dev.gradle'
+        break
+    default:
+        apply from: 'gradle/profile_default.gradle'
 }
 
 compileKotlin {

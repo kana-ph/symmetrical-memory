@@ -1,4 +1,8 @@
 run.doFirst {
+    String lockerRoot = "${projectDir}/test-data"
+
     systemProperties = [
+        'pstash.locker_root': lockerRoot,
+        'pstash.temp_dir': "$lockerRoot/temp-data"
     ]
 }

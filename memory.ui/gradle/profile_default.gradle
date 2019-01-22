@@ -1,0 +1,10 @@
+run.doFirst {
+    def userHome = System.getProperty('user.home')
+    def tempDir = System.getProperty('java.io.tmpdir')
+    def fs = System.getProperty('file.separator')
+    
+    systemProperties = [
+        'pstash.locker_root': "${userHome}${fs}.pstash",
+        'pstash.temp_dir': "${tempDir}${fs}"
+    ]
+}
