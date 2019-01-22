@@ -5,6 +5,7 @@ module ph.kana.memory.stash {
 	requires derby;
 	requires zip4j;
 	requires jbcrypt;
+	requires kotlin.stdlib;
 
 	exports ph.kana.memory.account;
 	exports ph.kana.memory.auth;
