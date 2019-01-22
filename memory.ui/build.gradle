@@ -38,7 +38,16 @@ javafx {
     ]
 }
 
-mainClassName = "ph.kana.memory.ui.MainForm"
+mainClassName = "ph.kana.memory.ui/ph.kana.memory.ui.MainForm"
+
+if (project.hasProperty('profile')) {
+    switch (project.property('profile').toString().toLowerCase()) {
+        case 'dev':
+            apply from: 'gradle/profile_dev.gradle'
+            break
+    }
+}
+
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"

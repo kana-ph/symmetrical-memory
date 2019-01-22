@@ -19,7 +19,7 @@ public class MainForm extends Application {
 	public void start(Stage stage) throws Exception {
 		var mainFormFxml = MainForm.class
 			.getResource("/ph/kana/memory/ui/fxml/main-form.fxml");
-		System.out.println("mainFormFxml = " + mainFormFxml);
+
 		var loader = new FXMLLoader(mainFormFxml);
 		var scene = new Scene(loader.load());
 
