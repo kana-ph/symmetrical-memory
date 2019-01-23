@@ -2,11 +2,10 @@ package ph.kana.memory.backup;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
+import ph.kana.memory.file.FileLocationHolder;
 import ph.kana.memory.file.ZipFileService;
 
 import java.io.File;
-
-import static ph.kana.memory.file.FileStoreConstants.LOCKER_ROOT;
 
 public final class BackupService {
 
@@ -25,7 +24,8 @@ public final class BackupService {
 				throw new BackupException("Backup File already exists!");
 			}
 
-			var lockerRoot = new File(LOCKER_ROOT);
+			var lockerRoot = FileLocationHolder.getInstance()
+				.getRoot();
 
 			var zipFile = zipFileService.addDirectoryToZip(file, lockerRoot, password);
 			removeAuthFile(zipFile);

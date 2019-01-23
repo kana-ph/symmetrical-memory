@@ -15,14 +15,16 @@ import java.nio.file.Files;
 import java.util.*;
 
 import static java.util.UUID.randomUUID;
-import static ph.kana.memory.file.FileStoreConstants.TEMP_ROOT;
-import static ph.kana.memory.file.FileStoreConstants.ZIP_PATH;
 
 public class PasswordZipFileDao implements PasswordDao {
 
 	private final AuthDao authDao = new AuthFileDao();
 
 	private final static String NO_ZIP_REASON = "zip file does not exist";
+	private final static File ZIP_FILE = FileLocationHolder.getInstance()
+		.getZip();
+	private final static File TEMP_DIR = FileLocationHolder.getInstance()
+		.getTempDir();
 
 	private final static char I_KEY = 'i';
 	private final static char V_KEY = 'v';
@@ -63,7 +65,7 @@ public class PasswordZipFileDao implements PasswordDao {
 			var passwordData = new HashMap<Character, byte[]>();
 			for (var key : passwordFiles.keySet()) {
 				var file = passwordFiles.get(key);
-				zipFile.extractFile(file, TEMP_ROOT);
+				zipFile.extractFile(file, TEMP_DIR.getAbsolutePath());
 
 				var tempFile = createTempFile(file);
 				var data = Files.readAllBytes(tempFile.toPath());
@@ -127,20 +129,20 @@ public class PasswordZipFileDao implements PasswordDao {
 
 	@Override
 	public boolean passwordStoreExists() {
-		return Files.exists(new File(ZIP_PATH).toPath());
+		return Files.exists(ZIP_FILE.toPath());
 	}
 
 	@Override
 	public void deletePasswordStore() throws StashException {
 		try {
-			Files.delete(new File(ZIP_PATH).toPath());
+			Files.delete(ZIP_FILE.toPath());
 		} catch (IOException e) {
 			throw new StashException(e);
 		}
 	}
 
 	private ZipFile openZipFile() throws StashException, ZipException  {
-		var zipFile = new ZipFile(ZIP_PATH);
+		var zipFile = new ZipFile(ZIP_FILE);
 
 		if (zipFile.getFile().exists()) {
 			if (zipFile.isEncrypted()) {
@@ -157,13 +159,13 @@ public class PasswordZipFileDao implements PasswordDao {
 	}
 
 	private static File createTempFile(String filename) {
-		var tempFile = new File(TEMP_ROOT + filename);
+		var tempFile = new File(TEMP_DIR, filename);
 		tempFile.deleteOnExit();
 		return tempFile;
 	}
 
 	private void addFilesToZip(File file1, File file2) throws StashException, ZipException {
-		var zipFile = new ZipFile(ZIP_PATH);
+		var zipFile = new ZipFile(ZIP_FILE);
 		var files = new ArrayList<>(List.of(file1, file2));
 		zipFile.addFiles(files, buildZipParameters());
 	}
@@ -195,13 +197,13 @@ public class PasswordZipFileDao implements PasswordDao {
 				.encodeToString(password);
 		zipParameters.setPassword(zipPassword);
 
-		var zipFile = new ZipFile(ZIP_PATH);
+		var zipFile = new ZipFile(ZIP_FILE);
 		zipFile.createZipFile(new ArrayList<>(files), zipParameters);
 	}
 
 	private Map<Character, String> fetchPasswordFiles(String passwordFile) {
 		return Map.of(
-				I_KEY, passwordFile + 'i',
-				V_KEY, passwordFile + 'v');
+			I_KEY, passwordFile + 'i',
+			V_KEY, passwordFile + 'v');
 	}
 }

@@ -1,5 +1,7 @@
 package ph.kana.memory.derby;
 
+import ph.kana.memory.file.FileLocationHolder;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,20 +14,20 @@ import java.util.Base64;
 import java.util.Comparator;
 import java.util.Properties;
 
-import static ph.kana.memory.file.FileStoreConstants.LOCKER_ROOT;
-
 final class DerbyDbConnection {
 
 	private final Connection sqlConnection;
 
 	private static DerbyDbConnection instance = null;
 
-	private final static String DB_FILE = LOCKER_ROOT + "/d";
-	private final static String DB_CONNECTION_STRING = "jdbc:derby:" + DB_FILE;
+	private final static File DB_FILE = FileLocationHolder.getInstance()
+		.getDb();
+	private final static String DB_PATH = DB_FILE.getAbsolutePath();
+	private final static String DB_CONNECTION_STRING = "jdbc:derby:" + DB_PATH;
 
 	private final static String DB_USERNAME = "LOCKER";
 	private final static String DB_PASSWORD = Base64.getEncoder()
-		.encodeToString(String.format("%s,%s",System.getProperty("os.name"), DB_FILE).getBytes());
+		.encodeToString(String.format("%s,%s",System.getProperty("os.name"), DB_PATH).getBytes());
 
 	public static DerbyDbConnection getInstance() throws SQLException {
 		if (null == instance) {
@@ -36,10 +38,10 @@ final class DerbyDbConnection {
 	}
 
 	static void deleteDbFile() throws IOException {
-		Files.walk(new File(DB_FILE).toPath())
-				.sorted(Comparator.reverseOrder())
-				.map(Path::toFile)
-				.forEach(File::delete);
+		Files.walk(DB_FILE.toPath())
+			.sorted(Comparator.reverseOrder())
+			.map(Path::toFile)
+			.forEach(File::delete);
 	}
 
 	private static void ensureDatabaseSettings() throws SQLException {

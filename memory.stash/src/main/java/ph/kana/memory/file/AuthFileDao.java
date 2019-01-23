@@ -7,11 +7,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import static ph.kana.memory.file.FileStoreConstants.AUTH_PATH;
-
 public class AuthFileDao implements AuthDao {
 
-	private static final File PIN_STORE = new File(AUTH_PATH);
+	private static final File PIN_STORE = FileLocationHolder.getInstance()
+		.getAuth();
 	static {
 		try {
 			PIN_STORE.createNewFile();
