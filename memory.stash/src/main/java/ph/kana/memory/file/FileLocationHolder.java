@@ -2,7 +2,9 @@ package ph.kana.memory.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class FileLocationHolder {
@@ -25,8 +27,8 @@ public class FileLocationHolder {
         fileCache[ROOT_FILE] = new File(LOCKER_ROOT);
         fileCache[AUTH_FILE] = new File(LOCKER_ROOT + "/a");
         fileCache[DB_FILE] = new File(LOCKER_ROOT + "/d");
-        fileCache[KEY_FILE] = new File(LOCKER_ROOT + "/p");
-        fileCache[ZIP_FILE] = new File(LOCKER_ROOT + "/k");
+        fileCache[KEY_FILE] = new File(LOCKER_ROOT + "/k");
+        fileCache[ZIP_FILE] = new File(LOCKER_ROOT + "/p");
         fileCache[TEMP_DIR] = new File(TEMP_ROOT);
         createHiddenDir(fileCache[ROOT_FILE]);
     }
@@ -51,8 +53,17 @@ public class FileLocationHolder {
         return fileCache[ZIP_FILE];
     }
 
-    public File getKey() {
-        return fileCache[KEY_FILE];
+    public char[] getKey() {
+        try {
+            var key = fileCache[KEY_FILE];
+            if (!key.exists()) {
+                buildKeyFile(key);
+            }
+            return readKeyFile(key);
+        } catch (IOException e) {
+            log.severe(e::getMessage);
+            return new char[0];
+        }
     }
 
     public File getTempDir() {
@@ -63,7 +74,7 @@ public class FileLocationHolder {
         var osName = System.getProperty("os.name").toLowerCase();
 
         try {
-            if (!file.mkdir()) {
+            if (!file.exists() && !file.mkdir()) {
                 throw new IOException("Failed to create directory: " + file);
             }
             if (osName.startsWith("windows")) {
@@ -72,5 +83,17 @@ public class FileLocationHolder {
         } catch (IOException e) {
             log.severe(e::getMessage);
         }
+    }
+
+    private void buildKeyFile(File key) throws IOException {
+        try (var writer = new PrintWriter(key)) {
+            writer.println(UUID.randomUUID().toString());
+            writer.flush();
+        }
+    }
+
+    private char[] readKeyFile(File key) throws IOException {
+        var keyData = Files.readString(key.toPath());
+        return keyData.toCharArray();
     }
 }

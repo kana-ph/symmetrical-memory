@@ -1,41 +1,40 @@
 package ph.kana.memory.codec;
 
+import ph.kana.memory.file.FileLocationHolder;
+
 import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
-import java.security.AlgorithmParameters;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 public class PasswordCodec {
 
-	private final static char[] WAGSTAFF_PRIME = "1298074214633706835075030044377087".toCharArray();
-
 	public EncryptedPassword encrypt(String rawPassword, String salt) throws CodecOperationException {
 		try {
-			SecretKeySpec keySpec = createSecretKey(salt.getBytes());
-			Cipher cipher = fetchCipher();
+			var keySpec = createSecretKey(salt.getBytes());
+			var cipher = fetchCipher();
 			cipher.init(Cipher.ENCRYPT_MODE, keySpec);
-			AlgorithmParameters parameters = cipher.getParameters();
-			IvParameterSpec ivParameterSpec = parameters.getParameterSpec(IvParameterSpec.class);
-			byte[] text = cipher.doFinal(rawPassword.getBytes("UTF-8"));
+
+			var parameters = cipher.getParameters();
+			var ivParameterSpec = parameters.getParameterSpec(IvParameterSpec.class);
+			byte[] text = cipher.doFinal(stringToBytes(rawPassword));
 			byte[] iv = ivParameterSpec.getIV();
 			return new EncryptedPassword(iv, text);
-		} catch (GeneralSecurityException | UnsupportedEncodingException e) {
+		} catch (GeneralSecurityException e) {
 			throw new CodecOperationException(e);
 		}
 	}
 
 	public byte[] decrypt(EncryptedPassword encryptedPassword, String salt) throws CodecOperationException {
 		try {
-			SecretKeySpec keySpec = createSecretKey(salt.getBytes());
-			Cipher cipher = fetchCipher();
-			cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(encryptedPassword.getInitializationVector()));
+			var keySpec = createSecretKey(salt.getBytes());
+			var cipher = fetchCipher();
+			cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(encryptedPassword.getIv()));
 			return cipher.doFinal(encryptedPassword.getValue());
 		} catch (GeneralSecurityException e) {
 			throw new CodecOperationException(e);
@@ -47,9 +46,15 @@ public class PasswordCodec {
 	}
 
 	private SecretKeySpec createSecretKey(byte[] salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
-		SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
-		PBEKeySpec keySpec = new PBEKeySpec(WAGSTAFF_PRIME, salt, 42000, 128);
-		SecretKey secretKey = keyFactory.generateSecret(keySpec);
+		var keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+		var key = FileLocationHolder.getInstance()
+			.getKey();
+		var keySpec = new PBEKeySpec(key, salt, 42000, 128);
+		var secretKey = keyFactory.generateSecret(keySpec);
 		return new SecretKeySpec(secretKey.getEncoded(),"AES");
+	}
+
+	private byte[] stringToBytes(String string) {
+		return string.getBytes(StandardCharsets.UTF_8);
 	}
 }

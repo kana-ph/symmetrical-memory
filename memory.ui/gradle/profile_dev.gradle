@@ -5,4 +5,8 @@ run.doFirst {
         'pstash.locker_root': lockerRoot,
         'pstash.temp_dir': "$lockerRoot/temp-data"
     ]
+
+    def tempDir = new File("$lockerRoot/temp-data")
+    tempDir.mkdirs()
+    tempDir.deleteOnExit()
 }

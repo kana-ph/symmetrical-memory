@@ -38,7 +38,7 @@ public class PasswordZipFileDao implements PasswordDao {
 			var ivFile = createTempFile(passwordFiles.get(I_KEY));
 			var valueFile = createTempFile(passwordFiles.get(V_KEY));
 
-			Files.write(ivFile.toPath(), password.getInitializationVector());
+			Files.write(ivFile.toPath(), password.getIv());
 			Files.write(valueFile.toPath(), password.getValue());
 
 			addFilesToZip(ivFile, valueFile);

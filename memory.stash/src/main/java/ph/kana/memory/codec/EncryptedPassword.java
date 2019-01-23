@@ -2,16 +2,16 @@ package ph.kana.memory.codec;
 
 public final class EncryptedPassword {
 
-	private final byte[] initializationVector;
+	private final byte[] iv;
 	private final byte[] value;
 
-	public EncryptedPassword(byte[] initializationVector, byte[] value) {
-		this.initializationVector = initializationVector;
+	public EncryptedPassword(byte[] iv, byte[] value) {
+		this.iv = iv;
 		this.value = value;
 	}
 
-	public byte[] getInitializationVector() {
-		return initializationVector;
+	public byte[] getIv() {
+		return iv;
 	}
 
 	public byte[] getValue() {
