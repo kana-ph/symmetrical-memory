@@ -24,7 +24,7 @@ public class SavePinModal extends AbstractTilePaneModal<Void, Void> {
 
 		List.of(currentPinTextBox, unmaskedPinTextBox, maskedPinTextBox)
 				.forEach(UiCommons::forceNumericalInput);
-		bindPinToggle();
+		UiCommons.bindPasswordToggle(maskedPinTextBox, unmaskedPinTextBox, maskPinToggle);
 	}
 
 	@Override
@@ -56,12 +56,5 @@ public class SavePinModal extends AbstractTilePaneModal<Void, Void> {
 			e.printStackTrace(System.err);
 			close();
 		}
-	}
-
-	private void bindPinToggle() {
-		unmaskedPinTextBox.textProperty()
-				.bindBidirectional(maskedPinTextBox.textProperty());
-		maskedPinTextBox.visibleProperty()
-				.bind(maskPinToggle.selectedProperty().not());
 	}
 }

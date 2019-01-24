@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <fx:root type="TilePane" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" styleClass="modal-darkening" visible="false">
 <children>
     <AnchorPane prefHeight="215.0" prefWidth="280.0" styleClass="modal">
@@ -11,8 +10,8 @@
             <Label layoutX="15.0" layoutY="85.0" text="Current PIN Code" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="60.0" />
             <PasswordField fx:id="currentPinTextBox" layoutX="15.0" layoutY="76.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="80.0" />
             <Label layoutX="23.0" layoutY="188.0" text="New PIN Code" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="115.0" />
+            <PasswordField fx:id="maskedPinTextBox" layoutX="30.0" layoutY="233.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="135.0" />
             <TextField fx:id="unmaskedPinTextBox" layoutX="30.0" layoutY="233.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="135.0" />
-            <PasswordField fx:id="maskedPinTextBox" layoutX="30.0" layoutY="197.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="135.0" />
             <CheckBox fx:id="maskPinToggle" layoutX="185.0" layoutY="169.0" mnemonicParsing="false" text="Show?" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="115.0" />
             <Button cancelButton="true" layoutX="204.0" layoutY="335.0" mnemonicParsing="false" onAction="#close" text="Cancel" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="175.0" />
             <Button defaultButton="true" layoutX="146.0" layoutY="240.0" mnemonicParsing="false" onAction="#savePin" text="Save" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="175.0" />

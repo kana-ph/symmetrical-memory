@@ -85,10 +85,10 @@ public final class UiCommons {
 		textField.textProperty()
 				.bindBidirectional(passwordField.textProperty());
 		textField.translateXProperty()
-				.bindBidirectional((passwordField.translateXProperty()));
+				.bindBidirectional(passwordField.translateXProperty());
 
-		passwordField.visibleProperty()
-				.bind(toggle.selectedProperty().not());
+		textField.visibleProperty()
+				.bind(toggle.selectedProperty());
 	}
 
 	private static boolean verifyAnimationLock(Node node) {
