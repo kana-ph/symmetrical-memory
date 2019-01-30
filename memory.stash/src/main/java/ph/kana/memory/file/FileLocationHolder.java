@@ -2,10 +2,7 @@ package ph.kana.memory.file;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
-import java.util.Random;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 public class FileLocationHolder {
@@ -57,17 +54,8 @@ public class FileLocationHolder {
         return fileCache[ZIP_FILE];
     }
 
-    public char[] getKey() {
-        try {
-            var key = fileCache[KEY_FILE];
-            if (!key.exists()) {
-                buildKeyFile(key);
-            }
-            return readKeyFile(key);
-        } catch (IOException e) {
-            log.severe(e::getMessage);
-            return new char[0];
-        }
+    public File getKey() {
+        return fileCache[KEY_FILE];
     }
 
     public File getTempDir() {
@@ -87,41 +75,5 @@ public class FileLocationHolder {
         } catch (IOException e) {
             log.severe(e::getMessage);
         }
-    }
-
-    private void buildKeyFile(File key) throws IOException {
-        try (var writer = new PrintWriter(key)) {
-            writer.println(generateKey());
-            writer.flush();
-        }
-    }
-
-    private char[] readKeyFile(File key) throws IOException {
-        var keyData = Files.readString(key.toPath());
-        return keyData.toCharArray();
-    }
-
-    private String generateKey() {
-        var uuid = UUID.randomUUID().toString();
-        var replacement = "$1" +
-            randomAlphaNum() +
-            "$3" +
-            randomAlphaNum() +
-            randomAlphaNum() +
-            "$5" +
-            randomAlphaNum() +
-            "$7" +
-            randomAlphaNum() +
-            "$9";
-
-        return uuid.replaceAll(TARGET_REGEX, replacement);
-    }
-
-    private char randomAlphaNum() {
-        var alphabet = "abcdef0123456789";
-        var rng = new Random();
-
-        var i = rng.nextInt(alphabet.length());
-        return alphabet.charAt(i);
     }
 }

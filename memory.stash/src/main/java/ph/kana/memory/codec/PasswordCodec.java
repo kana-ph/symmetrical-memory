@@ -1,6 +1,6 @@
 package ph.kana.memory.codec;
 
-import ph.kana.memory.file.FileLocationHolder;
+import ph.kana.memory.codec.impl.KeyServiceImpl;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
@@ -11,8 +11,11 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Base64;
 
 public class PasswordCodec {
+
+	private final KeyService keyService = new KeyServiceImpl();
 
 	public EncryptedPassword encrypt(String rawPassword, String salt) throws CodecOperationException {
 		try {
@@ -45,10 +48,12 @@ public class PasswordCodec {
 		return Cipher.getInstance("AES/CBC/PKCS5Padding");
 	}
 
-	private SecretKeySpec createSecretKey(byte[] salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
+	private SecretKeySpec createSecretKey(byte[] salt)
+			throws InvalidKeySpecException, NoSuchAlgorithmException, CodecOperationException {
+
 		var keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
-		var key = FileLocationHolder.getInstance()
-			.getKey();
+		var key = bytesToBase64(keyService.fetchKey())
+			.toCharArray();
 		var keySpec = new PBEKeySpec(key, salt, 42000, 128);
 		var secretKey = keyFactory.generateSecret(keySpec);
 		return new SecretKeySpec(secretKey.getEncoded(),"AES");
@@ -56,5 +61,10 @@ public class PasswordCodec {
 
 	private byte[] stringToBytes(String string) {
 		return string.getBytes(StandardCharsets.UTF_8);
+	}
+
+	private String bytesToBase64(byte[] bytes) {
+		return Base64.getEncoder()
+			.encodeToString(bytes);
 	}
 }
