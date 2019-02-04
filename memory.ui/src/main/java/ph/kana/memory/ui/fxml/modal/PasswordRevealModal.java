@@ -14,7 +14,7 @@ public class PasswordRevealModal extends AbstractTilePaneModal<Account, Void> {
 
 	@FXML private TextField passwordRevealTextBox;
 
-	private final PasswordService passwordService = PasswordService.getInstance();
+	private final PasswordService passwordService = PasswordService.INSTANCE;
 	private byte[] password;
 
 	public PasswordRevealModal() {
@@ -33,7 +33,8 @@ public class PasswordRevealModal extends AbstractTilePaneModal<Account, Void> {
 		}
 	}
 
-	@FXML @Override
+	@FXML
+	@Override
 	public void close() {
 		Arrays.fill(password, (byte) 0);
 		super.close();

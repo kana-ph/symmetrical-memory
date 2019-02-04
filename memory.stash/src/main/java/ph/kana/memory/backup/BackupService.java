@@ -1,45 +1,14 @@
 package ph.kana.memory.backup;
 
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
-import ph.kana.memory.file.FileLocationHolder;
-import ph.kana.memory.file.ZipFileService;
+import ph.kana.memory.backup.impl.DefaultBackupService;
 
 import java.io.File;
 
-public final class BackupService {
+public interface BackupService {
 
-	private final static BackupService INSTANCE = new BackupService();
+	BackupService INSTANCE = new DefaultBackupService();
 
-	private final ZipFileService zipFileService = ZipFileService.getInstance();
+	File createBackup(File backupFile, String password) throws BackupException;
 
-	public static BackupService getInstance() {
-		return INSTANCE;
-	}
-
-	public File createBackup(File backupFile, String password) throws BackupException {
-		try {
-			var file = new File(backupFile.getAbsolutePath());
-			if (file.exists() && !file.delete()) {
-				throw new BackupException("Backup File already exists!");
-			}
-
-			var lockerRoot = FileLocationHolder.getInstance()
-				.getRoot();
-
-			var zipFile = zipFileService.addDirectoryToZip(file, lockerRoot, password);
-			removeAuthFile(zipFile);
-			return zipFile.getFile();
-		} catch (ZipException e) {
-			throw new BackupException("Failed to create backup", e);
-		}
-	}
-
-	public void restoreBackup(File backupFile, String password) throws BackupException {
-
-	}
-
-	private void removeAuthFile(ZipFile zipFile) throws ZipException  {
-		zipFileService.removeFileFromZip(zipFile, "a");
-	}
+	void restoreBackup(File backupFile, String password) throws BackupException;
 }

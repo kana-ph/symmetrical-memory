@@ -22,7 +22,7 @@ public class SaveAccountModal extends AbstractTilePaneModal<Account, Account> {
 	@FXML private PasswordField maskedPasswordTextBox;
 	@FXML private CheckBox maskPasswordToggle;
 
-	private final AccountService accountService = AccountService.getInstance();
+	private final AccountService accountService = AccountService.INSTANCE;
 	private Account account;
 
 	public SaveAccountModal() {

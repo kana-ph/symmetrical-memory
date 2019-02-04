@@ -11,7 +11,7 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
-public class KeyServiceImpl implements KeyService {
+public class DefaultKeyService implements KeyService {
 
     private final static int KEY_SIZE = 1024;
 

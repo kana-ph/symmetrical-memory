@@ -35,8 +35,8 @@ public class MainFormController implements Initializable {
 	private HostServices hostServices;
 	private IdleMonitor idleMonitor = null;
 
-	private final AccountService accountService = AccountService.getInstance();
-	private final AuthService authService = AuthService.getInstance();
+	private final AccountService accountService = AccountService.INSTANCE;
+	private final AuthService authService = AuthService.INSTANCE;
 
 	private Comparator<Account> activeComparator = AccountComparator.of((SortColumn.DATE_ADDED));
 	private SortedMap<Account, AccountCard> accountCards =

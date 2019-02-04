@@ -6,7 +6,7 @@ import ph.kana.memory.stash.StashException;
 
 public class ResetModal extends AbstractTilePaneModal<Void, Void> {
 
-	private final AccountService accountService = AccountService.getInstance();
+	private final AccountService accountService = AccountService.INSTANCE;
 
 	public ResetModal() {
 		super("reset-modal.fxml");

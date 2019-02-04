@@ -1,77 +1,21 @@
 package ph.kana.memory.auth;
 
-import ph.kana.memory.account.AccountDao;
 import ph.kana.memory.account.CorruptDataException;
-import ph.kana.memory.account.PasswordService;
-import ph.kana.memory.codec.CodecOperationException;
+import ph.kana.memory.auth.impl.DefaultAuthService;
 import ph.kana.memory.codec.EncryptedPassword;
-import ph.kana.memory.codec.PasswordCodec;
-import ph.kana.memory.codec.PinBcryptEncryptor;
-import ph.kana.memory.derby.AccountDerbyDbDao;
-import ph.kana.memory.file.AuthFileDao;
 import ph.kana.memory.stash.StashException;
 
-public class AuthService {
+public interface AuthService {
 
-	private final AccountDao accountDao = new AccountDerbyDbDao();
-	private final AuthDao authDao = new AuthFileDao();
+	AuthService INSTANCE = new DefaultAuthService();
 
-	private final PasswordCodec passwordCodec = new PasswordCodec();
-	private final PasswordService passwordService = PasswordService.getInstance();
-	private final PinBcryptEncryptor pinEncryptor = new PinBcryptEncryptor();
+	String fetchDefaultPin();
 
-	public final static String DEFAULT_PIN = "12345678";
-	private final static AuthService INSTANCE = new AuthService();
+	boolean initializePin() throws CorruptDataException;
 
-	public static AuthService getInstance() {
-		return INSTANCE;
-	}
+	void saveClearPin(String pin) throws StashException;
 
-	public boolean initializePin() throws CorruptDataException {
-		try {
-			byte[] currentPin = authDao.readStoredPin();
+	boolean checkValidPin(String pin) throws StashException;
 
-			if (pinExists(currentPin)) {
-				return true;
-			} else {
-				if (dataExists()) {
-					throw new CorruptDataException("Missing PIN file");
-				} else {
-					saveClearPin(DEFAULT_PIN);
-					return false;
-				}
-			}
-		} catch (StashException e) {
-			e.printStackTrace(System.err);
-			System.exit(1);
-		}
-		return false;
-	}
-
-	public void saveClearPin(String pin) throws StashException {
-		byte[] hashPin = pinEncryptor.hash(pin);
-		passwordService.updateStoreEncryption(hashPin);
-		authDao.savePin(hashPin);
-	}
-
-	public boolean checkValidPin(String pin) throws StashException {
-		byte[] storedPin = authDao.readStoredPin();
-		return pinEncryptor.validate(pin, storedPin);
-	}
-
-	public byte[] decryptPassword(EncryptedPassword encryptedPassword, String salt) throws StashException {
-		try {
-			return passwordCodec.decrypt(encryptedPassword, salt);
-		} catch (CodecOperationException e) {
-			throw new StashException(e);
-		}
-	}
-
-	private boolean pinExists(byte[] pin) {
-		return pin.length > 0;
-	}
-
-	private boolean dataExists() throws CorruptDataException, StashException {
-		return accountDao.anyExists() || passwordService.storeExists();
-	}
+	byte[] decryptPassword(EncryptedPassword encryptedPassword, String salt) throws StashException;
 }

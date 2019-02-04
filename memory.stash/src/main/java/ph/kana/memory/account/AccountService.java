@@ -1,62 +1,20 @@
 package ph.kana.memory.account;
 
-import ph.kana.memory.derby.AccountDerbyDbDao;
+import ph.kana.memory.account.impl.DefaultAccountService;
 import ph.kana.memory.model.Account;
 import ph.kana.memory.stash.StashException;
 
 import java.util.List;
-import java.util.Objects;
 
-import static java.util.UUID.randomUUID;
+public interface AccountService {
 
-public class AccountService {
+	AccountService INSTANCE = new DefaultAccountService();
 
-	private final AccountDao accountDao = new AccountDerbyDbDao();
-	private final PasswordService passwordService = PasswordService.getInstance();
+	List<Account> fetchAccounts() throws CorruptDataException, StashException;
 
-	private static final AccountService INSTANCE = new AccountService();
+	Account saveAccount(Account account, String rawPassword) throws CorruptDataException, StashException;
 
-	public static AccountService getInstance() {
-		return INSTANCE;
-	}
+	void deleteAccount(Account account) throws CorruptDataException, StashException;
 
-	private AccountService() {}
-
-	public List<Account> fetchAccounts() throws CorruptDataException, StashException {
-		return accountDao.fetchAll();
-	}
-
-	public Account saveAccount(Account account, String rawPassword) throws CorruptDataException, StashException {
-		ensureId(account);
-		ensureSaveTimestamp(account);
-		account.setLastUpdateTimestamp(System.currentTimeMillis());
-
-		var passwordFile = passwordService.savePassword(account, rawPassword);
-		account.setPasswordFile(passwordFile);
-
-		return accountDao.save(account);
-	}
-
-	public void deleteAccount(Account account) throws CorruptDataException, StashException {
-		passwordService.removePassword(account);
-		accountDao.delete(account);
-	}
-
-	public void purge() throws StashException {
-		accountDao.deleteAll();
-		passwordService.purge();
-	}
-
-	private void ensureId(Account account) {
-		var accountId = account.getId();
-		if (Objects.isNull(accountId) || accountId.isEmpty()) {
-			account.setId(randomUUID().toString());
-		}
-	}
-
-	private void ensureSaveTimestamp(Account account) {
-		if (0L == account.getSaveTimestamp()) {
-			account.setSaveTimestamp(System.currentTimeMillis());
-		}
-	}
+	void purge() throws StashException;
 }

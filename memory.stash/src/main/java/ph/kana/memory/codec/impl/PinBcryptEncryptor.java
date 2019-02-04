@@ -1,4 +1,4 @@
-package ph.kana.memory.codec;
+package ph.kana.memory.codec.impl;
 
 import org.mindrot.jbcrypt.BCrypt;
 

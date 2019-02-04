@@ -25,7 +25,7 @@ public class RestoreBackupModal extends AbstractTilePaneModal<Void, Void> {
 	@FXML private CheckBox maskPasswordToggle;
 	private File backupFile = null;
 
-	private final BackupService backupService = BackupService.getInstance();
+	private final BackupService backupService = BackupService.INSTANCE;
 
 	private static ExtensionFilter FILE_FILTER = new ExtensionFilter("Backup File (*.bak)","*.bak");
 

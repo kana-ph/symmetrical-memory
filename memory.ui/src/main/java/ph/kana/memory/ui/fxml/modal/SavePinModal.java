@@ -17,7 +17,7 @@ public class SavePinModal extends AbstractTilePaneModal<Void, Void> {
 	@FXML private PasswordField maskedPinTextBox;
 	@FXML private CheckBox maskPinToggle;
 
-	private final AuthService authService = AuthService.getInstance();
+	private final AuthService authService = AuthService.INSTANCE;
 
 	public SavePinModal() {
 		super("save-pin-modal.fxml");

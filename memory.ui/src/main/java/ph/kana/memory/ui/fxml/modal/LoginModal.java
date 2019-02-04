@@ -14,7 +14,7 @@ public class LoginModal extends AbstractTilePaneModal<LoginFlag, Void> {
 	@FXML private Label subMessageLabel;
 	@FXML private TextField pinTextBox;
 
-	private final AuthService authService = AuthService.getInstance();
+	private final AuthService authService = AuthService.INSTANCE;
 
 	public LoginModal() {
 		super("login-modal.fxml");
@@ -24,7 +24,7 @@ public class LoginModal extends AbstractTilePaneModal<LoginFlag, Void> {
 	@Override
 	public void showModal(LoginFlag pinStatus) {
 		if (LoginFlag.FIRST_TIME == pinStatus) {
-			String message = String.format("Initial PIN Code: %s", AuthService.DEFAULT_PIN);
+			String message = String.format("Initial PIN Code: %s", authService.fetchDefaultPin());
 			subMessageLabel.setText(message);
 		} else if (LoginFlag.SESSION_EXPIRE == pinStatus) {
 			subMessageLabel.setText("Logged out due to inactivity.");
